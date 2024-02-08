@@ -1,0 +1,19 @@
+{
+    "name": "Generator",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a5c95b34f750bbf4fbea144b0ea4ddb4",
+        "GUID:1052cb1fefbe8e7469497f1d91c4d4d1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "BoDi.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,20 @@
+{
+    "name": "UnityFlowWindow",
+    "rootNamespace": "",
+    "references": [
+        "GUID:07abb0f040ff52f4d9defaf9873eb6c7"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "BoDi.dll",
+        "Gherkin.dll",
+        ""
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

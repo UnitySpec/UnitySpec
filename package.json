@@ -1,0 +1,16 @@
+{
+  "name": "com.mmulder135.unityflow",
+  "version": "0.0.1",
+  "displayName": "UnityFlow",
+  "description": "BDD in Unity; A package based on SpecFlow",
+  "unity": "2022.3",
+  "keywords": [
+    "BDD",
+    "Testing",
+    "SpecFlow"
+  ],
+  "author": {
+    "name": "Michael Mulder",
+    "email": "mmulder135@gmail.com"
+  }
+}
