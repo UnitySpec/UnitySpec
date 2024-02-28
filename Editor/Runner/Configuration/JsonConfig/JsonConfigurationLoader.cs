@@ -53,13 +53,13 @@ namespace UnityFlow.Configuration.JsonConfig
                 stopAtFirstError = jsonConfig.Runtime.StopAtFirstError;
                 obsoleteBehavior = jsonConfig.Runtime.ObsoleteBehavior;
 
-                if (jsonConfig.Runtime.Dependencies != null)
-                {
-                    foreach (var runtimeDependency in jsonConfig.Runtime.Dependencies)
-                    {
-                        containerRegistrationCollection.Add(runtimeDependency.ImplementationType, runtimeDependency.InterfaceType);
-                    }
-                }
+                //if (jsonConfig.Runtime.Dependencies != null)
+                //{
+                //    foreach (var runtimeDependency in jsonConfig.Runtime.Dependencies)
+                //    {
+                //        containerRegistrationCollection.Add(runtimeDependency.ImplementationType, runtimeDependency.InterfaceType);
+                //    }
+                //}
             }
 
             if (jsonConfig.Generator != null)

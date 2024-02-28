@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Configuration;
 using System.IO;
 using BoDi;
 using UnityFlow.BindingSkeletons;
-using UnityFlow.Configuration.AppConfig;
 using UnityFlow.Configuration.JsonConfig;
 using UnityFlow.Tracing;
 using UnityFlow.Compatibility;
@@ -14,8 +12,7 @@ namespace UnityFlow.Configuration
 {
     public class ConfigurationLoader : IConfigurationLoader
     {
-        private readonly AppConfigConfigurationLoader _appConfigConfigurationLoader;
-        //private readonly ObjectContainer _objectContainer;
+
         private readonly JsonConfigurationLoader _jsonConfigurationLoader;
         private readonly ISpecFlowJsonLocator _specFlowJsonLocator;
 
@@ -23,7 +20,6 @@ namespace UnityFlow.Configuration
         {
             _specFlowJsonLocator = specFlowJsonLocator;
             _jsonConfigurationLoader = new JsonConfigurationLoader();
-            _appConfigConfigurationLoader = new AppConfigConfigurationLoader();
         }
 
         private static CultureInfo DefaultFeatureLanguage => CultureInfo.GetCultureInfo(ConfigDefaults.FeatureLanguage);
@@ -52,7 +48,7 @@ namespace UnityFlow.Configuration
 
         public static ObsoleteBehavior DefaultObsoleteBehavior => ConfigDefaults.ObsoleteBehavior;
 
-        public bool HasAppConfig => ConfigurationManager.GetSection("specFlow") != null;
+        public bool HasAppConfig = false;
 
         public bool HasJsonConfig
         {
@@ -71,7 +67,6 @@ namespace UnityFlow.Configuration
             return specFlowConfigurationHolder.ConfigSource switch
             {
                 ConfigSource.Default => GetDefault(),
-                ConfigSource.AppConfig => LoadAppConfig(specFlowConfiguration, ConfigurationSectionHandler.CreateFromXml(specFlowConfigurationHolder.Content)),
                 ConfigSource.Json => LoadJson(specFlowConfiguration, specFlowConfigurationHolder.Content),
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -82,16 +77,9 @@ namespace UnityFlow.Configuration
             if (HasJsonConfig)
                 return LoadJson(specFlowConfiguration);
 
-            if (HasAppConfig)
-                return LoadAppConfig(specFlowConfiguration);
-
             return GetDefault();
         }
 
-        public SpecFlowConfiguration Update(SpecFlowConfiguration specFlowConfiguration, ConfigurationSectionHandler specFlowConfigSection)
-        {
-            return LoadAppConfig(specFlowConfiguration, specFlowConfigSection);
-        }
 
         public void TraceConfigSource(ITraceListener traceListener, SpecFlowConfiguration specFlowConfiguration)
         {
@@ -99,9 +87,6 @@ namespace UnityFlow.Configuration
             {
                 case ConfigSource.Default:
                     traceListener.WriteToolOutput("Using default config");
-                    break;
-                case ConfigSource.AppConfig:
-                    traceListener.WriteToolOutput("Using app.config");
                     break;
                 case ConfigSource.Json:
                     traceListener.WriteToolOutput("Using specflow.json");
@@ -131,20 +116,6 @@ namespace UnityFlow.Configuration
                 DefaultAddNonParallelizableMarkerForTags,
                 DefaultObsoleteBehavior
                 );
-        }
-
-
-        private SpecFlowConfiguration LoadAppConfig(SpecFlowConfiguration specFlowConfiguration)
-        {
-            var configSection = ConfigurationManager.GetSection("specFlow") as ConfigurationSectionHandler;
-
-            return LoadAppConfig(specFlowConfiguration, configSection);
-        }
-
-        private SpecFlowConfiguration LoadAppConfig(SpecFlowConfiguration specFlowConfiguration,
-            ConfigurationSectionHandler specFlowConfigSection)
-        {
-            return _appConfigConfigurationLoader.LoadAppConfig(specFlowConfiguration, specFlowConfigSection);
         }
 
 

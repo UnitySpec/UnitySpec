@@ -8,8 +8,6 @@ namespace UnityFlow.Configuration
 
         SpecFlowConfiguration Load(SpecFlowConfiguration specFlowConfiguration);
 
-        SpecFlowConfiguration Update(SpecFlowConfiguration specFlowConfiguration, ConfigurationSectionHandler specFlowConfigSection);
-
         void TraceConfigSource(ITraceListener traceListener, SpecFlowConfiguration specFlowConfiguration);
     }
 }

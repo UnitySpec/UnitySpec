@@ -9,7 +9,6 @@ namespace UnityFlow.Configuration
 {
     public enum ConfigSource
     {
-        AppConfig,
         Json,
         Default
     }
@@ -120,8 +119,6 @@ namespace UnityFlow.Configuration
             unchecked
             {
                 var hashCode = (int)ConfigSource;
-                hashCode = (hashCode * 397) ^ (CustomDependencies != null ? CustomDependencies.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (GeneratorCustomDependencies != null ? GeneratorCustomDependencies.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (FeatureLanguage != null ? FeatureLanguage.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (BindingCulture != null ? BindingCulture.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ StopAtFirstError.GetHashCode();

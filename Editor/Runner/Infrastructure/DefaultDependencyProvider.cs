@@ -4,7 +4,6 @@ using UnityFlow.BindingSkeletons;
 using UnityFlow.Configuration;
 using UnityFlow.ErrorHandling;
 using UnityFlow.Events;
-using UnityFlow.Plugins;
 using UnityFlow.Tracing;
 using BoDi;
 using TechTalk.SpecFlow.Analytics;
@@ -48,10 +47,6 @@ namespace UnityFlow.Infrastructure
             container.RegisterTypeAs<DefaultSkeletonTemplateProvider, ISkeletonTemplateProvider>();
             container.RegisterTypeAs<StepTextAnalyzer, IStepTextAnalyzer>();
 
-            container.RegisterTypeAs<RuntimePluginLoader, IRuntimePluginLoader>();
-            container.RegisterTypeAs<RuntimePluginLocator, IRuntimePluginLocator>();
-            container.RegisterTypeAs<RuntimePluginLocationMerger, IRuntimePluginLocationMerger>();
-
             container.RegisterTypeAs<BindingAssemblyLoader, IBindingAssemblyLoader>();
 
             container.RegisterTypeAs<ConfigurationLoader, IConfigurationLoader>();
@@ -64,7 +59,7 @@ namespace UnityFlow.Infrastructure
             container.RegisterTypeAs<TestUndefinedMessageFactory, ITestUndefinedMessageFactory>();
             container.RegisterTypeAs<DefaultTestRunContext, ITestRunContext>();
 
-            container.RegisterTypeAs<SpecFlowPath, ISpecFlowPath>();
+            //container.RegisterTypeAs<SpecFlowPath, ISpecFlowPath>();
 
             container.RegisterTypeAs<UtcDateTimeClock, IClock>();
 
@@ -81,9 +76,6 @@ namespace UnityFlow.Infrastructure
             container.RegisterTypeAs<AnalyticsEventProvider, IAnalyticsEventProvider>();
 
             container.RegisterTypeAs<SpecFlowJsonLocator, ISpecFlowJsonLocator>();
-
-            container.RegisterTypeAs<RuntimePluginTestExecutionLifecycleEvents, RuntimePluginTestExecutionLifecycleEvents>();
-            container.RegisterTypeAs<RuntimePluginTestExecutionLifecycleEventEmitter, IRuntimePluginTestExecutionLifecycleEventEmitter>();
 
             container.RegisterTypeAs<TestAssemblyProvider, ITestAssemblyProvider>();
         }

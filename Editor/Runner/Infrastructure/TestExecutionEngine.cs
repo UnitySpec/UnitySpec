@@ -4,7 +4,6 @@ using UnityFlow.Compatibility;
 using UnityFlow.Configuration;
 using UnityFlow.ErrorHandling;
 using UnityFlow.Events;
-using UnityFlow.Plugins;
 using UnityFlow.Tracing;
 using UnityFlow.UnitTestProvider;
 using BoDi;
@@ -32,7 +31,6 @@ namespace UnityFlow.Infrastructure
         private readonly IAnalyticsEventProvider _analyticsEventProvider;
         private readonly IAnalyticsTransmitter _analyticsTransmitter;
         private readonly ITestRunnerManager _testRunnerManager;
-        private readonly IRuntimePluginTestExecutionLifecycleEventEmitter _runtimePluginTestExecutionLifecycleEventEmitter;
         private readonly ITestThreadExecutionEventPublisher _testThreadExecutionEventPublisher;
         private readonly ITestPendingMessageFactory _testPendingMessageFactory;
         private readonly ITestUndefinedMessageFactory _testUndefinedMessageFactory;
@@ -56,7 +54,6 @@ namespace UnityFlow.Infrastructure
             IAnalyticsEventProvider analyticsEventProvider,
             IAnalyticsTransmitter analyticsTransmitter,
             ITestRunnerManager testRunnerManager,
-            IRuntimePluginTestExecutionLifecycleEventEmitter runtimePluginTestExecutionLifecycleEventEmitter,
             ITestThreadExecutionEventPublisher testThreadExecutionEventPublisher,
             ITestPendingMessageFactory testPendingMessageFactory,
             ITestUndefinedMessageFactory testUndefinedMessageFactory,
@@ -79,7 +76,6 @@ namespace UnityFlow.Infrastructure
             _analyticsEventProvider = analyticsEventProvider;
             _analyticsTransmitter = analyticsTransmitter;
             _testRunnerManager = testRunnerManager;
-            _runtimePluginTestExecutionLifecycleEventEmitter = runtimePluginTestExecutionLifecycleEventEmitter;
             _testThreadExecutionEventPublisher = testThreadExecutionEventPublisher;
             _testPendingMessageFactory = testPendingMessageFactory;
             _testUndefinedMessageFactory = testUndefinedMessageFactory;
@@ -341,22 +337,12 @@ namespace UnityFlow.Infrastructure
                 SetHookError(hookType, hookException);
             }
 
-            //Note: plugin-hooks are still executed even if a user-hook failed with an exception
-            //A plugin-hook should not throw an exception under normal circumstances, exceptions are not handled/caught here
-            FireRuntimePluginTestExecutionLifecycleEvents(hookType);
-
             _testThreadExecutionEventPublisher.PublishEvent(new HookFinishedEvent(hookType, FeatureContext, ScenarioContext, _contextManager.StepContext, hookException));
 
             //Note: the (user-)hook exception (if any) will be thrown after the plugin hooks executed to fail the test with the right error
             if (hookException != null) throw hookException;
         }
 
-        private void FireRuntimePluginTestExecutionLifecycleEvents(HookType hookType)
-        {
-            //We pass a container corresponding the type of event
-            var container = GetHookContainer(hookType);
-            _runtimePluginTestExecutionLifecycleEventEmitter.RaiseExecutionLifecycleEvent(hookType, container);
-        }
 
         protected IObjectContainer TestThreadContainer { get; }
 
