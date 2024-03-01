@@ -8,6 +8,10 @@ using TechTalk.SpecFlow.Generator;
 using UnityFlow.Generator.CodeDom;
 using TechTalk.SpecFlow.Parser;
 using UnityFlow;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Microsoft.CodeAnalysis.CSharp;
+using System;
 
 namespace UnityFlow.Generator.Generation
 {
@@ -36,66 +40,72 @@ namespace UnityFlow.Generator.Generation
 
             var backgroundMethod = generationContext.FeatureBackgroundMethod;
 
-            backgroundMethod.Attributes = MemberAttributes.Public;
-            backgroundMethod.Name = GeneratorConstants.BACKGROUND_NAME;
+            backgroundMethod.Modifiers.Add(Token(SyntaxKind.PublicKeyword));
 
 
-            var statements = new List<CodeStatement>();
-            using (new SourceLineScope(_specFlowConfiguration, _codeDomHelper, statements, generationContext.Document.SourceFilePath, background.Location))
-            {
-            }
+            var statements = new List<StatementSyntax>();
+            //using (new SourceLineScope(_specFlowConfiguration, _codeDomHelper, statements, generationContext.Document.SourceFilePath, background.Location))
+            //{
+            //}
 
             foreach (var step in background.Steps)
             {
                 GenerateStep(generationContext, statements, step, null);
             }
-            backgroundMethod.Statements.AddRange(statements.ToArray());
+            backgroundMethod.Body.Statements.AddRange(statements);
 
         }
 
-        public void GenerateStep(TestClassGenerationContext generationContext, List<CodeStatement> statements, Step gherkinStep, ParameterSubstitution paramToIdentifier)
+        public void GenerateStep(TestClassGenerationContext generationContext, List<StatementSyntax> statements, Step gherkinStep, ParameterSubstitution paramToIdentifier)
         {
             var testRunnerField = GetTestRunnerExpression();
             var scenarioStep = AsSpecFlowStep(gherkinStep);
 
-            //testRunner.Given("something");
-            var arguments = new List<CodeExpression>
-            {
+            var argumentList = _codeDomHelper.GetArgumentList(
                 GetSubstitutedString(scenarioStep.Text, paramToIdentifier),
                 GetDocStringArgExpression(scenarioStep.Argument as DocString, paramToIdentifier),
                 GetTableArgExpression(scenarioStep.Argument as DataTable, statements, paramToIdentifier),
-                new CodePrimitiveExpression(scenarioStep.Keyword)
-            };
+                _codeDomHelper.StringLiteral(scenarioStep.Keyword)
+                );
 
+            var invokeExpr = ParenthesizedExpression(CastExpression(
+                _codeDomHelper.GetName("System.Collections.IEnumerator"),
+                ParenthesizedExpression(InvocationExpression(
+                        _codeDomHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.{scenarioStep.StepKeyword}")
+                    ).WithArgumentList(argumentList)
+                )));
 
-            using (new SourceLineScope(_specFlowConfiguration, _codeDomHelper, statements, generationContext.Document.SourceFilePath, gherkinStep.Location))
-            {
-                var call = new CodeMethodReturnStatement(
-                    new CodeCastExpression("System.Collections.IEnumerator",
-                        new CodeMethodInvokeExpression(
-                            testRunnerField,
-                            scenarioStep.StepKeyword.ToString(),
-                            arguments.ToArray()
-                            )
-                        )
-                    );
-                // Hacky way to include yield return statement using CodeDom
-                statements.Add(new CodeSnippetStatement("yield"));
-                statements.Add(call);
-            }
-
-
+            var yieldStmt = _codeDomHelper.AddSourceLinePragmaStatement(YieldStatement(SyntaxKind.YieldReturnStatement, invokeExpr), gherkinStep.Location.Line);
+            //testRunner.Given("something");
+            statements.Add(yieldStmt);
         }
 
-        public CodeExpression GetStringArrayExpression(IEnumerable<Tag> tags)
+        public ExpressionSyntax GetStringArrayExpression(IEnumerable<Tag> tags)
         {
             if (!tags.Any())
             {
-                return new CodeCastExpression(typeof(string[]), new CodePrimitiveExpression(null));
+                return ParenthesizedExpression(CastExpression(
+                            _codeDomHelper.StringArray(OmittedArraySizeExpression()),
+                            ParenthesizedExpression(LiteralExpression(SyntaxKind.NullLiteralExpression))
+                            ));
             }
 
-            return new CodeArrayCreateExpression(typeof(string[]), tags.Select(tag => new CodePrimitiveExpression(tag.GetNameWithoutAt())).Cast<CodeExpression>().ToArray());
+            var tagExprs = tags.Select(tag => _codeDomHelper.StringLiteral(tag.GetNameWithoutAt())).ToArray();
+            return ParenthesizedExpression(
+                ArrayCreationExpression(
+                    _codeDomHelper.StringArray(_codeDomHelper.NumericLiteral(tagExprs.Length))
+                    )
+                .WithInitializer(
+                    InitializerExpression(
+                        SyntaxKind.ArrayInitializerExpression,
+                        _codeDomHelper.GetInterspersedList( tagExprs )
+                        )
+                    )
+                );
+
         }
+
+
 
         private SpecFlowStep AsSpecFlowStep(Step step)
         {
@@ -108,65 +118,76 @@ namespace UnityFlow.Generator.Generation
             return specFlowStep;
         }
 
-        private CodeExpression GetTableArgExpression(DataTable tableArg, List<CodeStatement> statements, ParameterSubstitution paramToIdentifier)
+        private ExpressionSyntax GetTableArgExpression(DataTable tableArg, List<StatementSyntax> statements, ParameterSubstitution paramToIdentifier)
         {
-            if (tableArg == null)
-            {
-                return new CodeCastExpression(typeof(Table), new CodePrimitiveExpression(null));
-            }
+            throw new NotImplementedException("Table expressions not yet implemented in Unity");
+            //var tableType = _codeDomHelper.GetName("UnityFlow.Table");
+            //if (tableArg == null)
+            //{
+            //    return CastExpression(tableType, LiteralExpression(SyntaxKind.NullLiteralExpression));
+            //}
 
-            _tableCounter++;
+            //_tableCounter++;
 
-            //TODO[Gherkin3]: remove dependency on having the first row as header
-            var header = tableArg.Rows.First();
-            var body = tableArg.Rows.Skip(1).ToArray();
+            ////TODO[Gherkin3]: remove dependency on having the first row as header
+            //var header = tableArg.Rows.First();
+            //var body = tableArg.Rows.Skip(1).ToArray();
 
-            //Table table0 = new Table(header...);
-            var tableVar = new CodeVariableReferenceExpression("table" + _tableCounter);
-            statements.Add(
-                new CodeVariableDeclarationStatement(typeof(Table), tableVar.VariableName,
-                    new CodeObjectCreateExpression(
-                        typeof(Table),
-                        GetStringArrayExpression(header.Cells.Select(c => c.Value), paramToIdentifier))));
+            ////Table table0 = new Table(header...);
+            //var tableVar = IdentifierName("table" + _tableCounter);
+            //statements.Add(
+            //    new CodeVariableDeclarationStatement(typeof(Table), tableVar.VariableName,
+            //        new CodeObjectCreateExpression(
+            //            typeof(Table),
+            //            GetStringArrayExpression(header.Cells.Select(c => c.Value), paramToIdentifier))));
 
-            foreach (var row in body)
-            {
-                //table0.AddRow(cells...);
-                statements.Add(new CodeExpressionStatement(
-                    new CodeMethodInvokeExpression(
-                        tableVar,
-                        "AddRow",
-                        GetStringArrayExpression(row.Cells.Select(c => c.Value), paramToIdentifier))));
-            }
+            //foreach (var row in body)
+            //{
+            //    //table0.AddRow(cells...);
+            //    statements.Add(new CodeExpressionStatement(
+            //        new CodeMethodInvokeExpression(
+            //            tableVar,
+            //            "AddRow",
+            //            GetStringArrayExpression(row.Cells.Select(c => c.Value), paramToIdentifier))));
+            //}
 
-            return tableVar;
+            //return tableVar;
         }
 
-        private CodeExpression GetDocStringArgExpression(DocString docString, ParameterSubstitution paramToIdentifier)
+        private ExpressionSyntax GetDocStringArgExpression(DocString docString, ParameterSubstitution paramToIdentifier)
         {
             return GetSubstitutedString(docString == null ? null : docString.Content, paramToIdentifier);
         }
 
-        public CodeExpression GetTestRunnerExpression()
+        public NameSyntax GetTestRunnerExpression()
         {
-            return new CodeVariableReferenceExpression(GeneratorConstants.TESTRUNNER_FIELD);
+            return IdentifierName(GeneratorConstants.TESTRUNNER_FIELD);
         }
 
-        private CodeExpression GetStringArrayExpression(IEnumerable<string> items, ParameterSubstitution paramToIdentifier)
-        {
-            return new CodeArrayCreateExpression(typeof(string[]), items.Select(item => GetSubstitutedString(item, paramToIdentifier)).ToArray());
-        }
+        //private ExpressionSyntax GetStringArrayExpression(IEnumerable<string> items, ParameterSubstitution paramToIdentifier)
+        //{
+        //    return new CodeArrayCreateExpression(typeof(string[]), items.Select(item => GetSubstitutedString(item, paramToIdentifier)).ToArray());
+        //}
 
-        private CodeExpression GetSubstitutedString(string text, ParameterSubstitution paramToIdentifier)
+        private ExpressionSyntax GetSubstitutedString(string text, ParameterSubstitution paramToIdentifier)
         {
             if (text == null)
             {
-                return new CodeCastExpression(typeof(string), new CodePrimitiveExpression(null));
+                return CastExpression(
+                        PredefinedType(
+                            Token(SyntaxKind.StringKeyword)
+                        ),
+                        ParenthesizedExpression(
+                            LiteralExpression(
+                                SyntaxKind.NullLiteralExpression
+                            )
+                        )
+                    );
             }
 
             if (paramToIdentifier == null)
             {
-                return new CodePrimitiveExpression(text);
+                return _codeDomHelper.StringLiteral(text);
             }
 
             var paramRe = new Regex(@"\<(?<param>[^\<\>]+)\>");
@@ -194,16 +215,13 @@ namespace UnityFlow.Generator.Generation
 
             if (arguments.Count == 0)
             {
-                return new CodePrimitiveExpression(text);
+                return _codeDomHelper.StringLiteral(text);
             }
 
-            var formatArguments = new List<CodeExpression> { new CodePrimitiveExpression(formatText) };
-            formatArguments.AddRange(arguments.Select(id => new CodeVariableReferenceExpression(id)));
+            ExpressionSyntax[] args = arguments.Select(id => IdentifierName(id)).Prepend(_codeDomHelper.StringLiteral(formatText)).ToArray();
+            var formatArguments = _codeDomHelper.GetArgumentList(args);
 
-            return new CodeMethodInvokeExpression(
-                new CodeTypeReferenceExpression(typeof(string)),
-                "Format",
-                formatArguments.ToArray());
+            return InvocationExpression(_codeDomHelper.GetName("String.Format"), formatArguments);
         }
     }
 

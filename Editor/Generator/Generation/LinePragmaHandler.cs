@@ -1,4 +1,4 @@
-﻿using System.CodeDom;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.IO;
 using TechTalk.SpecFlow.Configuration;
 using UnityFlow.Generator.CodeDom;
@@ -17,7 +17,7 @@ namespace UnityFlow.Generator.Generation
         }
 
 
-        public void AddLinePragmaInitial(CodeTypeDeclaration testType, string sourceFile)
+        public void AddLinePragmaInitial(ClassDeclarationSyntax testType, string sourceFile)
         {
             if (_specFlowConfiguration.AllowDebugGeneratedFiles)
                 return;

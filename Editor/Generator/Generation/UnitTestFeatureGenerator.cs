@@ -1,17 +1,15 @@
-using System.CodeDom;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System;
-using TechTalk.SpecFlow.Generator;
 using UnityFlow.Generator.CodeDom;
-using TechTalk.SpecFlow.Generator.UnitTestConverter;
-using TechTalk.SpecFlow.Generator.UnitTestProvider;
-using TechTalk.SpecFlow.Infrastructure;
+using UnityFlow.Generator.UnitTestConverter;
+using UnityFlow.Generator.UnitTestProvider;
 using TechTalk.SpecFlow.Parser;
 using TechTalk.SpecFlow.Tracing;
 using TechTalk.SpecFlow.Configuration;
-using UnityFlow;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
 
 namespace UnityFlow.Generator.Generation
 {
@@ -42,7 +40,7 @@ namespace UnityFlow.Generator.Generation
 
         public string TestClassNameFormat { get; set; } = "{0}Feature";
 
-        public CodeNamespace GenerateUnitTestFixture(SpecFlowDocument document, string testClassName, string targetNamespace)
+        public NamespaceDeclarationSyntax GenerateUnitTestFixture(SpecFlowDocument document, string testClassName, string targetNamespace)
         {
             var codeNamespace = CreateNamespace(targetNamespace);
             var feature = document.SpecFlowFeature;
@@ -70,10 +68,10 @@ namespace UnityFlow.Generator.Generation
         }
 
 
-        private TestClassGenerationContext CreateTestClassStructure(CodeNamespace codeNamespace, string testClassName, SpecFlowDocument document)
+        private TestClassGenerationContext CreateTestClassStructure(NamespaceDeclarationSyntax codeNamespace, string testClassName, SpecFlowDocument document)
         {
             var testClass = _codeDomHelper.CreateGeneratedTypeDeclaration(testClassName);
-            codeNamespace.Types.Add(testClass);
+            codeNamespace.Members.Add(testClass);
 
             return new TestClassGenerationContext(
                 _testGeneratorProvider,
@@ -81,18 +79,18 @@ namespace UnityFlow.Generator.Generation
                 codeNamespace,
                 testClass,
                 DeclareTestRunnerMember(testClass),
-                _codeDomHelper.CreateMethod(testClass),
-                _codeDomHelper.CreateMethod(testClass),
-                _codeDomHelper.CreateMethod(testClass),
-                _codeDomHelper.CreateMethod(testClass),
-                _codeDomHelper.CreateMethod(testClass),
-                _codeDomHelper.CreateMethod(testClass),
-                _codeDomHelper.CreateMethod(testClass),
-                document.SpecFlowFeature.HasFeatureBackground() ? _codeDomHelper.CreateMethod(testClass) : null,
+                _codeDomHelper.CreateMethod(testClass, GeneratorConstants.TESTCLASS_INITIALIZE_NAME),
+                _codeDomHelper.CreateMethod(testClass, GeneratorConstants.TESTCLASS_CLEANUP_NAME),
+                _codeDomHelper.CreateMethod(testClass, GeneratorConstants.TEST_INITIALIZE_NAME),
+                _codeDomHelper.CreateMethod(testClass, GeneratorConstants.TEST_CLEANUP_NAME),
+                _codeDomHelper.CreateMethod(testClass, GeneratorConstants.SCENARIO_INITIALIZE_NAME),
+                _codeDomHelper.CreateMethod(testClass, GeneratorConstants.SCENARIO_START_NAME),
+                _codeDomHelper.CreateMethod(testClass, GeneratorConstants.SCENARIO_CLEANUP_NAME),
+                document.SpecFlowFeature.HasFeatureBackground() ? _codeDomHelper.CreateMethod(testClass, GeneratorConstants.BACKGROUND_NAME) : null,
                 _testGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.RowTests) && _specFlowConfiguration.AllowRowTests);
         }
 
-        private CodeNamespace CreateNamespace(string targetNamespace)
+        private NamespaceDeclarationSyntax CreateNamespace(string targetNamespace)
         {
             targetNamespace = targetNamespace ?? GeneratorConstants.DEFAULT_NAMESPACE;
 
@@ -106,11 +104,11 @@ namespace UnityFlow.Generator.Generation
                 }
             }
 
-            var codeNamespace = new CodeNamespace(targetNamespace);
+            var codeNamespace = NamespaceDeclaration(_codeDomHelper.GetName(targetNamespace));
 
-            codeNamespace.Imports.Add(new CodeNamespaceImport(GeneratorConstants.UNITYFLOW_NAMESPACE));
-            codeNamespace.Imports.Add(new CodeNamespaceImport("System"));
-            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Linq"));
+            codeNamespace.Usings.Add(_codeDomHelper.GetUsing(GeneratorConstants.UNITYFLOW_NAMESPACE));
+            codeNamespace.Usings.Add(_codeDomHelper.GetUsing("System"));
+            codeNamespace.Usings.Add(_codeDomHelper.GetUsing("System.Linq"));
             return codeNamespace;
         }
 
@@ -118,23 +116,18 @@ namespace UnityFlow.Generator.Generation
         {
             var scenarioCleanupMethod = generationContext.ScenarioCleanupMethod;
 
-            scenarioCleanupMethod.Attributes = MemberAttributes.Public | MemberAttributes.Final;
-            scenarioCleanupMethod.Name = GeneratorConstants.SCENARIO_CLEANUP_NAME;
-
-            // call collect errors
-            var testRunnerField = _scenarioPartHelper.GetTestRunnerExpression();
+            scenarioCleanupMethod.Modifiers.Add(Token(SyntaxKind.PublicKeyword));
 
             //testRunner.CollectScenarioErrors();
-            scenarioCleanupMethod.Statements.Add(
-                new CodeMethodInvokeExpression(
-                    testRunnerField,
-                    "CollectScenarioErrors"));
+            scenarioCleanupMethod.Body.Statements.Add(ExpressionStatement(
+                    InvocationExpression(_codeDomHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.CollectScenarioErrors"))
+                ));
         }
 
         private void SetupTestClass(TestClassGenerationContext generationContext)
         {
-            generationContext.TestClass.IsPartial = true;
-            generationContext.TestClass.TypeAttributes |= TypeAttributes.Public;
+            generationContext.TestClass.Modifiers.Add(Token(SyntaxKind.PartialKeyword));
+            generationContext.TestClass.Modifiers.Add(Token(SyntaxKind.PublicKeyword));
 
             _linePragmaHandler.AddLinePragmaInitial(generationContext.TestClass, generationContext.Document.SourceFilePath);
 
@@ -147,17 +140,32 @@ namespace UnityFlow.Generator.Generation
                 _testGeneratorProvider.SetTestClassCategories(generationContext, featureCategories);
             }
 
-            var featureTagsField = new CodeMemberField(typeof(string[]), GeneratorConstants.FEATURE_TAGS_VARIABLE_NAME);
-            featureTagsField.Attributes |= MemberAttributes.Static;
-            featureTagsField.InitExpression = _scenarioPartHelper.GetStringArrayExpression(generationContext.Feature.Tags);
+            var featureTagsField = FieldDeclaration(
+                                        VariableDeclaration(
+                                            _codeDomHelper.StringArray(OmittedArraySizeExpression())
+                                            //ArrayType(PredefinedType(Token(SyntaxKind.StringKeyword)))
+                                            //.WithRankSpecifiers(SingletonList(ArrayRankSpecifier(SingletonSeparatedList<ExpressionSyntax>(OmittedArraySizeExpression()))))
+                                        )
+                                        .WithVariables(
+                                            SingletonSeparatedList(
+                                                VariableDeclarator(Identifier(GeneratorConstants.FEATURE_TAGS_VARIABLE_NAME))
+                                                .WithInitializer(EqualsValueClause(_scenarioPartHelper.GetStringArrayExpression(generationContext.Feature.Tags)))
+                                                )
+                                            )
+                                    );
+            featureTagsField.Modifiers.AddRange(new[]{Token(SyntaxKind.PrivateKeyword),Token(SyntaxKind.StaticKeyword)});
 
             generationContext.TestClass.Members.Add(featureTagsField);
         }
 
-        private CodeMemberField DeclareTestRunnerMember(CodeTypeDeclaration type)
+        private FieldDeclarationSyntax DeclareTestRunnerMember(ClassDeclarationSyntax outerClass)
         {
-            var testRunnerField = new CodeMemberField(typeof(ITestRunner), GeneratorConstants.TESTRUNNER_FIELD);
-            type.Members.Add(testRunnerField);
+            var testRunnerField = FieldDeclaration(
+                VariableDeclaration(_codeDomHelper.GetName("UnityFlow.ITestRunner"))
+                    .WithVariables(SingletonSeparatedList(VariableDeclarator(Identifier(GeneratorConstants.TESTRUNNER_FIELD))))
+                ).WithModifiers(TokenList(Token(SyntaxKind.PrivateKeyword)));
+
+            outerClass.Members.Add(testRunnerField);
             return testRunnerField;
         }
 
@@ -166,8 +174,8 @@ namespace UnityFlow.Generator.Generation
         {
             var testClassInitializeMethod = generationContext.TestClassInitializeMethod;
 
-            testClassInitializeMethod.Attributes = MemberAttributes.Public;
-            testClassInitializeMethod.Name = GeneratorConstants.TESTCLASS_INITIALIZE_NAME;
+            testClassInitializeMethod.AddModifiers(Token(SyntaxKind.PublicKeyword));
+            //testClassInitializeMethod.Name = GeneratorConstants.TESTCLASS_INITIALIZE_NAME;
 
             _testGeneratorProvider.SetTestClassInitializeMethod(generationContext);
 
@@ -175,37 +183,53 @@ namespace UnityFlow.Generator.Generation
             //testRunner = TestRunnerManager.GetTestRunner(null, 0); if not UnitTestGeneratorTraits.ParallelExecution
             var testRunnerField = _scenarioPartHelper.GetTestRunnerExpression();
 
-            var testRunnerParameters = _testGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.ParallelExecution)
-                ? new CodeExpression[] { }
-                : new[] { new CodePrimitiveExpression(null), new CodePrimitiveExpression(0) };
+            var testRunnerInvocation = InvocationExpression(_codeDomHelper.GetMemberAccess("UnityFlow.TestRunnerManager.GetTestRunner"));
+            testRunnerInvocation = _testGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.ParallelExecution)
+                ? testRunnerInvocation
+                : testRunnerInvocation
+                    .WithArgumentList(ArgumentList(SeparatedList<ArgumentSyntax>(new SyntaxNodeOrToken[]
+                    {
+                        Argument(LiteralExpression(SyntaxKind.NullLiteralExpression)),
+                        Token(SyntaxKind.CommaToken),
+                        Argument(LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(0)))
+                    })));
 
-            testClassInitializeMethod.Statements.Add(
-                new CodeAssignStatement(
+            testClassInitializeMethod.Body.AddStatements(ExpressionStatement(
+                AssignmentExpression(
+                    SyntaxKind.SimpleAssignmentExpression,
                     testRunnerField,
-                    new CodeMethodInvokeExpression(
-                        new CodeTypeReferenceExpression(typeof(TestRunnerManager)),
-                        "GetTestRunner", testRunnerParameters)));
+                    testRunnerInvocation
+                    )
+                ));
 
             //FeatureInfo featureInfo = new FeatureInfo("xxxx");
-            testClassInitializeMethod.Statements.Add(
-                new CodeVariableDeclarationStatement(typeof(FeatureInfo), "featureInfo",
-                    new CodeObjectCreateExpression(typeof(FeatureInfo),
-                        new CodeObjectCreateExpression(typeof(CultureInfo),
-                            new CodePrimitiveExpression(generationContext.Feature.Language)),
-                        new CodePrimitiveExpression(generationContext.Document.DocumentLocation?.FeatureFolderPath),
-                        new CodePrimitiveExpression(generationContext.Feature.Name),
-                        new CodePrimitiveExpression(generationContext.Feature.Description),
-                        new CodeFieldReferenceExpression(
-                            new CodeTypeReferenceExpression("ProgrammingLanguage"),
-                            _codeDomHelper.TargetLanguage.ToString()),
-                        new CodeFieldReferenceExpression(null, GeneratorConstants.FEATURE_TAGS_VARIABLE_NAME))));
+            var arguments = _codeDomHelper.GetArgumentList(
+                ObjectCreationExpression(
+                    _codeDomHelper.GetName("System.Globalization.CultureInfo")
+                    )
+                    .WithArgumentList(_codeDomHelper.GetArgumentList(_codeDomHelper.StringLiteral(generationContext.Feature.Language))),
+                _codeDomHelper.StringLiteral(generationContext.Document.DocumentLocation?.FeatureFolderPath),
+                _codeDomHelper.StringLiteral(generationContext.Feature.Name),
+                _codeDomHelper.StringLiteral(generationContext.Feature.Description),
+                _codeDomHelper.GetMemberAccess(_codeDomHelper.TargetLanguage.ToString()),
+                _codeDomHelper.GetName(GeneratorConstants.FEATURE_TAGS_VARIABLE_NAME)
+                );
+            var featureInfoDecl = VariableDeclaration(_codeDomHelper.GetName("UnityFlow.FeatureInfo"))
+                .WithVariables(SingletonSeparatedList(
+                    VariableDeclarator(Identifier("featureInfo"))
+                    .WithInitializer(EqualsValueClause(
+                        ObjectCreationExpression(_codeDomHelper.GetName("UnitFlow.FeatureInfo"))
+                        .WithArgumentList(arguments)
+                    ))
+                ));
+
+            testClassInitializeMethod.Body.AddStatements(LocalDeclarationStatement(featureInfoDecl));
 
             //testRunner.OnFeatureStart(featureInfo);
-            testClassInitializeMethod.Statements.Add(
-                new CodeMethodInvokeExpression(
-                    testRunnerField,
-                    "OnFeatureStart",
-                    new CodeVariableReferenceExpression("featureInfo")));
+            testClassInitializeMethod.Body.AddStatements(ExpressionStatement(
+                InvocationExpression(_codeDomHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnFeatureStart")) 
+                .WithArgumentList(_codeDomHelper.GetArgumentList(IdentifierName("featureInfo")))
+                ));
         }
 
 
@@ -213,30 +237,30 @@ namespace UnityFlow.Generator.Generation
         {
             var testClassCleanupMethod = generationContext.TestClassCleanupMethod;
 
-            testClassCleanupMethod.Attributes = MemberAttributes.Public;
-            testClassCleanupMethod.Name = GeneratorConstants.TESTCLASS_CLEANUP_NAME;
+            testClassCleanupMethod.AddModifiers(Token(SyntaxKind.PublicKeyword));
 
             _testGeneratorProvider.SetTestClassCleanupMethod(generationContext);
 
             var testRunnerField = _scenarioPartHelper.GetTestRunnerExpression();
             //            testRunner.OnFeatureEnd();
-            testClassCleanupMethod.Statements.Add(
-                new CodeMethodInvokeExpression(
-                    testRunnerField,
-                    "OnFeatureEnd"));
+            testClassCleanupMethod.Body.Statements.Add(ExpressionStatement(
+                InvocationExpression(_codeDomHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnFeatureEnd"))
+                ));
             //            testRunner = null;
-            testClassCleanupMethod.Statements.Add(
-                new CodeAssignStatement(
-                    testRunnerField,
-                    new CodePrimitiveExpression(null)));
+            testClassCleanupMethod.Body.Statements.Add(ExpressionStatement(
+                AssignmentExpression(
+                    SyntaxKind.SimpleAssignmentExpression, 
+                    testRunnerField, 
+                    LiteralExpression(SyntaxKind.NullLiteralExpression)
+                    )
+                ));
         }
 
         private void SetupTestInitializeMethod(TestClassGenerationContext generationContext)
         {
             var testInitializeMethod = generationContext.TestInitializeMethod;
 
-            testInitializeMethod.Attributes = MemberAttributes.Public | MemberAttributes.Final;
-            testInitializeMethod.Name = GeneratorConstants.TEST_INITIALIZE_NAME;
+            testInitializeMethod.AddModifiers(Token(SyntaxKind.PublicKeyword));
 
             _testGeneratorProvider.SetTestInitializeMethod(generationContext);
         }
@@ -245,50 +269,43 @@ namespace UnityFlow.Generator.Generation
         {
             var testCleanupMethod = generationContext.TestCleanupMethod;
 
-            testCleanupMethod.Attributes = MemberAttributes.Public | MemberAttributes.Final;
-            testCleanupMethod.Name = GeneratorConstants.TEST_CLEANUP_NAME;
+            testCleanupMethod.Modifiers.Add(Token(SyntaxKind.PublicKeyword));
 
             _testGeneratorProvider.SetTestCleanupMethod(generationContext);
 
-            var testRunnerField = _scenarioPartHelper.GetTestRunnerExpression();
             //testRunner.OnScenarioEnd();
-            testCleanupMethod.Statements.Add(
-                new CodeMethodInvokeExpression(
-                    testRunnerField,
-                    "OnScenarioEnd"));
+            testCleanupMethod.Body.Statements.Add(ExpressionStatement(
+                InvocationExpression(_codeDomHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnScenarioEnd"))
+                )); 
         }
 
         private void SetupScenarioInitializeMethod(TestClassGenerationContext generationContext)
         {
             var scenarioInitializeMethod = generationContext.ScenarioInitializeMethod;
 
-            scenarioInitializeMethod.Attributes = MemberAttributes.Public | MemberAttributes.Final;
-            scenarioInitializeMethod.Name = GeneratorConstants.SCENARIO_INITIALIZE_NAME;
-            scenarioInitializeMethod.Parameters.Add(
-                new CodeParameterDeclarationExpression(typeof(ScenarioInfo), "scenarioInfo"));
+            scenarioInitializeMethod.Modifiers.Add(Token(SyntaxKind.PublicKeyword));
+            scenarioInitializeMethod.ParameterList.AddParameters(
+                    Parameter(Identifier("scenarioInfo"))
+                    .WithType(_codeDomHelper.GetName("UnityFlow.ScenarioInfo"))
+                );
 
             //testRunner.OnScenarioInitialize(scenarioInfo);
-            var testRunnerField = _scenarioPartHelper.GetTestRunnerExpression();
-            scenarioInitializeMethod.Statements.Add(
-                new CodeMethodInvokeExpression(
-                    testRunnerField,
-                    nameof(ITestExecutionEngine.OnScenarioInitialize),
-                    new CodeVariableReferenceExpression("scenarioInfo")));
+            scenarioInitializeMethod.Body.AddStatements(ExpressionStatement(
+                InvocationExpression(_codeDomHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnScenarioInitialize"))
+                .WithArgumentList(_codeDomHelper.GetArgumentList(IdentifierName("scenarioInfo")))
+                ));
         }
 
         private void SetupScenarioStartMethod(TestClassGenerationContext generationContext)
         {
             var scenarioStartMethod = generationContext.ScenarioStartMethod;
 
-            scenarioStartMethod.Attributes = MemberAttributes.Public | MemberAttributes.Final;
-            scenarioStartMethod.Name = GeneratorConstants.SCENARIO_START_NAME;
+            scenarioStartMethod.Modifiers.Add(Token(SyntaxKind.PublicKeyword));
 
             //testRunner.OnScenarioStart();
-            var testRunnerField = _scenarioPartHelper.GetTestRunnerExpression();
-            scenarioStartMethod.Statements.Add(
-                new CodeMethodInvokeExpression(
-                    testRunnerField,
-                    nameof(ITestExecutionEngine.OnScenarioStart)));
+            scenarioStartMethod.Body.Statements.Add(ExpressionStatement(
+                InvocationExpression(_codeDomHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnScenarioStart"))
+                )); 
         }
     }
 }

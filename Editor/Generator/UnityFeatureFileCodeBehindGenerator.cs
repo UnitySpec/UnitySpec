@@ -1,7 +1,6 @@
 ﻿using SpecFlow.Tools.MsBuild.Generation;
 using System.Collections.Generic;
 using TechTalk.SpecFlow.Utils;
-using UnityEngine;
 
 namespace UnityFlow.Generator
 {

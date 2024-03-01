@@ -6,7 +6,7 @@ using UnityFlow.Generator.CodeDom;
 using TechTalk.SpecFlow.Generator.Configuration;
 using TechTalk.SpecFlow.Generator.Interfaces;
 using TechTalk.SpecFlow.Generator.Project;
-using TechTalk.SpecFlow.Generator.UnitTestConverter;
+using UnityFlow.Generator.UnitTestConverter;
 using TechTalk.SpecFlow.Parser;
 using UnityEngine;
 

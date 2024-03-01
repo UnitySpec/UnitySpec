@@ -1,20 +1,21 @@
 using BoDi;
-using UnityFlow.Generator.Generation;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using TechTalk.SpecFlow.Configuration;
 using TechTalk.SpecFlow.Generator;
-using UnityFlow.Generator.CodeDom;
 using TechTalk.SpecFlow.Generator.Interfaces;
-using TechTalk.SpecFlow.Generator.UnitTestConverter;
+using UnityFlow.Generator.UnitTestConverter;
 using TechTalk.SpecFlow.Generator.UnitTestProvider;
 using TechTalk.SpecFlow.Parser;
 using TechTalk.SpecFlow.Tracing;
+using UnityFlow.Generator.CodeDom;
+using UnityFlow.Generator.Generation;
 
 namespace UnityFlow.Generator
 {
@@ -88,26 +89,43 @@ namespace UnityFlow.Generator
 
         protected string GetGeneratedTestCode(FeatureFileInput featureFileInput)
         {
-            using (var outputWriter = new IndentProcessingWriter(new StringWriter()))
-            {
-                var codeProvider = codeDomHelper.CreateCodeDomProvider();
-                var codeNamespace = GenerateTestFileCode(featureFileInput);
+            var classDeclaration = GenerateTestFileCode(featureFileInput);
+            var header = GetSpecFlowHeader();
+            var footer = GetSpecFlowFooter();
 
-                if (codeNamespace == null) return "";
+            CompilationUnitSyntax unit =
+                SyntaxFactory.CompilationUnit()
+                .WithMembers(
+                    SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+                        classDeclaration
+                        .WithNamespaceKeyword(header)
+                        )
+                    )
+                .WithEndOfFileToken(footer)
+                .NormalizeWhitespace()
+                ;
 
-                var options = new CodeGeneratorOptions
-                {
-                    BracingStyle = "C",
-                };
+            return unit.ToFullString();
+            //using (var outputWriter = new IndentProcessingWriter(new StringWriter()))
+            //{
+            //    var codeProvider = codeDomHelper.CreateCodeDomProvider();
+            //    var codeNamespace = GenerateTestFileCode(featureFileInput);
 
-                AddSpecFlowHeader(codeProvider, outputWriter);
-                codeProvider.GenerateCodeFromNamespace(codeNamespace, outputWriter, options);
-                AddSpecFlowFooter(codeProvider, outputWriter);
+            //    if (codeNamespace == null) return "";
 
-                outputWriter.Flush();
-                var generatedTestCode = outputWriter.ToString();
-                return FixVBNetGlobalNamespace(generatedTestCode);
-            }
+            //    var options = new CodeGeneratorOptions
+            //    {
+            //        BracingStyle = "C",
+            //    };
+
+            //    AddSpecFlowHeader(codeProvider, outputWriter);
+            //    codeProvider.GenerateCodeFromNamespace(codeNamespace, outputWriter, options);
+            //    AddSpecFlowFooter(codeProvider, outputWriter);
+
+            //    outputWriter.Flush();
+            //    var generatedTestCode = outputWriter.ToString();
+            //    return FixVBNetGlobalNamespace(generatedTestCode);
+            //}
         }
 
         private string FixVBNetGlobalNamespace(string generatedTestCode)
@@ -117,7 +135,7 @@ namespace UnityFlow.Generator
                     .Replace("GlobalVBNetNamespace", "Global");
         }
 
-        private CodeNamespace GenerateTestFileCode(FeatureFileInput featureFileInput)
+        private NamespaceDeclarationSyntax GenerateTestFileCode(FeatureFileInput featureFileInput)
         {
             string targetNamespace = GetTargetNamespace(featureFileInput) ?? "SpecFlow.GeneratedTests";
 
@@ -130,10 +148,7 @@ namespace UnityFlow.Generator
 
             if (specFlowDocument.SpecFlowFeature == null) return null;
 
-            //IFeatureGenerator featureGenerator = featureGeneratorRegistry.CreateGenerator(specFlowDocument);
-            IUnitTestGeneratorProvider testGeneratorProvider = new UTFTestGeneratorProvider(codeDomHelper);
-            IDecoratorRegistry decoratorRegistry = new DecoratorRegistry(new ObjectContainer());
-            IFeatureGenerator featureGenerator = new UnitTestFeatureGenerator(testGeneratorProvider, codeDomHelper, specFlowConfiguration, decoratorRegistry);
+            var featureGenerator = featureGeneratorRegistry.CreateGenerator(specFlowDocument);
 
             var codeNamespace = featureGenerator.GenerateUnitTestFixture(specFlowDocument, null, targetNamespace);
             return codeNamespace;
@@ -194,37 +209,76 @@ namespace UnityFlow.Generator
             return testHeaderWriter.DetectGeneratedTestVersion(featureFileInput.GetGeneratedTestContent(generatedTestFullPath));
         }
 
-        protected void AddSpecFlowHeader(CodeDomProvider codeProvider, TextWriter outputWriter)
+        protected SyntaxToken GetSpecFlowHeader()
         {
-            const string specFlowHeaderTemplate = @"------------------------------------------------------------------------------
- <auto-generated>
-     This code was generated by UnityFlow (https://github.com/mmulder135/UnityFlow).
-     UnityFlow version: {0}
+            var version = GetCurrentSpecFlowVersion();
 
-     Changes to this file may cause incorrect behavior and will be lost if
-     the code is regenerated.
- </auto-generated>
-------------------------------------------------------------------------------";
+            return SyntaxFactory.Token(
+                        SyntaxFactory.TriviaList(
+                            new[]{
+                                SyntaxFactory.Comment("// ------------------------------------------------------------------------------"),
+                                SyntaxFactory.Comment("//  <auto-generated>"),
+                                SyntaxFactory.Comment("//      This code was generated by UnityFlow (https://github.com/mmulder135/UnityFlow)."),
+                                SyntaxFactory.Comment($"//      UnityFlow version: {version}"),
+                                SyntaxFactory.Comment("// "),
+                                SyntaxFactory.Comment("//      Changes to this file may cause incorrect behavior and will be lost if"),
+                                SyntaxFactory.Comment("//      the code is regenerated."),
+                                SyntaxFactory.Comment("//  </auto-generated>"),
+                                SyntaxFactory.Comment("// ------------------------------------------------------------------------------"),
 
-            var headerReader = new StringReader(string.Format(specFlowHeaderTemplate,
-                GetCurrentSpecFlowVersion()
-                ));
+                                codeDomHelper.GetStartRegionStatement("Designer generated code"),
+                                codeDomHelper.GetDisableWarningsPragma()
 
-            string line;
-            while ((line = headerReader.ReadLine()) != null)
-            {
-                codeProvider.GenerateCodeFromStatement(new CodeCommentStatement(line), outputWriter, null);
-            }
-
-            codeProvider.GenerateCodeFromStatement(codeDomHelper.GetStartRegionStatement("Designer generated code"), outputWriter, null);
-            codeProvider.GenerateCodeFromStatement(codeDomHelper.GetDisableWarningsPragma(), outputWriter, null);
+                            }
+                        ),
+                        SyntaxKind.NamespaceKeyword,
+                        SyntaxFactory.TriviaList()
+                );
         }
+        //        protected void AddSpecFlowHeader(CodeDomProvider codeProvider, TextWriter outputWriter)
+        //        {
+        //            const string specFlowHeaderTemplate = @"------------------------------------------------------------------------------
+        // <auto-generated>
+        //     This code was generated by UnityFlow (https://github.com/mmulder135/UnityFlow).
+        //     UnityFlow version: {0}
 
-        protected void AddSpecFlowFooter(CodeDomProvider codeProvider, TextWriter outputWriter)
+        //     Changes to this file may cause incorrect behavior and will be lost if
+        //     the code is regenerated.
+        // </auto-generated>
+        //------------------------------------------------------------------------------";
+
+        //            var headerReader = new StringReader(string.Format(specFlowHeaderTemplate,
+        //                GetCurrentSpecFlowVersion()
+        //                ));
+
+        //            string line;
+        //            while ((line = headerReader.ReadLine()) != null)
+        //            {
+        //                codeProvider.GenerateCodeFromStatement(new CodeCommentStatement(line), outputWriter, null);
+        //            }
+
+        //            codeProvider.GenerateCodeFromStatement(codeDomHelper.GetStartRegionStatement("Designer generated code"), outputWriter, null);
+        //            codeProvider.GenerateCodeFromStatement(codeDomHelper.GetDisableWarningsPragma(), outputWriter, null);
+        //        }
+
+        protected SyntaxToken GetSpecFlowFooter()
         {
-            codeProvider.GenerateCodeFromStatement(codeDomHelper.GetEnableWarningsPragma(), outputWriter, null);
-            codeProvider.GenerateCodeFromStatement(codeDomHelper.GetEndRegionStatement(), outputWriter, null);
+            return SyntaxFactory.Token(
+                        SyntaxFactory.TriviaList(
+                            new[]{
+                                codeDomHelper.GetEnableWarningsPragma(),
+                                codeDomHelper.GetEndRegionStatement()
+                            }
+                        ),
+                        SyntaxKind.EndOfFileToken,
+                        SyntaxFactory.TriviaList()
+                    );
         }
+        //protected void AddSpecFlowFooter(CodeDomProvider codeProvider, TextWriter outputWriter)
+        //{
+        //    codeProvider.GenerateCodeFromStatement(codeDomHelper.GetEnableWarningsPragma(), outputWriter, null);
+        //    codeProvider.GenerateCodeFromStatement(codeDomHelper.GetEndRegionStatement(), outputWriter, null);
+        //}
 
         protected Version GetCurrentSpecFlowVersion()
         {
