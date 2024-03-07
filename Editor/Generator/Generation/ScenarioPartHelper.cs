@@ -1,17 +1,15 @@
-﻿using System.CodeDom;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gherkin.Ast;
-using TechTalk.SpecFlow.Configuration;
-using TechTalk.SpecFlow.Generator;
-using UnityFlow.Generator.CodeDom;
-using TechTalk.SpecFlow.Parser;
-using UnityFlow;
+using UnityFlow.Generator.Roslyn;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using Microsoft.CodeAnalysis.CSharp;
 using System;
+using UnityFlow.General.Configuration;
+using UnityFlow.General.Extensions;
+using UnityFlow.General.Parser;
 
 namespace UnityFlow.Generator.Generation
 {
@@ -19,14 +17,14 @@ namespace UnityFlow.Generator.Generation
     public class ScenarioPartHelper
     {
         private readonly SpecFlowConfiguration _specFlowConfiguration;
-        private readonly CodeDomHelper _codeDomHelper;
+        private readonly RoslynHelper _roslynHelper;
         private int _tableCounter;
 
 
-        public ScenarioPartHelper(SpecFlowConfiguration specFlowConfiguration, CodeDomHelper codeDomHelper)
+        public ScenarioPartHelper(SpecFlowConfiguration specFlowConfiguration, RoslynHelper roslynHelper)
         {
             _specFlowConfiguration = specFlowConfiguration;
-            _codeDomHelper = codeDomHelper;
+            _roslynHelper = roslynHelper;
         }
 
         public void SetupFeatureBackground(TestClassGenerationContext generationContext)
@@ -44,7 +42,7 @@ namespace UnityFlow.Generator.Generation
 
 
             var statements = new List<StatementSyntax>();
-            //using (new SourceLineScope(_specFlowConfiguration, _codeDomHelper, statements, generationContext.Document.SourceFilePath, background.Location))
+            //using (new SourceLineScope(_specFlowConfiguration, _roslynHelper, statements, generationContext.Document.SourceFilePath, background.Location))
             //{
             //}
 
@@ -61,21 +59,21 @@ namespace UnityFlow.Generator.Generation
             var testRunnerField = GetTestRunnerExpression();
             var scenarioStep = AsSpecFlowStep(gherkinStep);
 
-            var argumentList = _codeDomHelper.GetArgumentList(
+            var argumentList = _roslynHelper.GetArgumentList(
                 GetSubstitutedString(scenarioStep.Text, paramToIdentifier),
                 GetDocStringArgExpression(scenarioStep.Argument as DocString, paramToIdentifier),
                 GetTableArgExpression(scenarioStep.Argument as DataTable, statements, paramToIdentifier),
-                _codeDomHelper.StringLiteral(scenarioStep.Keyword)
+                _roslynHelper.StringLiteral(scenarioStep.Keyword)
                 );
 
             var invokeExpr = ParenthesizedExpression(CastExpression(
-                _codeDomHelper.GetName("System.Collections.IEnumerator"),
+                _roslynHelper.GetName("System.Collections.IEnumerator"),
                 ParenthesizedExpression(InvocationExpression(
-                        _codeDomHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.{scenarioStep.StepKeyword}")
+                        _roslynHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.{scenarioStep.StepKeyword}")
                     ).WithArgumentList(argumentList)
                 )));
 
-            var yieldStmt = _codeDomHelper.AddSourceLinePragmaStatement(YieldStatement(SyntaxKind.YieldReturnStatement, invokeExpr), gherkinStep.Location.Line);
+            var yieldStmt = _roslynHelper.AddSourceLinePragmaStatement(YieldStatement(SyntaxKind.YieldReturnStatement, invokeExpr), gherkinStep.Location.Line);
             //testRunner.Given("something");
             statements.Add(yieldStmt);
         }
@@ -85,20 +83,20 @@ namespace UnityFlow.Generator.Generation
             if (!tags.Any())
             {
                 return ParenthesizedExpression(CastExpression(
-                            _codeDomHelper.StringArray(OmittedArraySizeExpression()),
+                            _roslynHelper.StringArray(OmittedArraySizeExpression()),
                             ParenthesizedExpression(LiteralExpression(SyntaxKind.NullLiteralExpression))
                             ));
             }
 
-            var tagExprs = tags.Select(tag => _codeDomHelper.StringLiteral(tag.GetNameWithoutAt())).ToArray();
+            var tagExprs = tags.Select(tag => _roslynHelper.StringLiteral(tag.GetNameWithoutAt())).ToArray();
             return ParenthesizedExpression(
                 ArrayCreationExpression(
-                    _codeDomHelper.StringArray(_codeDomHelper.NumericLiteral(tagExprs.Length))
+                    _roslynHelper.StringArray(_roslynHelper.NumericLiteral(tagExprs.Length))
                     )
                 .WithInitializer(
                     InitializerExpression(
                         SyntaxKind.ArrayInitializerExpression,
-                        _codeDomHelper.GetInterspersedList( tagExprs )
+                        _roslynHelper.GetInterspersedList( tagExprs )
                         )
                     )
                 );
@@ -120,12 +118,12 @@ namespace UnityFlow.Generator.Generation
 
         private ExpressionSyntax GetTableArgExpression(DataTable tableArg, List<StatementSyntax> statements, ParameterSubstitution paramToIdentifier)
         {
+            var tableType = _roslynHelper.GetName("UnityFlow.Table");
+            if (tableArg == null)
+            {
+                return CastExpression(tableType, LiteralExpression(SyntaxKind.NullLiteralExpression));
+            }
             throw new NotImplementedException("Table expressions not yet implemented in Unity");
-            //var tableType = _codeDomHelper.GetName("UnityFlow.Table");
-            //if (tableArg == null)
-            //{
-            //    return CastExpression(tableType, LiteralExpression(SyntaxKind.NullLiteralExpression));
-            //}
 
             //_tableCounter++;
 
@@ -187,7 +185,7 @@ namespace UnityFlow.Generator.Generation
 
             if (paramToIdentifier == null)
             {
-                return _codeDomHelper.StringLiteral(text);
+                return _roslynHelper.StringLiteral(text);
             }
 
             var paramRe = new Regex(@"\<(?<param>[^\<\>]+)\>");
@@ -215,13 +213,13 @@ namespace UnityFlow.Generator.Generation
 
             if (arguments.Count == 0)
             {
-                return _codeDomHelper.StringLiteral(text);
+                return _roslynHelper.StringLiteral(text);
             }
 
-            ExpressionSyntax[] args = arguments.Select(id => IdentifierName(id)).Prepend(_codeDomHelper.StringLiteral(formatText)).ToArray();
-            var formatArguments = _codeDomHelper.GetArgumentList(args);
+            ExpressionSyntax[] args = arguments.Select(id => IdentifierName(id)).Prepend(_roslynHelper.StringLiteral(formatText)).ToArray();
+            var formatArguments = _roslynHelper.GetArgumentList(args);
 
-            return InvocationExpression(_codeDomHelper.GetName("String.Format"), formatArguments);
+            return InvocationExpression(_roslynHelper.GetName("String.Format"), formatArguments);
         }
     }
 

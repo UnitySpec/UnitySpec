@@ -1,18 +1,14 @@
 ﻿using UnityFlow.Bindings;
 using UnityFlow.Bindings.Discovery;
 using UnityFlow.BindingSkeletons;
-using UnityFlow.Configuration;
 using UnityFlow.ErrorHandling;
 using UnityFlow.Events;
 using UnityFlow.Tracing;
 using BoDi;
-using TechTalk.SpecFlow.Analytics;
-using TechTalk.SpecFlow.Analytics.AppInsights;
-using TechTalk.SpecFlow.Analytics.UserId;
-using TechTalk.SpecFlow.EnvironmentAccess;
-using TechTalk.SpecFlow.FileAccess;
-using TechTalk.SpecFlow.TestFramework;
-using TechTalk.SpecFlow.Time;
+using UnityFlow.Runner.Configuration;
+using UnityFlow.General.Tracing;
+using UnityFlow.General.Configuration;
+using UnityFlow.General.Configuration.Interfaces;
 
 namespace UnityFlow.Infrastructure
 {
@@ -47,35 +43,41 @@ namespace UnityFlow.Infrastructure
             container.RegisterTypeAs<DefaultSkeletonTemplateProvider, ISkeletonTemplateProvider>();
             container.RegisterTypeAs<StepTextAnalyzer, IStepTextAnalyzer>();
 
+            //container.RegisterTypeAs<RuntimePluginLoader, IRuntimePluginLoader>();
+            //container.RegisterTypeAs<RuntimePluginLocator, IRuntimePluginLocator>();
+            //container.RegisterTypeAs<RuntimePluginLocationMerger, IRuntimePluginLocationMerger>();
+
             container.RegisterTypeAs<BindingAssemblyLoader, IBindingAssemblyLoader>();
 
             container.RegisterTypeAs<ConfigurationLoader, IConfigurationLoader>();
 
             container.RegisterTypeAs<ObsoleteStepHandler, IObsoleteStepHandler>();
 
-            container.RegisterTypeAs<EnvironmentWrapper, IEnvironmentWrapper>();
-            container.RegisterTypeAs<BinaryFileAccessor, IBinaryFileAccessor>();
+            //container.RegisterTypeAs<EnvironmentWrapper, IEnvironmentWrapper>();
+            //container.RegisterTypeAs<BinaryFileAccessor, IBinaryFileAccessor>();
             container.RegisterTypeAs<TestPendingMessageFactory, ITestPendingMessageFactory>();
             container.RegisterTypeAs<TestUndefinedMessageFactory, ITestUndefinedMessageFactory>();
-            container.RegisterTypeAs<DefaultTestRunContext, ITestRunContext>();
+            //container.RegisterTypeAs<DefaultTestRunContext, ITestRunContext>();
 
             //container.RegisterTypeAs<SpecFlowPath, ISpecFlowPath>();
 
-            container.RegisterTypeAs<UtcDateTimeClock, IClock>();
+            //container.RegisterTypeAs<UtcDateTimeClock, IClock>();
 
+            //container.RegisterTypeAs<FileUserIdStore, IUserUniqueIdStore>();
+            //container.RegisterTypeAs<FileService, IFileService>();
+            //container.RegisterTypeAs<DirectoryService, IDirectoryService>();
 
-            container.RegisterTypeAs<FileUserIdStore, IUserUniqueIdStore>();
-            container.RegisterTypeAs<FileService, IFileService>();
-            container.RegisterTypeAs<DirectoryService, IDirectoryService>();
-
-            container.RegisterTypeAs<EnvironmentSpecFlowTelemetryChecker, IEnvironmentSpecFlowTelemetryChecker>();
-            container.RegisterTypeAs<AnalyticsTransmitter, IAnalyticsTransmitter>();
-            container.RegisterTypeAs<HttpClientAnalyticsTransmitterSink, IAnalyticsTransmitterSink>();
-            container.RegisterTypeAs<AppInsightsEventSerializer, IAppInsightsEventSerializer>();
-            container.RegisterTypeAs<HttpClientWrapper, HttpClientWrapper>();
-            container.RegisterTypeAs<AnalyticsEventProvider, IAnalyticsEventProvider>();
+            //container.RegisterTypeAs<EnvironmentSpecFlowTelemetryChecker, IEnvironmentSpecFlowTelemetryChecker>();
+            //container.RegisterTypeAs<AnalyticsTransmitter, IAnalyticsTransmitter>();
+            //container.RegisterTypeAs<HttpClientAnalyticsTransmitterSink, IAnalyticsTransmitterSink>();
+            //container.RegisterTypeAs<AppInsightsEventSerializer, IAppInsightsEventSerializer>();
+            //container.RegisterTypeAs<HttpClientWrapper, HttpClientWrapper>();
+            //container.RegisterTypeAs<AnalyticsEventProvider, IAnalyticsEventProvider>();
 
             container.RegisterTypeAs<SpecFlowJsonLocator, ISpecFlowJsonLocator>();
+
+            //container.RegisterTypeAs<RuntimePluginTestExecutionLifecycleEvents, RuntimePluginTestExecutionLifecycleEvents>();
+            //container.RegisterTypeAs<RuntimePluginTestExecutionLifecycleEventEmitter, IRuntimePluginTestExecutionLifecycleEventEmitter>();
 
             container.RegisterTypeAs<TestAssemblyProvider, ITestAssemblyProvider>();
         }

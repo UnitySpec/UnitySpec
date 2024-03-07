@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 
-namespace UnityFlow.Generator.Generation
+namespace UnityFlow.Generator
 {
     [Serializable]
     public class TestGeneratorException : Exception

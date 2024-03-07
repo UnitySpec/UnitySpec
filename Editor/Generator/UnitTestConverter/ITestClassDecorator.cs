@@ -2,7 +2,11 @@
 
 namespace UnityFlow.Generator.UnitTestConverter
 {
-    public interface ITestClassTagDecorator
+    public interface ITestXDecorator
+    {
+        int Priority { get; }
+    }
+    public interface ITestClassTagDecorator 
     {
         int Priority { get; }
         bool RemoveProcessedTags { get; }
@@ -19,22 +23,18 @@ namespace UnityFlow.Generator.UnitTestConverter
         bool ApplyOtherDecoratorsForProcessedTags { get; }
 
         bool CanDecorateFrom(string tagName, TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod);
-        void DecorateFrom(string tagName, TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod);
+        MethodDeclarationSyntax DecorateFrom(string tagName, TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod);
     }
 
-    public interface ITestClassDecorator
+    public interface ITestClassDecorator : ITestXDecorator
     {
-        int Priority { get; }
-
         bool CanDecorateFrom(TestClassGenerationContext generationContext);
         void DecorateFrom(TestClassGenerationContext generationContext);
     }
 
-    public interface ITestMethodDecorator
+    public interface ITestMethodDecorator : ITestXDecorator
     {
-        int Priority { get; }
-
         bool CanDecorateFrom(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod);
-        void DecorateFrom(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod);
+        MethodDeclarationSyntax DecorateFrom(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod);
     }
 }

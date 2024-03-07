@@ -1,12 +1,12 @@
 ﻿using BoDi;
 using System.Collections.Generic;
-using UnityFlow.Generator.CodeDom;
-using UnityEngine;
+using UnityFlow.Generator.Roslyn;
 using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using UnityFlow.Generator.Generation;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
 
 namespace UnityFlow.Generator.UnitTestProvider
 {
@@ -26,12 +26,12 @@ namespace UnityFlow.Generator.UnitTestProvider
         protected internal const string TESTCONTEXT_TYPE = "NUnit.Framework.TestContext";
         protected internal const string TESTCONTEXT_INSTANCE = "NUnit.Framework.TestContext.CurrentContext";
 
-        public UTFTestGeneratorProvider(CodeDomHelper codeDomHelper)
+        public UTFTestGeneratorProvider(RoslynHelper roslynHelper)
         {
-            CodeDomHelper = codeDomHelper;
+            this.roslynHelper = roslynHelper;
         }
 
-        protected CodeDomHelper CodeDomHelper { get; set; }
+        protected RoslynHelper roslynHelper { get; set; }
 
         public bool GenerateParallelCodeForFeature { get; set; }
 
@@ -42,38 +42,54 @@ namespace UnityFlow.Generator.UnitTestProvider
 
         public virtual void SetTestClassIgnore(TestClassGenerationContext generationContext)
         {
-            CodeDomHelper.AddAttribute(generationContext.TestClass, IGNORE_ATTR, "Ignored feature");
+            generationContext.TestClass = generationContext.TestClass.WithAttributeLists(SingletonList(
+                roslynHelper.getAttribute(IGNORE_ATTR, "Ignored feature")
+                ));
         }
 
-        public virtual void SetTestMethodIgnore(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod)
+        public virtual MethodDeclarationSyntax SetTestMethodIgnore(MethodDeclarationSyntax testMethod)
         {
-            CodeDomHelper.AddAttribute(testMethod, IGNORE_ATTR, "Ignored scenario");
+            return testMethod.WithAttributeLists(SingletonList(
+                    roslynHelper.getAttribute(IGNORE_ATTR, "Ignored scenario")
+                ));
         }
 
         public virtual void SetTestClassInitializeMethod(TestClassGenerationContext generationContext)
         {
-            CodeDomHelper.AddAttribute(generationContext.TestClassInitializeMethod, TESTFIXTURESETUP_ATTR_NUNIT3);
+            generationContext.TestClassInitializeMethod = generationContext.TestClassInitializeMethod.WithAttributeLists(SingletonList(
+                        roslynHelper.getAttribute(TESTFIXTURESETUP_ATTR_NUNIT3)
+                    ));
         }
 
         public virtual void SetTestClassCleanupMethod(TestClassGenerationContext generationContext)
         {
-            CodeDomHelper.AddAttribute(generationContext.TestClassCleanupMethod, TESTFIXTURETEARDOWN_ATTR_NUNIT3);
+            generationContext.TestClassCleanupMethod = generationContext.TestClassCleanupMethod.WithAttributeLists(SingletonList(
+                    roslynHelper.getAttribute(TESTFIXTURETEARDOWN_ATTR_NUNIT3)
+                ));
         }
 
         public virtual void SetTestClassNonParallelizable(TestClassGenerationContext generationContext)
         {
-            CodeDomHelper.AddAttribute(generationContext.TestClass, NONPARALLELIZABLE_ATTR);
+            generationContext.TestClass = generationContext.TestClass.WithAttributeLists(SingletonList(
+                    roslynHelper.getAttribute(NONPARALLELIZABLE_ATTR)
+                    ));
         }
 
         public void SetTestClass(TestClassGenerationContext generationContext, string featureTitle, string featureDescription)
         {
-            CodeDomHelper.AddAttribute(generationContext.TestClass, TESTFIXTURE_ATTR);
-            CodeDomHelper.AddAttribute(generationContext.TestClass, DESCRIPTION_ATTR, featureTitle);
+            generationContext.TestClass = generationContext.TestClass.WithAttributeLists(new SyntaxList<AttributeListSyntax>
+                    {
+                        roslynHelper.getAttribute(TESTFIXTURE_ATTR),
+                        roslynHelper.getAttribute(DESCRIPTION_ATTR, featureTitle)
+                    }
+                );
         }
 
         public void SetTestClassCategories(TestClassGenerationContext generationContext, IEnumerable<string> featureCategories)
         {
-            CodeDomHelper.AddAttributeForEachValue(generationContext.TestClass, CATEGORY_ATTR, featureCategories);
+            generationContext.TestClass = generationContext.TestClass.WithAttributeLists(new SyntaxList<AttributeListSyntax>(
+                    roslynHelper.getAttributeForEachValue(CATEGORY_ATTR, featureCategories)
+                    ));
         }
 
         public virtual void FinalizeTestClass(TestClassGenerationContext generationContext)
@@ -83,56 +99,65 @@ namespace UnityFlow.Generator.UnitTestProvider
                 InvocationExpression(
                     MemberAccessExpression(
                         SyntaxKind.SimpleMemberAccessExpression,
-                        CodeDomHelper.GetMemberAccess(
-                            GeneratorConstants.TESTRUNNER_FIELD, 
-                            nameof(ScenarioContext), 
-                            nameof(ScenarioContext.ScenarioContainer)
+                        roslynHelper.GetMemberAccess(
+                            "ScenarioContainer",
+                            "ScenarioContext", 
+                            GeneratorConstants.TESTRUNNER_FIELD
                             ),
                         GenericName(Identifier(nameof(IObjectContainer.RegisterInstanceAs)))
                         .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList<TypeSyntax>(
-                            CodeDomHelper.GetName(TESTCONTEXT_TYPE)
+                            roslynHelper.GetName(TESTCONTEXT_TYPE)
                             )))
                         )
                     ).WithArgumentList(
-                        CodeDomHelper.GetArgumentList(
-                            CodeDomHelper.GetMemberAccess(TESTCONTEXT_INSTANCE)
+                        roslynHelper.GetArgumentList(
+                            roslynHelper.GetMemberAccess(TESTCONTEXT_INSTANCE)
                             )
                         );
-            generationContext.ScenarioInitializeMethod.Body.Statements.Add(ExpressionStatement(invocation));
+            generationContext.ScenarioInitializeMethod = generationContext.ScenarioInitializeMethod.WithBody(
+                generationContext.ScenarioInitializeMethod.Body.AddStatements(ExpressionStatement(invocation))
+                );
         }
 
         public void SetTestInitializeMethod(TestClassGenerationContext generationContext)
         {
-            CodeDomHelper.AddAttribute(generationContext.TestInitializeMethod, TESTSETUP_ATTR);
+            generationContext.TestInitializeMethod = generationContext.TestInitializeMethod.WithAttributeLists(SingletonList(roslynHelper.getAttribute(TESTSETUP_ATTR)));
         }
 
         public void SetTestCleanupMethod(TestClassGenerationContext generationContext)
         {
-            CodeDomHelper.AddAttribute(generationContext.TestCleanupMethod, TESTTEARDOWN_ATTR);
+            generationContext.TestCleanupMethod = generationContext.TestCleanupMethod.WithAttributeLists(SingletonList(roslynHelper.getAttribute(TESTTEARDOWN_ATTR)));
         }
 
-        public virtual void SetTestMethod(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, string friendlyTestName)
+        public MethodDeclarationSyntax MakeTestMethod(MethodDeclarationSyntax testMethod, string friendlyTestName)
         {
-            CodeDomHelper.AddAttribute(testMethod, TEST_ATTR);
-            CodeDomHelper.AddAttribute(testMethod, DESCRIPTION_ATTR, friendlyTestName);
+            return testMethod.WithAttributeLists(testMethod.AttributeLists.AddRange(
+                new AttributeListSyntax[]
+                    {
+                        roslynHelper.getAttribute(TEST_ATTR),
+                        roslynHelper.getAttribute(DESCRIPTION_ATTR, friendlyTestName)
+                    }
+                ));
         }
 
-        public virtual void SetTestMethodCategories(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, IEnumerable<string> scenarioCategories)
+        public MethodDeclarationSyntax SetTestMethodCategories(MethodDeclarationSyntax testMethod, IEnumerable<string> scenarioCategories)
         {
-            CodeDomHelper.AddAttributeForEachValue(testMethod, CATEGORY_ATTR, scenarioCategories);
+            return testMethod.WithAttributeLists(new SyntaxList<AttributeListSyntax>(
+                    roslynHelper.getAttributeForEachValue(CATEGORY_ATTR, scenarioCategories)
+                    ));
         }
 
-        public virtual void SetRowTest(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, string scenarioTitle)
+        public void SetRowTest(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, string scenarioTitle)
         {
-            Debug.LogError("Row tests are not supported in Unity");
+            //Debug.LogError("Row tests are not supported in Unity");
             throw new NotSupportedException();
-            //SetTestMethod(generationContext, testMethod, scenarioTitle);
+            //MakeTestMethod(generationContext, testMethod, scenarioTitle);
 
         }
 
         public void SetRow(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, IEnumerable<string> arguments, IEnumerable<string> tags, bool isIgnored)
         {
-            Debug.LogError("Row tests are not supported in Unity");
+            //Debug.LogError("Row tests are not supported in Unity");
             throw new NotSupportedException();
 
             //var args = arguments.Select(
@@ -157,7 +182,7 @@ namespace UnityFlow.Generator.UnitTestProvider
             //if (isIgnored)
             //    args.Add(new CodeAttributeArgument("Ignored", new CodePrimitiveExpression(true)));
 
-            //CodeDomHelper.AddAttribute(testMethod, ROW_ATTR, args.ToArray());
+            //RoslynHelper.getAttribute(testMethod, ROW_ATTR, args.ToArray());
         }
 
         public void SetTestMethodAsRow(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, string scenarioTitle, string exampleSetName, string variantName, IEnumerable<KeyValuePair<string, string>> arguments)

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TechTalk.SpecFlow.Configuration;
-using TechTalk.SpecFlow.Generator.UnitTestProvider;
-using TechTalk.SpecFlow.Parser;
+using UnityFlow.Generator.UnitTestProvider;
+using UnityFlow.General.Configuration;
+using UnityFlow.General.Extensions;
 
 namespace UnityFlow.Generator.UnitTestConverter
 {

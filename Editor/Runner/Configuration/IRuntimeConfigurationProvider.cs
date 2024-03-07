@@ -1,4 +1,6 @@
-﻿namespace UnityFlow.Configuration
+using UnityFlow.General.Configuration;
+
+namespace UnityFlow.Runner.Configuration
 {
     public interface IRuntimeConfigurationProvider
     {

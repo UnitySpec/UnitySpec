@@ -1,16 +1,15 @@
 ﻿using UnityFlow.Bindings;
 using UnityFlow.Bindings.Reflection;
 using UnityFlow.Compatibility;
-using UnityFlow.Configuration;
 using UnityFlow.ErrorHandling;
 using UnityFlow.Events;
 using UnityFlow.Tracing;
-using UnityFlow.UnitTestProvider;
 using BoDi;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using TechTalk.SpecFlow.Analytics;
+using UnityFlow.General.Configuration;
+using UnityFlow.Runner.UnitTestProvider;
 
 namespace UnityFlow.Infrastructure
 {
@@ -28,9 +27,10 @@ namespace UnityFlow.Infrastructure
         private readonly ITestObjectResolver _testObjectResolver;
         private readonly ITestTracer _testTracer;
         private readonly IUnitTestRuntimeProvider _unitTestRuntimeProvider;
-        private readonly IAnalyticsEventProvider _analyticsEventProvider;
-        private readonly IAnalyticsTransmitter _analyticsTransmitter;
+        //private readonly IAnalyticsEventProvider _analyticsEventProvider;
+        //private readonly IAnalyticsTransmitter _analyticsTransmitter;
         private readonly ITestRunnerManager _testRunnerManager;
+        //private readonly IRuntimePluginTestExecutionLifecycleEventEmitter _runtimePluginTestExecutionLifecycleEventEmitter;
         private readonly ITestThreadExecutionEventPublisher _testThreadExecutionEventPublisher;
         private readonly ITestPendingMessageFactory _testPendingMessageFactory;
         private readonly ITestUndefinedMessageFactory _testUndefinedMessageFactory;
@@ -51,9 +51,10 @@ namespace UnityFlow.Infrastructure
             IStepDefinitionMatchService stepDefinitionMatchService,
             IBindingInvoker bindingInvoker,
             IObsoleteStepHandler obsoleteStepHandler,
-            IAnalyticsEventProvider analyticsEventProvider,
-            IAnalyticsTransmitter analyticsTransmitter,
+            //IAnalyticsEventProvider analyticsEventProvider,
+            //IAnalyticsTransmitter analyticsTransmitter,
             ITestRunnerManager testRunnerManager,
+            //IRuntimePluginTestExecutionLifecycleEventEmitter runtimePluginTestExecutionLifecycleEventEmitter,
             ITestThreadExecutionEventPublisher testThreadExecutionEventPublisher,
             ITestPendingMessageFactory testPendingMessageFactory,
             ITestUndefinedMessageFactory testUndefinedMessageFactory,
@@ -73,9 +74,10 @@ namespace UnityFlow.Infrastructure
             _testObjectResolver = testObjectResolver;
             TestThreadContainer = testThreadContainer;
             _obsoleteStepHandler = obsoleteStepHandler;
-            _analyticsEventProvider = analyticsEventProvider;
-            _analyticsTransmitter = analyticsTransmitter;
+            //_analyticsEventProvider = analyticsEventProvider;
+            //_analyticsTransmitter = analyticsTransmitter;
             _testRunnerManager = testRunnerManager;
+            //_runtimePluginTestExecutionLifecycleEventEmitter = runtimePluginTestExecutionLifecycleEventEmitter;
             _testThreadExecutionEventPublisher = testThreadExecutionEventPublisher;
             _testPendingMessageFactory = testPendingMessageFactory;
             _testUndefinedMessageFactory = testUndefinedMessageFactory;
@@ -92,19 +94,19 @@ namespace UnityFlow.Infrastructure
                 return;
             }
 
-            if (_analyticsTransmitter.IsEnabled)
-            {
-                try
-                {
-                    var testAssemblyName = _testRunnerManager.TestAssembly.GetName().Name;
-                    var projectRunningEvent = _analyticsEventProvider.CreateProjectRunningEvent(testAssemblyName);
-                    _analyticsTransmitter.TransmitSpecFlowProjectRunningEvent(projectRunningEvent);
-                }
-                catch (Exception)
-                {
-                    // catch all exceptions since we do not want to break anything
-                }
-            }
+            //if (_analyticsTransmitter.IsEnabled)
+            //{
+            //    try
+            //    {
+            //        var testAssemblyName = _testRunnerManager.TestAssembly.GetName().Name;
+            //        var projectRunningEvent = _analyticsEventProvider.CreateProjectRunningEvent(testAssemblyName);
+            //        _analyticsTransmitter.TransmitSpecFlowProjectRunningEvent(projectRunningEvent);
+            //    }
+            //    catch (Exception)
+            //    {
+            //        // catch all exceptions since we do not want to break anything
+            //    }
+            //}
 
             _testRunnerStartExecuted = true;
 
@@ -337,12 +339,22 @@ namespace UnityFlow.Infrastructure
                 SetHookError(hookType, hookException);
             }
 
+            //Note: plugin-hooks are still executed even if a user-hook failed with an exception
+            //A plugin-hook should not throw an exception under normal circumstances, exceptions are not handled/caught here
+            //FireRuntimePluginTestExecutionLifecycleEvents(hookType);
+
             _testThreadExecutionEventPublisher.PublishEvent(new HookFinishedEvent(hookType, FeatureContext, ScenarioContext, _contextManager.StepContext, hookException));
 
             //Note: the (user-)hook exception (if any) will be thrown after the plugin hooks executed to fail the test with the right error
             if (hookException != null) throw hookException;
         }
 
+        //private void FireRuntimePluginTestExecutionLifecycleEvents(HookType hookType)
+        //{
+        //    //We pass a container corresponding the type of event
+        //    var container = GetHookContainer(hookType);
+        //    _runtimePluginTestExecutionLifecycleEventEmitter.RaiseExecutionLifecycleEvent(hookType, container);
+        //}
 
         protected IObjectContainer TestThreadContainer { get; }
 
@@ -531,7 +543,6 @@ namespace UnityFlow.Infrastructure
             if (match.Success)
                 return match;
 
-            UnityEngine.Debug.Log($"No succesful match for: {stepInstance.Text}, candidates? {candidatingMatches.Any()}");
             if (candidatingMatches.Any())
             {
                 if (ambiguityReason == StepDefinitionAmbiguityReason.AmbiguousSteps)

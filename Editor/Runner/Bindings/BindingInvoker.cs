@@ -7,6 +7,7 @@ using System.Reflection;
 using UnityFlow.Bindings.Reflection;
 using UnityFlow.Compatibility;
 using UnityFlow.ErrorHandling;
+using UnityFlow.General.Configuration;
 using UnityFlow.Infrastructure;
 using UnityFlow.Tracing;
 
@@ -14,11 +15,11 @@ namespace UnityFlow.Bindings
 {
     public class BindingInvoker : IBindingInvoker
     {
-        protected readonly Configuration.SpecFlowConfiguration specFlowConfiguration;
+        protected readonly SpecFlowConfiguration specFlowConfiguration;
         protected readonly IErrorProvider errorProvider;
         protected readonly ISynchronousBindingDelegateInvoker synchronousBindingDelegateInvoker;
 
-        public BindingInvoker(Configuration.SpecFlowConfiguration specFlowConfiguration, IErrorProvider errorProvider, ISynchronousBindingDelegateInvoker synchronousBindingDelegateInvoker)
+        public BindingInvoker(SpecFlowConfiguration specFlowConfiguration, IErrorProvider errorProvider, ISynchronousBindingDelegateInvoker synchronousBindingDelegateInvoker)
         {
             this.specFlowConfiguration = specFlowConfiguration;
             this.errorProvider = errorProvider;

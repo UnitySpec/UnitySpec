@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Gherkin.Ast;
-using TechTalk.SpecFlow.Configuration;
-using UnityFlow.Generator.CodeDom;
+using UnityFlow.Generator.Roslyn;
 using UnityFlow.Generator.UnitTestConverter;
-using TechTalk.SpecFlow.Parser;
-using TechTalk.SpecFlow.Tracing;
 using UnityFlow.Generator.UnitTestProvider;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using Microsoft.CodeAnalysis;
+using UnityFlow.General.Configuration;
+using UnityFlow.General.Parser;
+using UnityFlow.General.Extensions;
 
 namespace UnityFlow.Generator.Generation
 {
@@ -20,7 +19,7 @@ namespace UnityFlow.Generator.Generation
     {
         private const string IGNORE_TAG = "@Ignore";
         private const string TESTRUNNER_FIELD = "testRunner";
-        private readonly CodeDomHelper _codeDomHelper;
+        private readonly RoslynHelper _roslynHelper;
         private readonly IDecoratorRegistry _decoratorRegistry;
         private readonly ScenarioPartHelper _scenarioPartHelper;
         private readonly SpecFlowConfiguration _specFlowConfiguration;
@@ -29,13 +28,13 @@ namespace UnityFlow.Generator.Generation
         public UnitTestMethodGenerator(
             IUnitTestGeneratorProvider unitTestGeneratorProvider,
             IDecoratorRegistry decoratorRegistry,
-            CodeDomHelper codeDomHelper,
+            RoslynHelper roslynHelper,
             ScenarioPartHelper scenarioPartHelper,
             SpecFlowConfiguration specFlowConfiguration)
         {
             _unitTestGeneratorProvider = unitTestGeneratorProvider;
             _decoratorRegistry = decoratorRegistry;
-            _codeDomHelper = codeDomHelper;
+            _roslynHelper = roslynHelper;
             _scenarioPartHelper = scenarioPartHelper;
             _specFlowConfiguration = specFlowConfiguration;
         }
@@ -83,13 +82,15 @@ namespace UnityFlow.Generator.Generation
             GenerateScenarioOutlineExamplesAsIndividualMethods(scenarioOutline, generationContext, scenarioOutlineTestMethod, paramToIdentifier);
             //}
 
-            GenerateTestBody(generationContext, scenarioOutline, scenarioOutlineTestMethod, feature, exampleTagsParam, paramToIdentifier);
+            scenarioOutlineTestMethod = GenerateTestBody(generationContext, scenarioOutline, scenarioOutlineTestMethod, feature, exampleTagsParam, paramToIdentifier);
+            generationContext.TestClass = generationContext.TestClass.AddMembers(scenarioOutlineTestMethod);
         }
 
         private void GenerateTest(TestClassGenerationContext generationContext, Scenario scenario, SpecFlowFeature feature)
         {
             var testMethod = CreateTestMethod(generationContext, scenario, null);
-            GenerateTestBody(generationContext, scenario, testMethod, feature);
+            testMethod =  GenerateTestBody(generationContext, scenario, testMethod, feature);
+            generationContext.TestClass = generationContext.TestClass.AddMembers(testMethod);
         }
 
         private void ValidateExampleSetConsistency(ScenarioOutline scenarioOutline)
@@ -121,7 +122,7 @@ namespace UnityFlow.Generator.Generation
             return tags.Any(t => t.Name.Equals(IGNORE_TAG, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private void GenerateTestBody(
+        private MethodDeclarationSyntax GenerateTestBody(
             TestClassGenerationContext generationContext,
             StepsContainer scenario,
             MethodDeclarationSyntax testMethod,
@@ -167,47 +168,50 @@ namespace UnityFlow.Generator.Generation
                 //                    additionalTagsExpression)))));
             }
 
-            AddVariableForTags(testMethod, tagsExpression);
+            testMethod = AddVariableForTags(testMethod, tagsExpression);
 
-            AddVariableForArguments(testMethod, paramToIdentifier);
+            testMethod = AddVariableForArguments(testMethod, paramToIdentifier);
 
-            var arguments = _codeDomHelper.GetArgumentList(
-                                _codeDomHelper.StringLiteral(scenario.Name),
-                                _codeDomHelper.StringLiteral(scenario.Description),
-                                _codeDomHelper.GetName(GeneratorConstants.SCENARIO_TAGS_VARIABLE_NAME),
-                                _codeDomHelper.GetName(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME),
-                                _codeDomHelper.GetName(GeneratorConstants.FEATURE_TAGS_VARIABLE_NAME)
+            var arguments = _roslynHelper.GetArgumentList(
+                                _roslynHelper.StringLiteral(scenario.Name),
+                                _roslynHelper.StringLiteral(scenario.Description),
+                                _roslynHelper.GetName(GeneratorConstants.SCENARIO_TAGS_VARIABLE_NAME),
+                                _roslynHelper.GetName(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME),
+                                _roslynHelper.GetName(GeneratorConstants.FEATURE_TAGS_VARIABLE_NAME)
                                 );
-            var scenarioInfoDecl = VariableDeclaration(_codeDomHelper.GetName("UnityFlow.ScenarioInfo"))
+            var scenarioInfoDecl = VariableDeclaration(_roslynHelper.GetName("UnityFlow.ScenarioInfo"))
                                     .WithVariables(SingletonSeparatedList(
                                         VariableDeclarator(Identifier("scenarioInfo"))
                                         .WithInitializer(EqualsValueClause(
-                                            ObjectCreationExpression(_codeDomHelper.GetName("UnitFlow.ScenarioInfo"))
+                                            ObjectCreationExpression(_roslynHelper.GetName("UnityFlow.ScenarioInfo"))
                                             .WithArgumentList(arguments)
                                         ))
                                     ));
-            testMethod.Body.AddStatements(LocalDeclarationStatement(scenarioInfoDecl));
+            testMethod = testMethod.WithBody(testMethod.Body.AddStatements(LocalDeclarationStatement(scenarioInfoDecl)));
 
-            GenerateScenarioInitializeCall(generationContext, scenario, testMethod);
+            testMethod = GenerateScenarioInitializeCall(scenario, testMethod);
 
-            GenerateTestMethodBody(generationContext, scenario, testMethod, paramToIdentifier, feature);
+            testMethod = GenerateTestMethodBody(generationContext, scenario, testMethod, paramToIdentifier, feature);
 
-            GenerateScenarioCleanupMethodCall(generationContext, testMethod);
+            testMethod = testMethod.WithBody(testMethod.Body.AddStatements(GenerateScenarioCleanupMethodCall(generationContext, testMethod)));
+            return testMethod;
+            
         }
 
-        private void AddVariableForTags(MethodDeclarationSyntax testMethod, ExpressionSyntax tagsExpression)
+        private MethodDeclarationSyntax AddVariableForTags(MethodDeclarationSyntax testMethod, ExpressionSyntax tagsExpression)
         {
-            var tagVariable = VariableDeclaration(_codeDomHelper.StringArray(OmittedArraySizeExpression()))
+            var tagVariable = VariableDeclaration(_roslynHelper.StringArray(OmittedArraySizeExpression()))
                 .WithVariables(SingletonSeparatedList(VariableDeclarator(Identifier(GeneratorConstants.SCENARIO_TAGS_VARIABLE_NAME))
                     .WithInitializer(EqualsValueClause(tagsExpression))
                     ));
 
-            testMethod.Body.Statements.Add(LocalDeclarationStatement(tagVariable));
+            return testMethod.WithBody(testMethod.Body.AddStatements(LocalDeclarationStatement(tagVariable)));
         }
 
-        private void AddVariableForArguments(MethodDeclarationSyntax testMethod, ParameterSubstitution paramToIdentifier)
+        private MethodDeclarationSyntax AddVariableForArguments(MethodDeclarationSyntax testMethod, ParameterSubstitution paramToIdentifier)
         {
-            var type = _codeDomHelper.GetName("System.Collections.Specialized.OrderedDictionary");
+            List<StatementSyntax> statements = new List<StatementSyntax>();
+            var type = _roslynHelper.GetName("System.Collections.Specialized.OrderedDictionary");
             var variableDecl = VariableDeclaration(type)
                 .WithVariables(SingletonSeparatedList(
                     VariableDeclarator(Identifier(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME))
@@ -217,37 +221,38 @@ namespace UnityFlow.Generator.Generation
                         ))
                     ));
 
-            testMethod.Body.Statements.Add(LocalDeclarationStatement(variableDecl));
+            statements.Add(LocalDeclarationStatement(variableDecl));
 
             if (paramToIdentifier != null)
             {
                 foreach (var parameter in paramToIdentifier)
                 {
                     var addArgumentExpression = ExpressionStatement(
-                        InvocationExpression(_codeDomHelper.GetMemberAccess("argumentsOfScenario.Add"))
-                        .WithArgumentList(_codeDomHelper.GetArgumentList(
-                            _codeDomHelper.StringLiteral(parameter.Key),
+                        InvocationExpression(_roslynHelper.GetMemberAccess("argumentsOfScenario.Add"))
+                        .WithArgumentList(_roslynHelper.GetArgumentList(
+                            _roslynHelper.StringLiteral(parameter.Key),
                             IdentifierName(parameter.Value)
                             )
                         ));
 
-                    testMethod.Body.Statements.Add(addArgumentExpression);
+                    statements.Add(addArgumentExpression);
                 }
             }
+            return testMethod.WithBody(testMethod.Body.AddStatements(statements.ToArray()));
         }
 
-        internal void GenerateTestMethodBody(TestClassGenerationContext generationContext, StepsContainer scenario, MethodDeclarationSyntax testMethod, ParameterSubstitution paramToIdentifier, SpecFlowFeature feature)
+        internal MethodDeclarationSyntax GenerateTestMethodBody(TestClassGenerationContext generationContext, StepsContainer scenario, MethodDeclarationSyntax testMethod, ParameterSubstitution paramToIdentifier, SpecFlowFeature feature)
         {
             var statementsWhenScenarioIsIgnored = SingletonList(ExpressionStatement(CreateTestRunnerSkipScenarioCall()));
             var statementsWhenScenarioIsExecuted = new List<StatementSyntax>
             {
-                ExpressionStatement(InvocationExpression(_codeDomHelper.GetMemberAccess(ThisExpression(), "ScenarioStart")))
+                ExpressionStatement(InvocationExpression(_roslynHelper.GetMemberAccess(ThisExpression(), "ScenarioStart")))
             };
 
 
             if (generationContext.Feature.HasFeatureBackground())
             {
-                var thisExpr = _codeDomHelper.AddSourceLinePragmaStatement(IdentifierName(GeneratorConstants.BACKGROUND_NAME), scenario.Location.Line);
+                var thisExpr = _roslynHelper.AddSourceLinePragmaStatement(IdentifierName(GeneratorConstants.BACKGROUND_NAME), scenario.Location.Line);
                 statementsWhenScenarioIsExecuted.Add(ExpressionStatement(InvocationExpression(thisExpr)));
             }
 
@@ -260,48 +265,52 @@ namespace UnityFlow.Generator.Generation
             var tagsOfScenarioVariableReferenceExpression = IdentifierName(GeneratorConstants.SCENARIO_TAGS_VARIABLE_NAME);
             var featureFileTagFieldReferenceExpression = IdentifierName(GeneratorConstants.FEATURE_TAGS_VARIABLE_NAME);
 
-            var tagHelperReference = IdentifierName(nameof(TagHelper));
-            var scenarioTagIgnoredCheckStatement = InvocationExpression(_codeDomHelper.GetMemberAccess(tagHelperReference, nameof(TagHelper.ContainsIgnoreTag)))
-                                                    .WithArgumentList(_codeDomHelper.GetArgumentList(tagsOfScenarioVariableReferenceExpression));
-            var featureTagIgnoredCheckStatement = InvocationExpression(_codeDomHelper.GetMemberAccess(tagHelperReference, nameof(TagHelper.ContainsIgnoreTag)))
-                                                    .WithArgumentList(_codeDomHelper.GetArgumentList(featureFileTagFieldReferenceExpression));
+            var tagHelperReference = IdentifierName("TagHelper");
+            var scenarioTagIgnoredCheckStatement = InvocationExpression(_roslynHelper.GetMemberAccess(tagHelperReference, "ContainsIgnoreTag"))
+                                                    .WithArgumentList(_roslynHelper.GetArgumentList(tagsOfScenarioVariableReferenceExpression));
+            var featureTagIgnoredCheckStatement = InvocationExpression(_roslynHelper.GetMemberAccess(tagHelperReference, "ContainsIgnoreTag"))
+                                                    .WithArgumentList(_roslynHelper.GetArgumentList(featureFileTagFieldReferenceExpression));
             var conditionStatement = BinaryExpression(SyntaxKind.LogicalOrExpression, scenarioTagIgnoredCheckStatement, featureTagIgnoredCheckStatement);
             var ifElseStatement = IfStatement(
                                     ParenthesizedExpression(conditionStatement),
                                     Block(statementsWhenScenarioIsIgnored)
                                     )
                                 .WithElse(ElseClause(Block(statementsWhenScenarioIsExecuted)));
-
-            testMethod.Body.AddStatements(ifElseStatement);
+            return testMethod.WithBody(testMethod.Body.AddStatements(ifElseStatement));
         }
 
-        internal void GenerateScenarioInitializeCall(TestClassGenerationContext generationContext, StepsContainer scenario, MethodDeclarationSyntax testMethod)
+        internal MethodDeclarationSyntax GenerateScenarioInitializeCall(StepsContainer scenario, MethodDeclarationSyntax testMethod)
         {
-            var statement = _codeDomHelper.AddSourceLinePragmaStatement(
+            var statement = _roslynHelper.AddSourceLinePragmaStatement(
                     IdentifierName("ScenarioInitialize"), 
                     scenario.Location.Line
                     );
-            var invocation = InvocationExpression(statement).WithArgumentList(_codeDomHelper.GetArgumentList(IdentifierName("scenarioInfo")));
+            var invocation = InvocationExpression(statement).WithArgumentList(_roslynHelper.GetArgumentList(IdentifierName("scenarioInfo")));
 
-            testMethod.Body.Statements.Add(ExpressionStatement(invocation));
+            return testMethod.WithBody(testMethod.Body.AddStatements(ExpressionStatement(invocation)));
         }
 
-        internal void GenerateScenarioCleanupMethodCall(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod)
+        internal ExpressionStatementSyntax GenerateScenarioCleanupMethodCall(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod)
         {
             // call scenario cleanup
-            testMethod.Body.AddStatements(
-                ExpressionStatement(
-                    InvocationExpression(
-                        _codeDomHelper.GetMemberAccess(ThisExpression(), GeneratorConstants.SCENARIO_CLEANUP_NAME)
-                        )
-                    )
-                );
+            return ExpressionStatement(
+                        InvocationExpression(
+                            _roslynHelper.GetMemberAccess(ThisExpression(), GeneratorConstants.SCENARIO_CLEANUP_NAME)
+                            )
+                        );
+            //testMethod.Body.AddStatements(
+            //    ExpressionStatement(
+            //        InvocationExpression(
+            //            _roslynHelper.GetMemberAccess(ThisExpression(), GeneratorConstants.SCENARIO_CLEANUP_NAME)
+            //            )
+            //        )
+            //    );
         }
 
 
         private InvocationExpressionSyntax CreateTestRunnerSkipScenarioCall()
         {
-            return InvocationExpression(_codeDomHelper.GetMemberAccess($"{TESTRUNNER_FIELD}.SkipScenario"));
+            return InvocationExpression(_roslynHelper.GetMemberAccess($"{TESTRUNNER_FIELD}.SkipScenario"));
         }
 
         private void GenerateScenarioOutlineExamplesAsIndividualMethods(
@@ -343,16 +352,16 @@ namespace UnityFlow.Generator.Generation
             }
         }
 
-        //private void GenerateScenarioOutlineExamplesAsRowTests(TestClassGenerationContext generationContext, ScenarioOutline scenarioOutline, CodeMemberMethod scenatioOutlineTestMethod)
+        //private void GenerateScenarioOutlineExamplesAsRowTests(TestClassGenerationContext generationContext, ScenarioOutline scenarioOutline, CodeMemberMethod scenarioOutlineTestMethod)
         //{
-        //    SetupTestMethod(generationContext, scenatioOutlineTestMethod, scenarioOutline, null, null, null, true);
+        //    SetupTestMethod(generationContext, scenarioOutlineTestMethod, scenarioOutline, null, null, null, true);
 
         //    foreach (var examples in scenarioOutline.Examples)
         //    {
         //        foreach (var row in examples.TableBody)
         //        {
         //            var arguments = row.Cells.Select(c => c.Value);
-        //            _unitTestGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, arguments, GetNonIgnoreTags(examples.Tags), HasIgnoreTag(examples.Tags));
+        //            _unitTestGeneratorProvider.SetRow(generationContext, scenarioOutlineTestMethod, arguments, GetNonIgnoreTags(examples.Tags), HasIgnoreTag(examples.Tags));
         //        }
         //    }
         //}
@@ -402,9 +411,9 @@ namespace UnityFlow.Generator.Generation
         private MethodDeclarationSyntax CreateScenatioOutlineTestMethod(TestClassGenerationContext generationContext, ScenarioOutline scenarioOutline, ParameterSubstitution paramToIdentifier)
         {
             var name = string.Format(GeneratorConstants.TEST_NAME_FORMAT, scenarioOutline.Name.ToIdentifier());
-            var returnType = _codeDomHelper.GetName("System.Collections.IEnumerator");
+            var returnType = _roslynHelper.GetName("System.Collections.IEnumerator");
 
-            var parameters = new SyntaxNodeOrTokenList();
+            List<SyntaxNodeOrToken> parameters = new();
             foreach (var pair in paramToIdentifier)
             {
                 parameters.Add(Parameter(Identifier(pair.Value))
@@ -422,18 +431,16 @@ namespace UnityFlow.Generator.Generation
                     )
                 );
 
-            var testMethod = _codeDomHelper.CreateMethod(generationContext.TestClass, name, returnType)
-                .WithParameterList(ParameterList(SeparatedList<ParameterSyntax>(parameters.ToArray())));
-
-            testMethod.AddModifiers(Token(SyntaxKind.PublicKeyword));
-
+            var testMethod = _roslynHelper.CreateMethod(name, returnType)
+                .WithParameterList(ParameterList(SeparatedList<ParameterSyntax>(parameters.ToArray())))
+                .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)));
             return testMethod;
         }
 
         private void GenerateScenarioOutlineTestVariant(
             TestClassGenerationContext generationContext,
             ScenarioOutline scenarioOutline,
-            MethodDeclarationSyntax scenatioOutlineTestMethod,
+            MethodDeclarationSyntax scenarioOutlineTestMethod,
             IEnumerable<KeyValuePair<string, string>> paramToIdentifier,
             string exampleSetTitle,
             string exampleSetIdentifier,
@@ -443,22 +450,23 @@ namespace UnityFlow.Generator.Generation
         {
             var testMethod = CreateTestMethod(generationContext, scenarioOutline, exampleSetTags, variantName, exampleSetIdentifier);
 
-
             //call test implementation with the params
-            
-            var argumentList = row.Cells.Select(paramCell => _codeDomHelper.StringLiteral(paramCell.Value)).ToList();
+
+            var argumentList = row.Cells.Select(paramCell => _roslynHelper.StringLiteral(paramCell.Value)).ToList();
             
 
             argumentList.Add(_scenarioPartHelper.GetStringArrayExpression(exampleSetTags));
 
 
             var returnStatement = ReturnStatement(
-                        InvocationExpression(_codeDomHelper.GetMemberAccess(ThisExpression(), "BasicMovement"))
-                        .WithArgumentList(_codeDomHelper.GetArgumentList(argumentList.ToArray()))
+                        InvocationExpression(_roslynHelper.GetMemberAccess(ThisExpression(), scenarioOutlineTestMethod.Identifier.Text))
+                        .WithArgumentList(_roslynHelper.GetArgumentList(argumentList.ToArray()))
                         );
-            returnStatement = _codeDomHelper.AddSourceLinePragmaStatement( returnStatement, scenarioOutline.Location.Line );
+            returnStatement = _roslynHelper.AddSourceLinePragmaStatement( returnStatement, scenarioOutline.Location.Line );
 
-            testMethod.Body.Statements.Add(returnStatement);
+            testMethod = testMethod.WithBody(Block(testMethod.Body.AddStatements(returnStatement)));
+
+            generationContext.TestClass = generationContext.TestClass.AddMembers( testMethod ); 
 
             //_linePragmaHandler.AddLineDirectiveHidden(testMethod.Statements);
             var arguments = paramToIdentifier.Select((p2i, paramIndex) => new KeyValuePair<string, string>(p2i.Key, row.Cells.ElementAt(paramIndex).Value)).ToList();
@@ -477,16 +485,16 @@ namespace UnityFlow.Generator.Generation
             string exampleSetIdentifier = null)
         {
             var name = GetTestMethodName(scenario, variantName, exampleSetIdentifier);
-            var testMethod = _codeDomHelper.CreateMethod(generationContext.TestClass, name, _codeDomHelper.GetName("System.Collections.IEnumerator"));
-            testMethod.AddModifiers(Token(SyntaxKind.PublicKeyword));
+            var testMethod = _roslynHelper.CreateMethod(name, _roslynHelper.GetName("System.Collections.IEnumerator"));
+            testMethod = testMethod.AddModifiers(Token(SyntaxKind.PublicKeyword));
 
-            SetupTestMethod(generationContext, testMethod, scenario, additionalTags, variantName, exampleSetIdentifier);
+            testMethod = SetupTestMethod(generationContext, testMethod, scenario, additionalTags, variantName, exampleSetIdentifier);
 
             return testMethod;
         }
 
 
-        private void SetupTestMethod(
+        private MethodDeclarationSyntax SetupTestMethod(
             TestClassGenerationContext generationContext,
             MethodDeclarationSyntax testMethod,
             StepsContainer scenarioDefinition,
@@ -507,15 +515,17 @@ namespace UnityFlow.Generator.Generation
             }
             else
             {
-                _unitTestGeneratorProvider.SetTestMethod(generationContext, testMethod, friendlyTestName);
+                testMethod = _unitTestGeneratorProvider.MakeTestMethod(testMethod, friendlyTestName);
             }
 
-            _decoratorRegistry.DecorateTestMethod(generationContext, testMethod, ConcatTags(scenarioDefinition.GetTags(), additionalTags), out var scenarioCategories);
+            testMethod = _decoratorRegistry.DecorateTestMethod(generationContext, testMethod, ConcatTags(scenarioDefinition.GetTags(), additionalTags), out var scenarioCategories);
 
             if (scenarioCategories.Any())
             {
-                _unitTestGeneratorProvider.SetTestMethodCategories(generationContext, testMethod, scenarioCategories);
+                testMethod = _unitTestGeneratorProvider.SetTestMethodCategories(testMethod, scenarioCategories);
             }
+
+            return testMethod;
         }
 
         private static string GetTestMethodName(StepsContainer scenario, string variantName, string exampleSetIdentifier)

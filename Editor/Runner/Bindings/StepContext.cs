@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using UnityFlow.Compatibility;
-using UnityFlow.Configuration;
+using UnityFlow.General.Configuration;
 
 namespace UnityFlow.Bindings
 {

@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityFlow.Generator.UnitTestProvider;
-using TechTalk.SpecFlow.Parser;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using UnityFlow.General.Parser;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Microsoft.CodeAnalysis;
+using System.Linq;
 
 namespace UnityFlow.Generator
 {
@@ -13,16 +16,16 @@ namespace UnityFlow.Generator
         public SpecFlowFeature Feature => Document.SpecFlowFeature;
 
         public NamespaceDeclarationSyntax Namespace { get; private set; }
-        public ClassDeclarationSyntax TestClass { get; private set; }
-        public MethodDeclarationSyntax TestClassInitializeMethod { get; private set; }
-        public MethodDeclarationSyntax TestClassCleanupMethod { get; private set; }
-        public MethodDeclarationSyntax TestInitializeMethod { get; private set; }
-        public MethodDeclarationSyntax TestCleanupMethod { get; private set; }
-        public MethodDeclarationSyntax ScenarioInitializeMethod { get; private set; }
-        public MethodDeclarationSyntax ScenarioStartMethod { get; private set; }
-        public MethodDeclarationSyntax ScenarioCleanupMethod { get; private set; }
-        public MethodDeclarationSyntax FeatureBackgroundMethod { get; private set; }
-        public FieldDeclarationSyntax TestRunnerField { get; private set; }
+        public ClassDeclarationSyntax TestClass { get; set; }
+        public MethodDeclarationSyntax TestClassInitializeMethod { get; set; }
+        public MethodDeclarationSyntax TestClassCleanupMethod { get; set; }
+        public MethodDeclarationSyntax TestInitializeMethod { get; set; }
+        public MethodDeclarationSyntax TestCleanupMethod { get; set; }
+        public MethodDeclarationSyntax ScenarioInitializeMethod { get; set; }
+        public MethodDeclarationSyntax ScenarioStartMethod { get; set; }
+        public MethodDeclarationSyntax ScenarioCleanupMethod { get; set; }
+        public MethodDeclarationSyntax FeatureBackgroundMethod { get; set; }
+        public FieldDeclarationSyntax TestRunnerField { get; set; }
 
         public bool GenerateRowTests { get; private set; }
 
@@ -61,5 +64,30 @@ namespace UnityFlow.Generator
 
             CustomData = new Dictionary<string, object>();
         }
-    }
-}
+
+        public NamespaceDeclarationSyntax BuildClass()
+        {
+            return Namespace.WithMembers(SingletonList<MemberDeclarationSyntax>(BuildTestClass()));
+        }
+
+        private ClassDeclarationSyntax BuildTestClass()
+        {
+            var members = new MemberDeclarationSyntax[]
+                {
+                    TestRunnerField,
+                    TestClassInitializeMethod,
+                    TestClassCleanupMethod,
+                    TestInitializeMethod,
+                    TestCleanupMethod,
+                    ScenarioInitializeMethod,
+                    ScenarioStartMethod,
+                    ScenarioCleanupMethod
+                };
+            if (FeatureBackgroundMethod != null) { members = (MemberDeclarationSyntax[])members.Append(FeatureBackgroundMethod); }
+            var allMembers = TestClass.Members.AddRange(members);
+            return TestClass.WithMembers(List<MemberDeclarationSyntax>(allMembers));  
+        }       
+    }           
+}               
+                
+                

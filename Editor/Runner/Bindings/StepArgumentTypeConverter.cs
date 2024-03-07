@@ -3,11 +3,11 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using TechTalk.SpecFlow.Assist.ValueRetrievers;
 using UnityFlow.Bindings.Reflection;
 using UnityFlow.Tracing;
 using UnityFlow.Infrastructure;
 using UnityFlow.ErrorHandling;
+using UnityFlow.Runner.ValueRetriever;
 
 namespace UnityFlow.Bindings
 {
@@ -110,7 +110,7 @@ namespace UnityFlow.Bindings
 
         private static object ConvertSimple(IBindingType typeToConvertTo, object value, CultureInfo cultureInfo)
         {
-            if (typeToConvertTo is not RuntimeBindingType runtimeBindingType)
+            if (!(typeToConvertTo is RuntimeBindingType runtimeBindingType))
                 throw new SpecFlowException("The StepArgumentTypeConverter can be used with runtime types only.");
 
             return ConvertSimple(runtimeBindingType.Type, value, cultureInfo);

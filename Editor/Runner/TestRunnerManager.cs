@@ -6,8 +6,8 @@ using System.Threading;
 using UnityFlow.Infrastructure;
 using BoDi;
 using UnityFlow.Bindings.Discovery;
-using UnityFlow.Configuration;
 using UnityFlow.Tracing;
+using UnityFlow.General.Configuration;
 
 namespace UnityFlow
 {
