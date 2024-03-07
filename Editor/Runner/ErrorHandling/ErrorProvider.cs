@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityFlow.Bindings;
 using UnityFlow.Bindings.Reflection;
-using UnityFlow.Configuration;
+using UnityFlow.General.Configuration;
+using UnityFlow.Runner.UnitTestProvider;
 using UnityFlow.Tracing;
-using UnityFlow.UnitTestProvider;
 
 namespace UnityFlow.ErrorHandling
 {

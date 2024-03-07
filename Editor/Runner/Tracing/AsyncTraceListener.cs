@@ -1,5 +1,6 @@
 ﻿using System;
 using BoDi;
+using UnityFlow.General.Tracing;
 
 namespace UnityFlow.Tracing
 {

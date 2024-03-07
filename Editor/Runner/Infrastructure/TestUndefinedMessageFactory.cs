@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
-using UnityFlow.Configuration;
 using UnityFlow.ErrorHandling;
 using UnityFlow.BindingSkeletons;
+using UnityFlow.General.Configuration;
 
 namespace UnityFlow.Infrastructure
 {

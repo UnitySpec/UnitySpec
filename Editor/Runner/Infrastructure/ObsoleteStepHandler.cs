@@ -1,6 +1,6 @@
 ﻿using UnityFlow.Bindings;
-using UnityFlow.Configuration;
 using UnityFlow.ErrorHandling;
+using UnityFlow.General.Configuration;
 using UnityFlow.Tracing;
 
 namespace UnityFlow.Infrastructure

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TechTalk.SpecFlow.Assist.Attributes;
+using UnityFlow.Runner.Attributes;
 
 namespace UnityFlow.Bindings.Discovery
 {

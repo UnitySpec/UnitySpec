@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SpecFlow.Internal.Json</id>
+    <version>1.0.8</version>
+    <title>SpecFlow.Internal.Json</title>
+    <authors>SpecFlow Team</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://specflow.org/</projectUrl>
+    <description>A really simple C# JSON parser.</description>
+    <copyright>Copyright © SpecFlow Team</copyright>
+    <tags>Json Serialisation</tags>
+    <repository url="https://github.com/SpecFlowOSS/SpecFlow.Internal.Json" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.5" />
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+</package>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityFlow.Bindings.Reflection;
-using UnityFlow.Configuration;
+using UnityFlow.General.Configuration;
 using UnityFlow.Tracing;
 
 namespace UnityFlow.Bindings
@@ -27,7 +27,7 @@ namespace UnityFlow.Bindings
 
         private const string WordConnectorRe = @"[^\w\p{Sc}]*(?!(?<=-)\d)";
 
-        public StepDefinitionRegexCalculator(Configuration.SpecFlowConfiguration specFlowConfiguration)
+        public StepDefinitionRegexCalculator(SpecFlowConfiguration specFlowConfiguration)
         {
             this.specFlowConfiguration = specFlowConfiguration;
         }

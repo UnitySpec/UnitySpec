@@ -1,28 +1,28 @@
-﻿using System.CodeDom;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.IO;
-using TechTalk.SpecFlow.Configuration;
-using UnityFlow.Generator.CodeDom;
+using UnityFlow.General.Configuration;
+using UnityFlow.Generator.Roslyn;
 
 namespace UnityFlow.Generator.Generation
 {
     public class LinePragmaHandler
     {
         private readonly SpecFlowConfiguration _specFlowConfiguration;
-        private readonly CodeDomHelper _codeDomHelper;
+        private readonly RoslynHelper _roslynHelper;
 
-        public LinePragmaHandler(SpecFlowConfiguration specFlowConfiguration, CodeDomHelper codeDomHelper)
+        public LinePragmaHandler(SpecFlowConfiguration specFlowConfiguration, RoslynHelper roslynHelper)
         {
             _specFlowConfiguration = specFlowConfiguration;
-            _codeDomHelper = codeDomHelper;
+            _roslynHelper = roslynHelper;
         }
 
 
-        public void AddLinePragmaInitial(CodeTypeDeclaration testType, string sourceFile)
+        public void AddLinePragmaInitial(ClassDeclarationSyntax testType, string sourceFile)
         {
             if (_specFlowConfiguration.AllowDebugGeneratedFiles)
                 return;
 
-            _codeDomHelper.BindTypeToSourceFile(testType, Path.GetFileName(sourceFile));
+            //_roslynHelper.BindTypeToSourceFile(testType, Path.GetFileName(sourceFile));
         }
     }
 }

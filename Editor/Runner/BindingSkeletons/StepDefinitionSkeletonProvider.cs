@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityFlow.Bindings;
+using UnityFlow.General.BindingSkeletons;
 
 namespace UnityFlow.BindingSkeletons
 {

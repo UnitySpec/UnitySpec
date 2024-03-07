@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using UnityFlow.General.Tracing;
 
 namespace UnityFlow.Tracing
 {

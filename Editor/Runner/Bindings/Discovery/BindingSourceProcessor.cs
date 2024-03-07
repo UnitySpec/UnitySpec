@@ -4,6 +4,7 @@ using System.Linq;
 using UnityFlow.Bindings.Reflection;
 using UnityFlow.Compatibility;
 using UnityFlow.ErrorHandling;
+using UnityFlow.Runner.Attributes;
 
 namespace UnityFlow.Bindings.Discovery
 {
