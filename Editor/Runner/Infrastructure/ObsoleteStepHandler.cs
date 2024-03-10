@@ -1,6 +1,6 @@
 ﻿using UnityFlow.Bindings;
-using UnityFlow.Configuration;
 using UnityFlow.ErrorHandling;
+using UnityFlow.General.Configuration;
 using UnityFlow.Tracing;
 
 namespace UnityFlow.Infrastructure
@@ -20,7 +20,7 @@ namespace UnityFlow.Infrastructure
 
         public void Handle(BindingMatch bindingMatch)
         {
-            if(bindingMatch.IsObsolete)
+            if (bindingMatch.IsObsolete)
             {
                 switch (specFlowConfiguration.ObsoleteBehavior)
                 {

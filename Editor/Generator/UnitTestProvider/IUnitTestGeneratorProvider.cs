@@ -19,9 +19,9 @@ namespace UnityFlow.Generator.UnitTestProvider
         void SetTestInitializeMethod(TestClassGenerationContext generationContext);
         void SetTestCleanupMethod(TestClassGenerationContext generationContext);
 
-        void SetTestMethod(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, string friendlyTestName);
-        void SetTestMethodCategories(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, IEnumerable<string> scenarioCategories);
-        void SetTestMethodIgnore(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod);
+        MethodDeclarationSyntax MakeTestMethod(MethodDeclarationSyntax testMethod, string friendlyTestName);
+        MethodDeclarationSyntax SetTestMethodCategories(MethodDeclarationSyntax testMethod, IEnumerable<string> scenarioCategories);
+        MethodDeclarationSyntax SetTestMethodIgnore(MethodDeclarationSyntax testMethod);
 
         void SetRowTest(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, string scenarioTitle);
         void SetRow(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, IEnumerable<string> arguments, IEnumerable<string> tags, bool isIgnored);

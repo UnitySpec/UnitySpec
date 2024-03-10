@@ -3,7 +3,7 @@ using System;
 namespace UnityFlow.Infrastructure
 {
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
-    public class GeneratorPluginAttribute: Attribute
+    public class GeneratorPluginAttribute : Attribute
     {
         public Type PluginType { get; }
 

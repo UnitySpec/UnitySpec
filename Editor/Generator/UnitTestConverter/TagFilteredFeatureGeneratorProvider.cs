@@ -1,6 +1,5 @@
 using System;
-using System.Linq;
-using TechTalk.SpecFlow.Parser;
+using UnityFlow.General.Parser;
 
 namespace UnityFlow.Generator.UnitTestConverter
 {

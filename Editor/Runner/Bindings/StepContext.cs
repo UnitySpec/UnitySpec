@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using UnityFlow.Compatibility;
-using UnityFlow.Configuration;
+using UnityFlow.General.Configuration;
 
 namespace UnityFlow.Bindings
 {
@@ -26,7 +26,7 @@ namespace UnityFlow.Bindings
         {
             Language = featureInfo == null ? CultureInfoHelper.GetCultureInfo(ConfigDefaults.FeatureLanguage) : featureInfo.Language;
             FeatureTitle = featureInfo == null ? null : featureInfo.Title;
-            ScenarioTitle = scenarioInfo == null ? null : scenarioInfo.Title; 
+            ScenarioTitle = scenarioInfo == null ? null : scenarioInfo.Title;
 
             var tags = Enumerable.Empty<string>();
             if (featureInfo != null && featureInfo.Tags != null)

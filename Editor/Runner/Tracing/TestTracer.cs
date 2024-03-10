@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using UnityFlow.Bindings;
 using UnityFlow.Bindings.Reflection;
-using UnityFlow.ErrorHandling;
-using UnityFlow.Configuration;
 using UnityFlow.BindingSkeletons;
+using UnityFlow.ErrorHandling;
+using UnityFlow.General.Configuration;
+using UnityFlow.General.Tracing;
 
 namespace UnityFlow.Tracing
 {
@@ -51,13 +52,12 @@ namespace UnityFlow.Tracing
 
         public void TraceWarning(string text)
         {
-            traceListener.WriteToolOutput("warning: {0}", text);
+            traceListener.WriteToolOutput($"warning: {text}");
         }
 
         public void TraceStepDone(BindingMatch match, object[] arguments, TimeSpan duration)
         {
-            traceListener.WriteToolOutput("done: {0} ({1:F1}s)",
-                stepFormatter.GetMatchText(match, arguments), duration.TotalSeconds);
+            traceListener.WriteToolOutput($"done: {stepFormatter.GetMatchText(match, arguments)} ({(double)duration.TotalSeconds:F1}s)");
         }
 
         public void TraceStepSkipped()
@@ -67,13 +67,12 @@ namespace UnityFlow.Tracing
 
         public void TraceStepPending(BindingMatch match, object[] arguments)
         {
-            traceListener.WriteToolOutput("pending: {0}",
-                stepFormatter.GetMatchText(match, arguments));
+            traceListener.WriteToolOutput($"pending: {stepFormatter.GetMatchText(match, arguments)}");
         }
 
         public void TraceBindingError(BindingException ex)
         {
-            traceListener.WriteToolOutput("binding error: {0}", ex.Message);
+            traceListener.WriteToolOutput($"binding error: {ex.Message}");
         }
 
         public void TraceError(Exception ex, TimeSpan duration)
@@ -104,13 +103,13 @@ namespace UnityFlow.Tracing
                 .Select(x => $"LoaderException: {x}");
             foreach (var ex in exceptions)
             {
-                WriteErrorMessage(ex,duration);
+                WriteErrorMessage(ex, duration);
             }
         }
 
-        private void WriteErrorMessage(string ex,TimeSpan duration)
+        private void WriteErrorMessage(string ex, TimeSpan duration)
         {
-            traceListener.WriteToolOutput("error: {0} ({1:F1}s)", ex, duration.TotalSeconds);
+            traceListener.WriteToolOutput($"error: {ex} ({(double)duration.TotalSeconds:F1}s)");
         }
 
         public void TraceNoMatchingStepDefinition(StepInstance stepInstance, ProgrammingLanguage targetLanguage, CultureInfo bindingCulture, List<BindingMatch> matchesWithoutScopeCheck)

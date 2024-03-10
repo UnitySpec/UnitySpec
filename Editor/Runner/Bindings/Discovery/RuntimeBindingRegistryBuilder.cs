@@ -34,7 +34,7 @@ namespace UnityFlow.Bindings.Discovery
         //internal - for testing
         internal bool BuildBindingsFromType(Type type)
         {
-// ReSharper disable PossibleMultipleEnumeration
+            // ReSharper disable PossibleMultipleEnumeration
             var filteredAttributes = type.GetCustomAttributes(typeof(Attribute), true).Cast<Attribute>().Where(attr => _bindingSourceProcessor.CanProcessTypeAttribute(attr.GetType().FullName));
             if (!_bindingSourceProcessor.PreFilterType(filteredAttributes.Select(attr => attr.GetType().FullName)))
                 return false;
@@ -51,18 +51,18 @@ namespace UnityFlow.Bindings.Discovery
 
             _bindingSourceProcessor.ProcessTypeDone();
             return true;
-// ReSharper restore PossibleMultipleEnumeration
+            // ReSharper restore PossibleMultipleEnumeration
         }
 
         private BindingSourceMethod CreateBindingSourceMethod(MethodInfo methodDefinition)
         {
             return new BindingSourceMethod
-                       {
-                           BindingMethod = new RuntimeBindingMethod(methodDefinition),
-                           IsPublic = methodDefinition.IsPublic,
-                           IsStatic = methodDefinition.IsStatic,
-                           Attributes = GetAttributes(methodDefinition.GetCustomAttributes(true).Cast<Attribute>().Where(attr => _bindingSourceProcessor.CanProcessTypeAttribute(attr.GetType().FullName)))
-                       };
+            {
+                BindingMethod = new RuntimeBindingMethod(methodDefinition),
+                IsPublic = methodDefinition.IsPublic,
+                IsStatic = methodDefinition.IsStatic,
+                Attributes = GetAttributes(methodDefinition.GetCustomAttributes(true).Cast<Attribute>().Where(attr => _bindingSourceProcessor.CanProcessTypeAttribute(attr.GetType().FullName)))
+            };
         }
 
         private IBindingType CreateBindingType(Type type)
@@ -73,15 +73,15 @@ namespace UnityFlow.Bindings.Discovery
         private BindingSourceType CreateBindingSourceType(Type type, IEnumerable<Attribute> filteredAttributes)
         {
             return new BindingSourceType
-                       {
-                           BindingType = CreateBindingType(type),
-                           IsAbstract = type.IsAbstract,
-                           IsClass = type.IsClass,
-                           IsPublic = type.IsPublic,
-                           IsNested = TypeHelper.IsNested(type),
-                           IsGenericTypeDefinition = type.IsGenericTypeDefinition,
-                           Attributes = GetAttributes(filteredAttributes)
-                       };
+            {
+                BindingType = CreateBindingType(type),
+                IsAbstract = type.IsAbstract,
+                IsClass = type.IsClass,
+                IsPublic = type.IsPublic,
+                IsNested = TypeHelper.IsNested(type),
+                IsGenericTypeDefinition = type.IsGenericTypeDefinition,
+                Attributes = GetAttributes(filteredAttributes)
+            };
         }
 
         private BindingSourceAttribute CreateAttribute(Attribute attribute)
@@ -112,9 +112,9 @@ namespace UnityFlow.Bindings.Discovery
 
             return new BindingSourceAttribute
             {
-               AttributeType = CreateBindingType(attributeType),
-               AttributeValues = mostComplexCtor == null ? Array.Empty<IBindingSourceAttributeValueProvider>() : mostComplexCtor.GetParameters().Select(p => FindAttributeConstructorArg(p, namedAttributeValues)).ToArray(),
-               NamedAttributeValues = namedAttributeValues
+                AttributeType = CreateBindingType(attributeType),
+                AttributeValues = mostComplexCtor == null ? Array.Empty<IBindingSourceAttributeValueProvider>() : mostComplexCtor.GetParameters().Select(p => FindAttributeConstructorArg(p, namedAttributeValues)).ToArray(),
+                NamedAttributeValues = namedAttributeValues
             };
         }
 

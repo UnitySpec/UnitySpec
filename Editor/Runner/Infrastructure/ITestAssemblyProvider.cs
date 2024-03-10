@@ -6,6 +6,6 @@ namespace UnityFlow.Infrastructure
     {
         Assembly TestAssembly { get; }
 
-        public void RegisterTestAssembly(Assembly testAssembly);
+        void RegisterTestAssembly(Assembly testAssembly);
     }
 }

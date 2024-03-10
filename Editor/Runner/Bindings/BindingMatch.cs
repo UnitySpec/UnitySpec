@@ -13,7 +13,7 @@ namespace UnityFlow.Bindings
         public int ScopeMatches { get; private set; }
         public bool IsScoped { get { return ScopeMatches > 0; } }
 
-        public object[] Arguments  { get; private set; }
+        public object[] Arguments { get; private set; }
         public StepContext StepContext { get; private set; }
 
         public BindingMatch(IStepDefinitionBinding stepBinding, int scopeMatches, object[] arguments, StepContext stepContext)

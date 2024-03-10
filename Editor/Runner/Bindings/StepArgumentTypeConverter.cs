@@ -3,11 +3,11 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using TechTalk.SpecFlow.Assist.ValueRetrievers;
 using UnityFlow.Bindings.Reflection;
-using UnityFlow.Tracing;
-using UnityFlow.Infrastructure;
 using UnityFlow.ErrorHandling;
+using UnityFlow.Infrastructure;
+using UnityFlow.Runner.ValueRetriever;
+using UnityFlow.Tracing;
 
 namespace UnityFlow.Bindings
 {
@@ -63,7 +63,7 @@ namespace UnityFlow.Bindings
             if (stepTransformation.Regex != null && value is string stringValue)
                 arguments = GetStepTransformationArgumentsFromRegex(stepTransformation, stringValue, cultureInfo);
             else
-                arguments = new[] {value};
+                arguments = new[] { value };
 
             return bindingInvoker.InvokeBinding(stepTransformation, contextManager, arguments, testTracer, out _);
         }
@@ -110,7 +110,7 @@ namespace UnityFlow.Bindings
 
         private static object ConvertSimple(IBindingType typeToConvertTo, object value, CultureInfo cultureInfo)
         {
-            if (typeToConvertTo is not RuntimeBindingType runtimeBindingType)
+            if (!(typeToConvertTo is RuntimeBindingType runtimeBindingType))
                 throw new SpecFlowException("The StepArgumentTypeConverter can be used with runtime types only.");
 
             return ConvertSimple(runtimeBindingType.Type, value, cultureInfo);

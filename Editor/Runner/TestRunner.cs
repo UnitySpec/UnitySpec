@@ -1,5 +1,5 @@
-﻿using UnityFlow.Infrastructure;
-using UnityFlow.Bindings;
+﻿using UnityFlow.Bindings;
+using UnityFlow.Infrastructure;
 
 namespace UnityFlow
 {

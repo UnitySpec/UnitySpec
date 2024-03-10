@@ -1,9 +1,11 @@
 using BoDi;
 using System;
 using System.Reflection;
-using UnityFlow.Configuration;
-using UnityFlow.Tracing;
-using UnityFlow.UnitTestProvider;
+using UnityFlow.General.Configuration;
+using UnityFlow.General.Tracing;
+using UnityFlow.General.UnitTestProvider;
+using UnityFlow.Runner.Configuration;
+using UnityFlow.Runner.UnitTestProvider;
 
 namespace UnityFlow.Infrastructure
 {
@@ -38,23 +40,37 @@ namespace UnityFlow.Infrastructure
 
             if (configurationProvider != null)
                 container.RegisterInstanceAs(configurationProvider);
+            else
+            {
+                configurationProvider = container.Resolve<IRuntimeConfigurationProvider>();
+            }
 
-            configurationProvider ??= container.Resolve<IRuntimeConfigurationProvider>();
+
+            //container.RegisterTypeAs<RuntimePluginEvents, RuntimePluginEvents>(); //NOTE: we need this unnecessary registration, due to a bug in BoDi (does not inherit non-registered objects)
+            //var runtimePluginEvents = container.Resolve<RuntimePluginEvents>();
 
             SpecFlowConfiguration specFlowConfiguration = ConfigurationLoader.GetDefault();
             specFlowConfiguration = configurationProvider.LoadConfiguration(specFlowConfiguration);
-            //if (specFlowConfiguration.CustomDependencies != null)
-            //{
-            //    container.RegisterFromConfiguration(specFlowConfiguration.CustomDependencies);
-            //}
+            if (specFlowConfiguration.CustomDependencies != null)
+            {
+                container.RegisterFromConfiguration(specFlowConfiguration.CustomDependencies);
+            }
 
             var unitTestProviderConfiguration = container.Resolve<UnitTestProviderConfiguration>();
+
+            //LoadPlugins(configurationProvider, container, runtimePluginEvents, specFlowConfiguration, unitTestProviderConfiguration, testAssembly);
+
+            //runtimePluginEvents.RaiseConfigurationDefaults(specFlowConfiguration);
+
+            //runtimePluginEvents.RaiseRegisterGlobalDependencies(container);
 
             container.RegisterInstanceAs(specFlowConfiguration);
 
             if (unitTestProviderConfiguration != null)
                 container.RegisterInstanceAs(container.Resolve<IUnitTestRuntimeProvider>(unitTestProviderConfiguration.UnitTestProvider ?? ConfigDefaults.UnitTestProviderName));
-            
+
+            //runtimePluginEvents.RaiseCustomizeGlobalDependencies(container, specFlowConfiguration);
+
             container.Resolve<IConfigurationLoader>().TraceConfigSource(container.Resolve<ITraceListener>(), specFlowConfiguration);
 
             return container;
@@ -66,6 +82,8 @@ namespace UnityFlow.Infrastructure
 
             _defaultDependencyProvider.RegisterTestThreadContainerDefaults(testThreadContainer);
 
+            //var runtimePluginEvents = globalContainer.Resolve<RuntimePluginEvents>();
+            //runtimePluginEvents.RaiseCustomizeTestThreadDependencies(testThreadContainer);
             testThreadContainer.Resolve<ITestObjectResolver>();
             return testThreadContainer;
         }
@@ -87,6 +105,8 @@ namespace UnityFlow.Infrastructure
                 }
             };
 
+            //var runtimePluginEvents = testThreadContainer.Resolve<RuntimePluginEvents>();
+            //runtimePluginEvents.RaiseCustomizeScenarioDependencies(scenarioContainer);
 
             return scenarioContainer;
         }
@@ -107,9 +127,49 @@ namespace UnityFlow.Infrastructure
                 }
             };
 
+            //var runtimePluginEvents = testThreadContainer.Resolve<RuntimePluginEvents>();
+            //runtimePluginEvents.RaiseCustomizeFeatureDependencies(featureContainer);
+
             return featureContainer;
         }
 
+        //protected virtual void LoadPlugins(IRuntimeConfigurationProvider configurationProvider, ObjectContainer container, RuntimePluginEvents runtimePluginEvents,
+        //    SpecFlowConfiguration specFlowConfiguration, UnitTestProviderConfiguration unitTestProviderConfigration, Assembly testAssembly)
+        //{
+        //    // initialize plugins that were registered from code
+        //    foreach (var runtimePlugin in container.Resolve<IDictionary<string, IRuntimePlugin>>().Values)
+        //    {
+        //        // these plugins cannot have parameters
+        //        runtimePlugin.Initialize(runtimePluginEvents, new RuntimePluginParameters(), unitTestProviderConfigration);
+        //    }
+
+        //    // load & initalize parameters from configuration
+        //    var pluginLocator = container.Resolve<IRuntimePluginLocator>();
+        //    var pluginLoader = container.Resolve<IRuntimePluginLoader>();
+        //    var traceListener = container.Resolve<ITraceListener>();
+        //    foreach (var pluginPath in pluginLocator.GetAllRuntimePlugins())
+        //    {
+        //        // Should not log error if TestAssembly does not have a RuntimePlugin attribute
+        //        var traceMissingPluginAttribute = !testAssembly.Location.Equals(pluginPath);
+        //        LoadPlugin(pluginPath, pluginLoader, runtimePluginEvents, unitTestProviderConfigration, traceListener, traceMissingPluginAttribute);
+        //    }
+        //}
+
+        //protected virtual void LoadPlugin(
+        //    string pluginPath,
+        //    IRuntimePluginLoader pluginLoader,
+        //    RuntimePluginEvents runtimePluginEvents,
+        //    UnitTestProviderConfiguration unitTestProviderConfigration,
+        //    ITraceListener traceListener,
+        //    bool traceMissingPluginAttribute)
+        //{
+        //    traceListener.WriteToolOutput($"Loading plugin {pluginPath}");
+
+        //    var plugin = pluginLoader.LoadPlugin(pluginPath, traceListener, traceMissingPluginAttribute);
+        //    var runtimePluginParameters = new RuntimePluginParameters();
+
+        //    plugin?.Initialize(runtimePluginEvents, runtimePluginParameters, unitTestProviderConfigration);
+        //}
 
         protected virtual void RegisterDefaults(ObjectContainer container)
         {

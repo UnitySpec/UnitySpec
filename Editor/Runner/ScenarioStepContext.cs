@@ -1,6 +1,6 @@
-using UnityFlow.ErrorHandling;
 using System.Diagnostics;
 using System.Threading;
+using UnityFlow.ErrorHandling;
 
 namespace UnityFlow
 {

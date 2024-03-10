@@ -1,5 +1,5 @@
 ﻿
-using UnityFlow.Tracing;
+using UnityFlow.General.Tracing;
 
 namespace UnityFlow.Infrastructure
 {

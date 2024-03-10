@@ -37,9 +37,9 @@ namespace UnityFlow.Generator.UnitTestConverter
             return CanDecorateFrom(tagName);
         }
 
-        public void DecorateFrom(string tagName, TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod)
+        public MethodDeclarationSyntax DecorateFrom(string tagName, TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod)
         {
-            generationContext.UnitTestGeneratorProvider.SetTestMethodIgnore(generationContext, testMethod);
+            return generationContext.UnitTestGeneratorProvider.SetTestMethodIgnore(testMethod);
         }
 
         public bool CanDecorateFrom(string tagName, TestClassGenerationContext generationContext)

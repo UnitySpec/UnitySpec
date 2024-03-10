@@ -26,16 +26,16 @@ namespace UnityFlow.Bindings
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((HookBinding) obj);
+            return Equals((HookBinding)obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                var hashCode = (int) HookType;
-                hashCode = (hashCode*397) ^ HookOrder;
-                hashCode = (hashCode*397) ^ (BindingScope != null ? BindingScope.GetHashCode() : 0);
+                var hashCode = (int)HookType;
+                hashCode = (hashCode * 397) ^ HookOrder;
+                hashCode = (hashCode * 397) ^ (BindingScope != null ? BindingScope.GetHashCode() : 0);
                 return hashCode;
             }
         }

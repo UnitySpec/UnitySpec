@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>BoDi</id>
+    <version>1.5.0</version>
+    <title>BoDi - Simple IoC Container</title>
+    <authors>Gaspar Nagy</authors>
+    <owners>Gaspar Nagy</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/gasparnagy/BoDi/raw/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/gasparnagy/BoDi</projectUrl>
+    <description>A very simple IoC container, easily embeddable also as a source code.</description>
+    <summary>A very simple IoC container, easily embeddable also as a source code.</summary>
+    <releaseNotes>Minor changes, see https://github.com/gasparnagy/BoDi/blob/master/BoDi/BoDi.cs for detailed history.</releaseNotes>
+    <copyright>Copyright (C) 2010-2019, Gaspar Nagy (http://gasparnagy.com)</copyright>
+    <language>en-US</language>
+    <tags>dependency injection, embeddable</tags>
+  </metadata>
+</package>

@@ -1,11 +1,11 @@
+using BoDi;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using UnityFlow.Bindings;
 using UnityFlow.ErrorHandling;
 using UnityFlow.Infrastructure;
-using BoDi;
-using UnityFlow.Bindings;
 
 
 namespace UnityFlow

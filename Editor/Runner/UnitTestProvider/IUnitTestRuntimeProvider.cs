@@ -1,4 +1,4 @@
-﻿namespace UnityFlow.UnitTestProvider
+﻿namespace UnityFlow.Runner.UnitTestProvider
 {
     public interface IUnitTestRuntimeProvider
     {

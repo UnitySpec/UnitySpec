@@ -1,7 +1,7 @@
+using BoDi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BoDi;
 using UnityFlow.Bindings;
 using UnityFlow.Tracing;
 
@@ -9,7 +9,7 @@ namespace UnityFlow.Infrastructure
 {
     public class ContextManager : IContextManager, IDisposable
     {
-        private class InternalContextManager<TContext>: IDisposable where TContext : SpecFlowContext
+        private class InternalContextManager<TContext> : IDisposable where TContext : SpecFlowContext
         {
             private readonly ITestTracer testTracer;
             private TContext instance;
@@ -150,7 +150,7 @@ namespace UnityFlow.Infrastructure
 
         public ScenarioStepContext StepContext
         {
-            get{return stepContextManager.Instance;}
+            get { return stepContextManager.Instance; }
         }
 
         public TestThreadContext TestThreadContext { get; private set; }
