@@ -1,6 +1,4 @@
-﻿using UnityFlow.Generator.Configuration;
-
-namespace UnityFlow.Generator.Project
+﻿namespace UnityFlow.Generator.Project
 {
     public interface ISpecFlowProjectReader
     {

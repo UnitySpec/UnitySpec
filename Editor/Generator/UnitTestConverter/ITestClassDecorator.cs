@@ -6,7 +6,7 @@ namespace UnityFlow.Generator.UnitTestConverter
     {
         int Priority { get; }
     }
-    public interface ITestClassTagDecorator 
+    public interface ITestClassTagDecorator
     {
         int Priority { get; }
         bool RemoveProcessedTags { get; }

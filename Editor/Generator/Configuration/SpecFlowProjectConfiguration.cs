@@ -21,7 +21,7 @@ namespace UnityFlow.Generator.Configuration
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((SpecFlowProjectConfiguration) obj);
+            return Equals((SpecFlowProjectConfiguration)obj);
         }
 
         public override int GetHashCode()

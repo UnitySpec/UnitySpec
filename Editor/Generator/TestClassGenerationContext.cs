@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using UnityFlow.Generator.UnitTestProvider;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using UnityFlow.General.Parser;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 using System.Linq;
+using UnityFlow.General.Parser;
+using UnityFlow.Generator.UnitTestProvider;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace UnityFlow.Generator
 {
@@ -85,9 +84,9 @@ namespace UnityFlow.Generator
                 };
             if (FeatureBackgroundMethod != null) { members = (MemberDeclarationSyntax[])members.Append(FeatureBackgroundMethod); }
             var allMembers = TestClass.Members.AddRange(members);
-            return TestClass.WithMembers(List<MemberDeclarationSyntax>(allMembers));  
-        }       
-    }           
-}               
-                
-                
+            return TestClass.WithMembers(List<MemberDeclarationSyntax>(allMembers));
+        }
+    }
+}
+
+

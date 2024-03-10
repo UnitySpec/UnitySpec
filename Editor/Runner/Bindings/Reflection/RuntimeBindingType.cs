@@ -37,7 +37,7 @@ namespace UnityFlow.Bindings.Reflection
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((RuntimeBindingType) obj);
+            return Equals((RuntimeBindingType)obj);
         }
 
         public override int GetHashCode()

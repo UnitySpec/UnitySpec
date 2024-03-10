@@ -4,10 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityFlow.Bindings.Reflection;
-using UnityFlow.Tracing;
-using UnityFlow.Infrastructure;
 using UnityFlow.ErrorHandling;
+using UnityFlow.Infrastructure;
 using UnityFlow.Runner.ValueRetriever;
+using UnityFlow.Tracing;
 
 namespace UnityFlow.Bindings
 {
@@ -63,7 +63,7 @@ namespace UnityFlow.Bindings
             if (stepTransformation.Regex != null && value is string stringValue)
                 arguments = GetStepTransformationArgumentsFromRegex(stepTransformation, stringValue, cultureInfo);
             else
-                arguments = new[] {value};
+                arguments = new[] { value };
 
             return bindingInvoker.InvokeBinding(stepTransformation, contextManager, arguments, testTracer, out _);
         }

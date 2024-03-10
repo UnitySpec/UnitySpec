@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
-using UnityFlow.Generator.Configuration;
 using UnityFlow.General.Configuration;
 using UnityFlow.General.GeneratorInterfaces;
+using UnityFlow.Generator.Configuration;
 
 namespace UnityFlow.Generator.Project
 {
@@ -31,7 +31,7 @@ namespace UnityFlow.Generator.Project
                 specFlowProject.ProjectSettings.DefaultNamespace = rootNamespace;
                 specFlowProject.ProjectSettings.ProjectPlatformSettings.Language = _languageReader.GetLanguage(projectFilePath);
 
-      
+
                 specFlowProject.ProjectSettings.ConfigurationHolder = GetSpecFlowConfigurationHolder(projectFolder);
 
                 if (specFlowProject.ProjectSettings.ConfigurationHolder != null)

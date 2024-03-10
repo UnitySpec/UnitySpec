@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using UnityFlow.Generator.Configuration;
-using UnityFlow.Generator.Project;
+using UnityFlow.General.Build;
 using UnityFlow.General.Configuration;
 using UnityFlow.General.GeneratorInterfaces;
 using UnityFlow.General.Utils;
-using UnityFlow.General.Build;
+using UnityFlow.Generator.Configuration;
+using UnityFlow.Generator.Project;
 
 namespace UnityFlow.Generator
 {
@@ -24,7 +24,7 @@ namespace UnityFlow.Generator
 
             SpecFlowProject specFlowProject = reader.ReadSpecFlowProject(projectFilePath, rootNamespace);
 
-            ITestGenerator testGen = new TestGeneratorFactory().CreateGenerator(specFlowProject.ProjectSettings,new GeneratorPluginInfo[0]);
+            ITestGenerator testGen = new TestGeneratorFactory().CreateGenerator(specFlowProject.ProjectSettings, new GeneratorPluginInfo[0]);
             _featureCodeBehindGenerator = new FeatureCodeBehindGenerator(testGen);
 
             _loggingWrapper = log;

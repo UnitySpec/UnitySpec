@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Gherkin.Ast;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Gherkin.Ast;
-using UnityFlow.Generator.Roslyn;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using Microsoft.CodeAnalysis.CSharp;
-using System;
 using UnityFlow.General.Configuration;
 using UnityFlow.General.Extensions;
 using UnityFlow.General.Parser;
+using UnityFlow.Generator.Roslyn;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace UnityFlow.Generator.Generation
 {
@@ -96,7 +96,7 @@ namespace UnityFlow.Generator.Generation
                 .WithInitializer(
                     InitializerExpression(
                         SyntaxKind.ArrayInitializerExpression,
-                        _roslynHelper.GetInterspersedList( tagExprs )
+                        _roslynHelper.GetInterspersedList(tagExprs)
                         )
                     )
                 );

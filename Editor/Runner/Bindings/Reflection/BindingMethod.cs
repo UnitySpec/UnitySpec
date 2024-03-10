@@ -33,7 +33,7 @@ namespace UnityFlow.Bindings.Reflection
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((BindingMethod) obj);
+            return Equals((BindingMethod)obj);
         }
 
         public override int GetHashCode()
@@ -41,9 +41,9 @@ namespace UnityFlow.Bindings.Reflection
             unchecked
             {
                 var hashCode = (Type != null ? Type.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Name != null ? Name.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Parameters != null ? Parameters.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (ReturnType != null ? ReturnType.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Parameters != null ? Parameters.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (ReturnType != null ? ReturnType.GetHashCode() : 0);
                 return hashCode;
             }
         }

@@ -73,7 +73,7 @@ namespace UnityFlow
 
         private static T CallTheFactoryMethodToGetTheValue<T>(object value)
         {
-            return ((Func<T>) value)();
+            return ((Func<T>)value)();
         }
 
         private static bool TheValueIsAFactoryMethod<T>(object value)

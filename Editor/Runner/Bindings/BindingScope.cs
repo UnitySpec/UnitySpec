@@ -65,7 +65,7 @@ namespace UnityFlow.Bindings
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((BindingScope) obj);
+            return Equals((BindingScope)obj);
         }
 
         public override int GetHashCode()
@@ -73,8 +73,8 @@ namespace UnityFlow.Bindings
             unchecked
             {
                 var hashCode = (Tag != null ? Tag.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (FeatureTitle != null ? FeatureTitle.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (ScenarioTitle != null ? ScenarioTitle.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (FeatureTitle != null ? FeatureTitle.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (ScenarioTitle != null ? ScenarioTitle.GetHashCode() : 0);
                 return hashCode;
             }
         }

@@ -1,12 +1,12 @@
 ﻿using BoDi;
-using System.Collections.Generic;
-using UnityFlow.Generator.Roslyn;
-using System;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using UnityFlow.Generator.Generation;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
+using System.Collections.Generic;
+using UnityFlow.Generator.Generation;
+using UnityFlow.Generator.Roslyn;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace UnityFlow.Generator.UnitTestProvider
 {
@@ -95,13 +95,13 @@ namespace UnityFlow.Generator.UnitTestProvider
         public virtual void FinalizeTestClass(TestClassGenerationContext generationContext)
         {
             // testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
-            var invocation = 
+            var invocation =
                 InvocationExpression(
                     MemberAccessExpression(
                         SyntaxKind.SimpleMemberAccessExpression,
                         roslynHelper.GetMemberAccess(
                             "ScenarioContainer",
-                            "ScenarioContext", 
+                            "ScenarioContext",
                             GeneratorConstants.TESTRUNNER_FIELD
                             ),
                         GenericName(Identifier(nameof(IObjectContainer.RegisterInstanceAs)))

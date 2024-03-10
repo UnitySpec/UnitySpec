@@ -12,7 +12,7 @@ public class Generator
     private RunGenerator _runGenerator;
     private ITaskLoggingWrapper _logger;
 
-    public Generator() 
+    public Generator()
     {
         _projectFolder = Path.GetFullPath(Application.dataPath);
         _outputPath = Path.Combine(_projectFolder, "output");

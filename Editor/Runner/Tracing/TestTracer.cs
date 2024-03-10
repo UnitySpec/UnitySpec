@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using UnityFlow.Bindings;
 using UnityFlow.Bindings.Reflection;
-using UnityFlow.ErrorHandling;
 using UnityFlow.BindingSkeletons;
-using UnityFlow.General.Tracing;
+using UnityFlow.ErrorHandling;
 using UnityFlow.General.Configuration;
+using UnityFlow.General.Tracing;
 
 namespace UnityFlow.Tracing
 {
@@ -103,11 +103,11 @@ namespace UnityFlow.Tracing
                 .Select(x => $"LoaderException: {x}");
             foreach (var ex in exceptions)
             {
-                WriteErrorMessage(ex,duration);
+                WriteErrorMessage(ex, duration);
             }
         }
 
-        private void WriteErrorMessage(string ex,TimeSpan duration)
+        private void WriteErrorMessage(string ex, TimeSpan duration)
         {
             traceListener.WriteToolOutput($"error: {ex} ({(double)duration.TotalSeconds:F1}s)");
         }

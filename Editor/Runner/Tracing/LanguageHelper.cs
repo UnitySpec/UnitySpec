@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Gherkin;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Gherkin;
 using UnityFlow.Bindings;
 using UnityFlow.Compatibility;
 using UnityFlow.General.Parser;

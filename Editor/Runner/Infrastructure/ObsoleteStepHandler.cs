@@ -20,7 +20,7 @@ namespace UnityFlow.Infrastructure
 
         public void Handle(BindingMatch bindingMatch)
         {
-            if(bindingMatch.IsObsolete)
+            if (bindingMatch.IsObsolete)
             {
                 switch (specFlowConfiguration.ObsoleteBehavior)
                 {

@@ -7,8 +7,10 @@ namespace UnityFlow.BindingSkeletons
     {
         protected override string GetTemplateFileContent()
         {
-            string path = "Assets\\Editor\\Runner\\Context\\BindingSkeletons\\DefaultSkeletonTemplates.sftemplate";
-            using (StreamReader streamReader  = new StreamReader(path))
+
+            string path = "Packages\\UnityFlow\\Editor\\Runner\\BindingSkeletons\\DefaultSkeletonTemplates.sftemplate";
+            // TODO: not hardcode this path
+            using (StreamReader streamReader = new StreamReader(path))
             {
                 return streamReader.ReadToEnd();
             }

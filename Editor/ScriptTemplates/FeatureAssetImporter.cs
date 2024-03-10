@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.AssetImporters;
@@ -12,14 +13,35 @@ public sealed class FeatureAssetImporter : ScriptedImporter
 
     private const string FeatureExtension = "feature";
 
+    private const string DefaultContent = @"
+    Feature: Addition
+
+    Scenario: Add two numbers
+        Given the first number is 50
+        And the second number is 70
+        When the two numbers are added
+        Then the result should be 120
+    ";
+
+    [MenuItem("Assets/Create/New Feature", false, 1)]
+    private static void CreateNewFeature()
+    {
+        ProjectWindowUtil.CreateAssetWithContent(
+            "NewFeature.feature",
+            DefaultContent);
+    }
+
+
     public override void OnImportAsset(AssetImportContext ctx)
     {
         // Create our FeatureAsset
-        var asset = ScriptableObject.CreateInstance<FeatureAsset>();
         var assetPath = ctx.assetPath;
-        asset.filePath = assetPath;
-        asset.Load();
-        ctx.AddObjectToAsset(GUID.Generate().ToString(), asset);
+        var contents = File.ReadAllText(assetPath);
+        var asset = new TextAsset(contents);
+        ctx.AddObjectToAsset("text", asset);
+        //var asset = ScriptableObject.CreateInstance<TextAsset>();
+        //asset.text = contents;
+        //ctx.AddObjectToAsset("feature", asset);
         ctx.SetMainObject(asset);
 
         // If extension not included in our project add it.

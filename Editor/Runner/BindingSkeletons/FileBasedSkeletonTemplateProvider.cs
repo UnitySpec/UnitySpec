@@ -1,9 +1,9 @@
-using UnityFlow.ErrorHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using UnityFlow.ErrorHandling;
 
 namespace UnityFlow.BindingSkeletons
 {
@@ -17,7 +17,7 @@ namespace UnityFlow.BindingSkeletons
             var templates = new Dictionary<string, string>();
 
             string templateFileContent = GetTemplateFileContent();
-            var templateItems = templateFileContent.Split(new[] {templateSeparator}, StringSplitOptions.RemoveEmptyEntries);
+            var templateItems = templateFileContent.Split(new[] { templateSeparator }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var templateItem in templateItems.Select(ti => new StringReader(ti)).Select(reader => new { Key = reader.ReadLine(), Body = reader.ReadToEnd() }))
             {
                 if (string.IsNullOrEmpty(templateItem.Key))

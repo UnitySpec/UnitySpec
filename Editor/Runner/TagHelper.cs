@@ -1,6 +1,6 @@
 ﻿namespace UnityFlow
 {
-    #nullable enable
+#nullable enable
     /// <summary>
     /// Provides helper methods around tags.
     /// </summary>

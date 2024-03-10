@@ -1,6 +1,6 @@
+using System;
 using UnityFlow.Infrastructure;
 using UnityFlow.Tracing;
-using System;
 
 namespace UnityFlow.Bindings
 {

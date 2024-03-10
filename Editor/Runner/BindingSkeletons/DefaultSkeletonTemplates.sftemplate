@@ -1,6 +1,6 @@
 ﻿>>>CSharp/StepDefinitionClass
 using System;
-using TechTalk.SpecFlow;
+using UnityFlow;
 
 namespace {namespace}
 {
@@ -26,11 +26,11 @@ public void {methodName}({parameters})
 [{attribute}]
 public void {methodName}({parameters})
 {
-    _scenarioContext .Pending();
+    _scenarioContext.Pending();
 }
 >>>VB/StepDefinitionClass
 Imports System
-Imports TechTalk.SpecFlow
+Imports UnityFlow
 
 Namespace {namespace}
 
@@ -43,20 +43,20 @@ Namespace {namespace}
 
 End Namespace
 >>>VB/StepDefinitionRegex
-<TechTalk.SpecFlow.{attribute}("{regex}")> _
+<UnityFlow.{attribute}("{regex}")> _
 Public Sub {methodName}({parameters})
     ScenarioContext.Current.Pending()
 End Sub
 >>>VB/StepDefinition
-<TechTalk.SpecFlow.{attribute}()> _
+<UnityFlow.{attribute}()> _
 Public Sub {methodName}({parameters})
     ScenarioContext.Current.Pending()
 End Sub
 >>>FSharp/StepDefinitionClass
-[<TechTalk.SpecFlow.Binding>]
+[<UnityFlow.Binding>]
 module {className}
 
-open TechTalk.SpecFlow
+open UnityFlow
 
 {bindings}
 >>>FSharp/StepDefinitionRegex

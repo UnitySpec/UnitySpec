@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Gherkin;
+using System;
 using System.Diagnostics;
 using System.Linq;
-using Gherkin;
 using UnityFlow.General.Extensions;
 using UnityFlow.General.GeneratorInterfaces;
 
@@ -37,7 +37,7 @@ namespace UnityFlow.Generator
             {
                 return DetectGeneratedTestVersionWithExceptions(featureFileInput);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception, "ErrorHandlingTestGenerator.DetectGeneratedTestVersion");
                 return null;

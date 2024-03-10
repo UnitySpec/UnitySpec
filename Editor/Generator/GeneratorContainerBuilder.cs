@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using BoDi;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BoDi;
-using UnityFlow.Generator.Configuration;
-using UnityFlow.Generator.Plugins;
-using UnityFlow.Generator.Roslyn;
-using UnityFlow.Generator.UnitTestProvider;
 using UnityFlow.General.Configuration;
 using UnityFlow.General.GeneratorInterfaces;
 using UnityFlow.General.Plugins;
 using UnityFlow.General.UnitTestProvider;
+using UnityFlow.Generator.Configuration;
+using UnityFlow.Generator.Plugins;
+using UnityFlow.Generator.Roslyn;
+using UnityFlow.Generator.UnitTestProvider;
 
 namespace UnityFlow.Generator
 {
@@ -36,7 +36,7 @@ namespace UnityFlow.Generator
             specFlowConfiguration.SpecFlowConfiguration = configurationProvider.LoadConfiguration(specFlowConfiguration.SpecFlowConfiguration, configurationHolder);
 
             LoadPlugins(container, generatorPluginEvents, unitTestProviderConfiguration, generatorPluginInfos.Select(p => p.PathToGeneratorPluginAssembly));
-            
+
             generatorPluginEvents.RaiseRegisterDependencies(container);
             generatorPluginEvents.RaiseConfigurationDefaults(specFlowConfiguration);
 
@@ -83,7 +83,7 @@ namespace UnityFlow.Generator
             foreach (string generatorPlugin in generatorPlugins)
             {
                 //todo: should set the parameters, and do not pass empty
-                var pluginDescriptor = new PluginDescriptor(Path.GetFileNameWithoutExtension(generatorPlugin), generatorPlugin, PluginType.Generator, string.Empty); 
+                var pluginDescriptor = new PluginDescriptor(Path.GetFileNameWithoutExtension(generatorPlugin), generatorPlugin, PluginType.Generator, string.Empty);
                 LoadPlugin(pluginDescriptor, pluginLoader, generatorPluginEvents, unitTestProviderConfiguration);
             }
         }

@@ -19,7 +19,7 @@ namespace UnityFlow.Bindings
 
         protected bool Equals(MethodBinding other)
         {
-            if (Method == null )
+            if (Method == null)
                 if (other.Method == null)
                     return true;
                 else
@@ -39,7 +39,7 @@ namespace UnityFlow.Bindings
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((MethodBinding) obj);
+            return Equals((MethodBinding)obj);
         }
 
         public override int GetHashCode()

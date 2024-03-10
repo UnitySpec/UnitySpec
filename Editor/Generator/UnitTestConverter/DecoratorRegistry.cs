@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using BoDi;
 using Gherkin.Ast;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityFlow.General.Extensions;
 
 namespace UnityFlow.Generator.UnitTestConverter
@@ -44,7 +44,7 @@ namespace UnityFlow.Generator.UnitTestConverter
 
             public void DecorateFrom(TestClassGenerationContext generationContext)
             {
-                 testClassDecorator.DecorateFrom(generationContext);
+                testClassDecorator.DecorateFrom(generationContext);
             }
         }
         private class TestMethodClassTagDecoratorWrapper : ITestClassTagDecorator
@@ -160,7 +160,7 @@ namespace UnityFlow.Generator.UnitTestConverter
 
             foreach (var decorator in FindDecorators(decorators, generationContext))
             {
-                 decorator.DecorateFrom(generationContext);
+                decorator.DecorateFrom(generationContext);
             }
 
             if (tags != null)

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 
@@ -287,7 +286,7 @@ namespace UnityFlow.Generator.Roslyn
             return methodCall.WithYieldKeyword(
                 Token(
                     GetLineTrivia(lineNo),
-                    SyntaxKind.YieldKeyword, 
+                    SyntaxKind.YieldKeyword,
                     TriviaList()
                     )
                 );
@@ -334,7 +333,8 @@ namespace UnityFlow.Generator.Roslyn
         public ExpressionSyntax GetMemberAccess(params string[] strings)
         {
             var len = strings.Length;
-            if (len < 2) { 
+            if (len < 2)
+            {
                 return IdentifierName(strings[0]);
                 //throw new Exception("Member access for < 2"); 
             }
@@ -378,7 +378,7 @@ namespace UnityFlow.Generator.Roslyn
         {
             var resultLen = expr.Length * 2 - 1;
             var resultList = new SyntaxNodeOrToken[resultLen];
-            for (var i = 0; i < resultLen; i ++) 
+            for (var i = 0; i < resultLen; i++)
             {
                 if (i % 2 == 0)
                 {
@@ -402,7 +402,8 @@ namespace UnityFlow.Generator.Roslyn
                 if (i % 2 == 0)
                 {
                     res = expr[i / 2];
-                } else
+                }
+                else
                 {
                     res = Token(SyntaxKind.CommaToken);
                 }

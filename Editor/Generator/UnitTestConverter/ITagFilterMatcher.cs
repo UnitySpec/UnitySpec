@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.General.Parser;
 using UnityFlow.General.Extensions;
+using UnityFlow.General.Parser;
 
 namespace UnityFlow.Generator.UnitTestConverter
 {
@@ -20,7 +20,7 @@ namespace UnityFlow.Generator.UnitTestConverter
             if (tagName == null)
                 return false;
 
-            return tagFilterMatcher.Match(tagFilter, new string[] {tagName});
+            return tagFilterMatcher.Match(tagFilter, new string[] { tagName });
         }
 
         public static bool MatchPrefix(this ITagFilterMatcher tagFilterMatcher, string tagFilter, SpecFlowDocument document)

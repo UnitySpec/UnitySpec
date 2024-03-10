@@ -1,15 +1,15 @@
-﻿using UnityFlow.Bindings;
+﻿using BoDi;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using UnityFlow.Bindings;
 using UnityFlow.Bindings.Reflection;
 using UnityFlow.Compatibility;
 using UnityFlow.ErrorHandling;
 using UnityFlow.Events;
-using UnityFlow.Tracing;
-using BoDi;
-using System;
-using System.Diagnostics;
-using System.Linq;
 using UnityFlow.General.Configuration;
 using UnityFlow.Runner.UnitTestProvider;
+using UnityFlow.Tracing;
 
 namespace UnityFlow.Infrastructure
 {
@@ -578,7 +578,7 @@ namespace UnityFlow.Infrastructure
             {
                 throw new ArgumentNullException(nameof(_contextManager));
             }
-            
+
             if (_contextManager.ScenarioContext == null)
             {
                 throw new ArgumentNullException(nameof(_contextManager.ScenarioContext));
@@ -625,7 +625,7 @@ namespace UnityFlow.Infrastructure
         {
             StepDefinitionType stepDefinitionType = stepDefinitionKeyword == StepDefinitionKeyword.And || stepDefinitionKeyword == StepDefinitionKeyword.But
                 ? GetCurrentBindingType()
-                : (StepDefinitionType) stepDefinitionKeyword;
+                : (StepDefinitionType)stepDefinitionKeyword;
             _contextManager.InitializeStepContext(new StepInfo(stepDefinitionType, text, tableArg, multilineTextArg));
             _testThreadExecutionEventPublisher.PublishEvent(new StepStartedEvent(FeatureContext, ScenarioContext, _contextManager.StepContext));
 

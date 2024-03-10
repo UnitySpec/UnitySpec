@@ -1,15 +1,15 @@
-using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
+using System.Linq;
+using UnityFlow.General.Configuration;
+using UnityFlow.General.Extensions;
+using UnityFlow.General.Parser;
 using UnityFlow.Generator.Roslyn;
 using UnityFlow.Generator.UnitTestConverter;
 using UnityFlow.Generator.UnitTestProvider;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Parser;
-using UnityFlow.General.Extensions;
 
 namespace UnityFlow.Generator.Generation
 {
@@ -119,7 +119,7 @@ namespace UnityFlow.Generator.Generation
             var mods = scenarioCleanupMethod.Modifiers.Add(Token(SyntaxKind.PublicKeyword));
 
             //testRunner.CollectScenarioErrors();
-            var statements =scenarioCleanupMethod.Body.Statements.Add(ExpressionStatement(
+            var statements = scenarioCleanupMethod.Body.Statements.Add(ExpressionStatement(
                     InvocationExpression(_roslynHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.CollectScenarioErrors"))
                 ));
 
@@ -128,7 +128,7 @@ namespace UnityFlow.Generator.Generation
 
         private void SetupTestClass(TestClassGenerationContext generationContext)
         {
-            var modifiers = new SyntaxTokenList{Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.PartialKeyword)};
+            var modifiers = new SyntaxTokenList { Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.PartialKeyword) };
 
             _linePragmaHandler.AddLinePragmaInitial(generationContext.TestClass, generationContext.Document.SourceFilePath); // TODO
 
@@ -144,8 +144,8 @@ namespace UnityFlow.Generator.Generation
             var featureTagsField = FieldDeclaration(
                                         VariableDeclaration(
                                             _roslynHelper.StringArray(OmittedArraySizeExpression())
-                                            //ArrayType(PredefinedType(Token(SyntaxKind.StringKeyword)))
-                                            //.WithRankSpecifiers(SingletonList(ArrayRankSpecifier(SingletonSeparatedList<ExpressionSyntax>(OmittedArraySizeExpression()))))
+                                        //ArrayType(PredefinedType(Token(SyntaxKind.StringKeyword)))
+                                        //.WithRankSpecifiers(SingletonList(ArrayRankSpecifier(SingletonSeparatedList<ExpressionSyntax>(OmittedArraySizeExpression()))))
                                         )
                                         .WithVariables(
                                             SingletonSeparatedList(
@@ -154,7 +154,7 @@ namespace UnityFlow.Generator.Generation
                                                 )
                                             )
                                     )
-                                    .WithModifiers(new SyntaxTokenList( Token(SyntaxKind.PrivateKeyword), Token(SyntaxKind.StaticKeyword) ));
+                                    .WithModifiers(new SyntaxTokenList(Token(SyntaxKind.PrivateKeyword), Token(SyntaxKind.StaticKeyword)));
 
             generationContext.TestClass = generationContext.TestClass
                 .WithModifiers(generationContext.TestClass.Modifiers.AddRange(modifiers))
@@ -195,7 +195,7 @@ namespace UnityFlow.Generator.Generation
                     })));
 
             var statements = testClassInitializeMethod.Body.Statements.ToList();
-                
+
             statements.Add(ExpressionStatement(
                 AssignmentExpression(
                     SyntaxKind.SimpleAssignmentExpression,
@@ -229,11 +229,11 @@ namespace UnityFlow.Generator.Generation
 
             //testRunner.OnFeatureStart(featureInfo);
             statements.Add(ExpressionStatement(
-                InvocationExpression(_roslynHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnFeatureStart")) 
+                InvocationExpression(_roslynHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnFeatureStart"))
                 .WithArgumentList(_roslynHelper.GetArgumentList(IdentifierName("featureInfo")))
                 ));
 
-            generationContext.TestClassInitializeMethod = 
+            generationContext.TestClassInitializeMethod =
                 generationContext.TestClassInitializeMethod
                 .WithModifiers(mods)
                 .WithBody(Block(statements));
@@ -257,8 +257,8 @@ namespace UnityFlow.Generator.Generation
             //            testRunner = null;
             statements.Add(ExpressionStatement(
                 AssignmentExpression(
-                    SyntaxKind.SimpleAssignmentExpression, 
-                    testRunnerField, 
+                    SyntaxKind.SimpleAssignmentExpression,
+                    testRunnerField,
                     LiteralExpression(SyntaxKind.NullLiteralExpression)
                     )
                 ));
@@ -288,7 +288,7 @@ namespace UnityFlow.Generator.Generation
             //testRunner.OnScenarioEnd();
             var statements = generationContext.TestCleanupMethod.Body.Statements.Add(ExpressionStatement(
                 InvocationExpression(_roslynHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnScenarioEnd"))
-                )); 
+                ));
             generationContext.TestCleanupMethod = generationContext.TestCleanupMethod.WithModifiers(mods).WithBody(Block(statements));
         }
 
@@ -307,7 +307,7 @@ namespace UnityFlow.Generator.Generation
                 InvocationExpression(_roslynHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnScenarioInitialize"))
                 .WithArgumentList(_roslynHelper.GetArgumentList(IdentifierName("scenarioInfo")))
                 ));
-            generationContext.ScenarioInitializeMethod = 
+            generationContext.ScenarioInitializeMethod =
                 generationContext.ScenarioInitializeMethod
                 .WithModifiers(mods)
                 .WithParameterList(ParameterList(parList))
@@ -323,7 +323,7 @@ namespace UnityFlow.Generator.Generation
             //testRunner.OnScenarioStart();
             var statements = scenarioStartMethod.Body.Statements.Add(ExpressionStatement(
                 InvocationExpression(_roslynHelper.GetMemberAccess($"{GeneratorConstants.TESTRUNNER_FIELD}.OnScenarioStart"))
-                )); 
+                ));
 
             generationContext.ScenarioStartMethod = generationContext.ScenarioStartMethod.WithModifiers(mods).WithBody(Block(statements));
         }

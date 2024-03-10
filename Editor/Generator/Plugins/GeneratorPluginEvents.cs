@@ -1,5 +1,5 @@
-﻿using System;
-using BoDi;
+﻿using BoDi;
+using System;
 using UnityFlow.Generator.Configuration;
 
 namespace UnityFlow.Generator.Plugins

@@ -20,7 +20,7 @@ namespace UnityFlow.Generator.Plugins
                 pluginAssembly = Assembly.LoadFrom(pluginDescriptor.Path);
 #endif
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new SpecFlowException($"Unable to load plugin assembly: {pluginDescriptor.Path}. Please check https://go.specflow.org/doc-plugins for details.", ex);
             }

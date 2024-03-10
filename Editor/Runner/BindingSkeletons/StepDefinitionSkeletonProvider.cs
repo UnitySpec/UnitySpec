@@ -1,4 +1,3 @@
-using UnityFlow.Tracing;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityFlow.Bindings;
 using UnityFlow.General.BindingSkeletons;
+using UnityFlow.Tracing;
 
 namespace UnityFlow.BindingSkeletons
 {
@@ -33,13 +33,13 @@ namespace UnityFlow.BindingSkeletons
                 bindings = bindings.Indent(METHOD_INDENT);
 
             //{namespace}/{className}/{bindings}
-            return ApplyTemplate(template, new { @namespace = namespaceName, className, bindings});
+            return ApplyTemplate(template, new { @namespace = namespaceName, className, bindings });
         }
 
         private static IEnumerable<StepInstance> GetOrderedSteps(StepInstance[] stepInstances)
         {
             return stepInstances
-                .Select((si, index) => new { Step = si, Index = index})
+                .Select((si, index) => new { Step = si, Index = index })
                 .OrderBy(item => item.Step.StepDefinitionType)
                 .ThenBy(item => item.Index)
                 .Select(item => item.Step);
@@ -52,12 +52,12 @@ namespace UnityFlow.BindingSkeletons
             var analyzedStepText = Analyze(stepInstance, bindingCulture);
             //{attribute}/{regex}/{methodName}/{parameters}
             return ApplyTemplate(template, new
-                                               {
-                                                   attribute = stepInstance.StepDefinitionType,
-                                                   regex = withRegex ? GetRegex(analyzedStepText) : "",
-                                                   methodName = GetMethodName(stepInstance, analyzedStepText, style, language),
-                                                   parameters = string.Join(", ", analyzedStepText.Parameters.Select(p => ToDeclaration(language, p)).ToArray())
-                                               });
+            {
+                attribute = stepInstance.StepDefinitionType,
+                regex = withRegex ? GetRegex(analyzedStepText) : "",
+                methodName = GetMethodName(stepInstance, analyzedStepText, style, language),
+                parameters = string.Join(", ", analyzedStepText.Parameters.Select(p => ToDeclaration(language, p)).ToArray())
+            });
         }
 
         private AnalyzedStepText Analyze(StepInstance stepInstance, CultureInfo bindingCulture)
@@ -138,7 +138,7 @@ namespace UnityFlow.BindingSkeletons
             result.Append(EscapeRegex(stepText.TextParts[0]));
             for (int i = 1; i < stepText.TextParts.Count; i++)
             {
-                result.AppendFormat("({0})", stepText.Parameters[i-1].RegexPattern);
+                result.AppendFormat("({0})", stepText.Parameters[i - 1].RegexPattern);
                 result.Append(EscapeRegex(stepText.TextParts[i]));
             }
 

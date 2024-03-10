@@ -1,8 +1,8 @@
-﻿using System;
+﻿using BoDi;
+using System;
 using System.ComponentModel;
 using UnityFlow.ErrorHandling;
 using UnityFlow.Infrastructure;
-using BoDi;
 
 namespace UnityFlow
 {

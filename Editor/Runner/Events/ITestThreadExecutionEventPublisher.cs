@@ -8,6 +8,6 @@ namespace UnityFlow.Events
 
         void AddListener(IExecutionEventListener listener);
 
-        void AddHandler<TEvent>(Action<TEvent> handler) where TEvent: IExecutionEvent;
+        void AddHandler<TEvent>(Action<TEvent> handler) where TEvent : IExecutionEvent;
     }
 }

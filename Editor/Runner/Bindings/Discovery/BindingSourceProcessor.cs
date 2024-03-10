@@ -4,7 +4,6 @@ using System.Linq;
 using UnityFlow.Bindings.Reflection;
 using UnityFlow.Compatibility;
 using UnityFlow.ErrorHandling;
-using UnityFlow.Runner.Attributes;
 
 namespace UnityFlow.Bindings.Discovery
 {
@@ -90,10 +89,10 @@ namespace UnityFlow.Bindings.Discovery
 
         private bool IsHookAttribute(BindingSourceAttribute attribute)
         {
-// ReSharper disable AssignNullToNotNullAttribute
+            // ReSharper disable AssignNullToNotNullAttribute
             return attribute.AttributeType.FullName.StartsWith(typeof(BeforeScenarioAttribute).Namespace) &&
                 TryGetHookType(attribute) != null;
-// ReSharper restore AssignNullToNotNullAttribute
+            // ReSharper restore AssignNullToNotNullAttribute
         }
 
         private bool IsStepArgumentTransformationAttribute(BindingSourceAttribute attribute)

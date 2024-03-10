@@ -1,9 +1,9 @@
+using BoDi;
 using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using UnityFlow.ErrorHandling;
-using BoDi;
 using UnityFlow.General.Configuration;
 
 namespace UnityFlow

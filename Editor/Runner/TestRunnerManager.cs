@@ -1,13 +1,13 @@
-﻿using System;
+﻿using BoDi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using UnityFlow.Infrastructure;
-using BoDi;
 using UnityFlow.Bindings.Discovery;
-using UnityFlow.Tracing;
 using UnityFlow.General.Configuration;
+using UnityFlow.Infrastructure;
+using UnityFlow.Tracing;
 
 namespace UnityFlow
 {
@@ -138,7 +138,7 @@ namespace UnityFlow
             }
             catch (Exception ex)
             {
-                testTracer.TraceError(ex,TimeSpan.Zero);
+                testTracer.TraceError(ex, TimeSpan.Zero);
                 throw;
             }
         }

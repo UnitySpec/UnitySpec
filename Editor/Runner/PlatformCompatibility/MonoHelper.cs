@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace UnityFlow.Compatibility
 {
-	internal class MonoHelper
+    internal class MonoHelper
     {
         internal static bool IsMono { get; private set; }
 
@@ -22,7 +22,7 @@ namespace UnityFlow.Compatibility
             Assembly locatedAssembly = null;
 
             // TODO: This may have to change, for now just load the assemblies from the domain
-			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 AssemblyName loadedAssemblyName = assembly.GetName();
 

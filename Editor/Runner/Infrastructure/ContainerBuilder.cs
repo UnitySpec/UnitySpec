@@ -68,7 +68,7 @@ namespace UnityFlow.Infrastructure
 
             if (unitTestProviderConfiguration != null)
                 container.RegisterInstanceAs(container.Resolve<IUnitTestRuntimeProvider>(unitTestProviderConfiguration.UnitTestProvider ?? ConfigDefaults.UnitTestProviderName));
-            
+
             //runtimePluginEvents.RaiseCustomizeGlobalDependencies(container, specFlowConfiguration);
 
             container.Resolve<IConfigurationLoader>().TraceConfigSource(container.Resolve<ITraceListener>(), specFlowConfiguration);

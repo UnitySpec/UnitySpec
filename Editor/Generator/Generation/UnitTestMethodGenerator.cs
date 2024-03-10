@@ -1,17 +1,17 @@
+using Gherkin.Ast;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gherkin.Ast;
+using UnityFlow.General.Configuration;
+using UnityFlow.General.Extensions;
+using UnityFlow.General.Parser;
 using UnityFlow.Generator.Roslyn;
 using UnityFlow.Generator.UnitTestConverter;
 using UnityFlow.Generator.UnitTestProvider;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using Microsoft.CodeAnalysis;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Parser;
-using UnityFlow.General.Extensions;
 
 namespace UnityFlow.Generator.Generation
 {
@@ -89,7 +89,7 @@ namespace UnityFlow.Generator.Generation
         private void GenerateTest(TestClassGenerationContext generationContext, Scenario scenario, SpecFlowFeature feature)
         {
             var testMethod = CreateTestMethod(generationContext, scenario, null);
-            testMethod =  GenerateTestBody(generationContext, scenario, testMethod, feature);
+            testMethod = GenerateTestBody(generationContext, scenario, testMethod, feature);
             generationContext.TestClass = generationContext.TestClass.AddMembers(testMethod);
         }
 
@@ -195,7 +195,7 @@ namespace UnityFlow.Generator.Generation
 
             testMethod = testMethod.WithBody(testMethod.Body.AddStatements(GenerateScenarioCleanupMethodCall(generationContext, testMethod)));
             return testMethod;
-            
+
         }
 
         private MethodDeclarationSyntax AddVariableForTags(MethodDeclarationSyntax testMethod, ExpressionSyntax tagsExpression)
@@ -282,7 +282,7 @@ namespace UnityFlow.Generator.Generation
         internal MethodDeclarationSyntax GenerateScenarioInitializeCall(StepsContainer scenario, MethodDeclarationSyntax testMethod)
         {
             var statement = _roslynHelper.AddSourceLinePragmaStatement(
-                    IdentifierName("ScenarioInitialize"), 
+                    IdentifierName("ScenarioInitialize"),
                     scenario.Location.Line
                     );
             var invocation = InvocationExpression(statement).WithArgumentList(_roslynHelper.GetArgumentList(IdentifierName("scenarioInfo")));
@@ -453,7 +453,7 @@ namespace UnityFlow.Generator.Generation
             //call test implementation with the params
 
             var argumentList = row.Cells.Select(paramCell => _roslynHelper.StringLiteral(paramCell.Value)).ToList();
-            
+
 
             argumentList.Add(_scenarioPartHelper.GetStringArrayExpression(exampleSetTags));
 
@@ -462,11 +462,11 @@ namespace UnityFlow.Generator.Generation
                         InvocationExpression(_roslynHelper.GetMemberAccess(ThisExpression(), scenarioOutlineTestMethod.Identifier.Text))
                         .WithArgumentList(_roslynHelper.GetArgumentList(argumentList.ToArray()))
                         );
-            returnStatement = _roslynHelper.AddSourceLinePragmaStatement( returnStatement, scenarioOutline.Location.Line );
+            returnStatement = _roslynHelper.AddSourceLinePragmaStatement(returnStatement, scenarioOutline.Location.Line);
 
             testMethod = testMethod.WithBody(Block(testMethod.Body.AddStatements(returnStatement)));
 
-            generationContext.TestClass = generationContext.TestClass.AddMembers( testMethod ); 
+            generationContext.TestClass = generationContext.TestClass.AddMembers(testMethod);
 
             //_linePragmaHandler.AddLineDirectiveHidden(testMethod.Statements);
             var arguments = paramToIdentifier.Select((p2i, paramIndex) => new KeyValuePair<string, string>(p2i.Key, row.Cells.ElementAt(paramIndex).Value)).ToList();

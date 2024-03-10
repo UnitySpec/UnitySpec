@@ -132,7 +132,7 @@ namespace UnityFlow.Bindings
             }
         }
 
-        private sealed class SetSynchronizationContext: IDisposable
+        private sealed class SetSynchronizationContext : IDisposable
         {
             private readonly SynchronizationContext _oldContext;
 

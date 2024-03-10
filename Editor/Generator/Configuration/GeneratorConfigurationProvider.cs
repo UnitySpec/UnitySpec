@@ -21,7 +21,7 @@ namespace UnityFlow.Generator.Configuration
         {
             return _configurationLoader.Load(specFlowConfiguration);
         }
-        
+
         internal virtual void UpdateConfiguration(SpecFlowProjectConfiguration configuration, ConfigurationSectionHandler specFlowConfigSection)
         {
             configuration.SpecFlowConfiguration = _configurationLoader.Update(configuration.SpecFlowConfiguration, specFlowConfigSection);
