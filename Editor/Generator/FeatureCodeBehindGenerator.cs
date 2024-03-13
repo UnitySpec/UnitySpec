@@ -16,7 +16,6 @@ namespace UnityFlow.Generator
         public TestFileGeneratorResult GenerateCodeBehindFile(string featureFile)
         {
             var featureFileInput = new FeatureFileInput(featureFile);
-            featureFileInput.CustomNamespace = "Specs.Tests.Features";
 
             var generatedFeatureFileName = Path.GetFileName(_testGenerator.GetTestFullPath(featureFileInput));
 

@@ -154,7 +154,11 @@ namespace UnityFlow.Generator
                 ? null
                 : projectSettings.DefaultNamespace;
 
-            var directoryName = Path.GetDirectoryName(featureFileInput.ProjectRelativePath);
+            string directoryName = Path.GetDirectoryName(featureFileInput.ProjectRelativePath);
+            if (directoryName.StartsWith(projectSettings.ProjectFolder, StringComparison.OrdinalIgnoreCase))
+            {
+                directoryName = directoryName.Substring(projectSettings.ProjectFolder.Length + "/Assets".Length);
+            }
             string namespaceExtension = string.IsNullOrEmpty(directoryName) ? null :
                 string.Join(".", directoryName.TrimStart('\\', '/', '.').Split('\\', '/').Select(f => f.ToIdentifier()).ToArray());
             if (!string.IsNullOrEmpty(namespaceExtension))
