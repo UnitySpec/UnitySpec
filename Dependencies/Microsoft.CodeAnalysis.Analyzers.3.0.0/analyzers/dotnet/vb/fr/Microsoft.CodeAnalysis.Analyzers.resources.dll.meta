@@ -1,8 +1,5 @@
 fileFormatVersion: 2
-guid: 9eee595174cc4db44b390b0608201e5d
-labels:
-- NuGetForUnity
-- RoslynAnalyzer
+guid: 4ed2c593611bedd4e8b82937c05dda52
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -10,40 +7,27 @@ PluginImporter:
   executionOrder: {}
   defineConstraints: []
   isPreloaded: 0
-  isOverridable: 0
+  isOverridable: 1
   isExplicitlyReferenced: 0
   validateReferences: 1
   platformData:
   - first:
-      : Any
+      Any: 
+    second:
+      enabled: 1
+      settings: {}
+  - first:
+      Editor: Editor
     second:
       enabled: 0
       settings:
-        'Exclude ': 0
-        Exclude Android: 0
-        Exclude CloudRendering: 0
-        Exclude EmbeddedLinux: 0
-        Exclude GameCoreScarlett: 0
-        Exclude GameCoreXboxOne: 0
-        Exclude Linux64: 0
-        Exclude OSXUniversal: 0
-        Exclude PS4: 0
-        Exclude PS5: 0
-        Exclude QNX: 0
-        Exclude Stadia: 0
-        Exclude Switch: 0
-        Exclude WebGL: 0
-        Exclude Win: 0
-        Exclude Win64: 0
-        Exclude WindowsStoreApps: 0
-        Exclude XboxOne: 0
-        Exclude iOS: 0
-        Exclude tvOS: 0
+        DefaultValueInitialized: true
   - first:
-      Any: 
+      Windows Store Apps: WindowsStoreApps
     second:
       enabled: 0
-      settings: {}
+      settings:
+        CPU: AnyCPU
   userData: 
   assetBundleName: 
   assetBundleVariant: 
