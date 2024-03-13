@@ -34,14 +34,10 @@ public sealed class FeatureAssetImporter : ScriptedImporter
 
     public override void OnImportAsset(AssetImportContext ctx)
     {
-        // Create our FeatureAsset
         var assetPath = ctx.assetPath;
         var contents = File.ReadAllText(assetPath);
         var asset = new TextAsset(contents);
         ctx.AddObjectToAsset("text", asset);
-        //var asset = ScriptableObject.CreateInstance<TextAsset>();
-        //asset.text = contents;
-        //ctx.AddObjectToAsset("feature", asset);
         ctx.SetMainObject(asset);
 
         // If extension not included in our project add it.
