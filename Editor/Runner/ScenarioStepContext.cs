@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using System.Threading;
-using UnityFlow.ErrorHandling;
+using UnitySpec.ErrorHandling;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public interface IScenarioStepContext : ISpecFlowContext
     {

@@ -1,4 +1,4 @@
-﻿namespace UnityFlow.Generator.Configuration
+﻿namespace UnitySpec.Generator.Configuration
 {
     public interface IGeneratorInfoProvider
     {

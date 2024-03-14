@@ -1,4 +1,4 @@
-﻿namespace UnityFlow
+﻿namespace UnitySpec
 {
 #nullable enable
     /// <summary>

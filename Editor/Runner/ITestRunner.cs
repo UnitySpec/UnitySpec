@@ -1,4 +1,4 @@
-namespace UnityFlow
+namespace UnitySpec
 {
     public interface ITestRunner
     {

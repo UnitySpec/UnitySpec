@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UnityFlow.Bindings;
-using UnityFlow.Bindings.Reflection;
+using UnitySpec.Bindings;
+using UnitySpec.Bindings.Reflection;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public enum StepDefinitionAmbiguityReason
     {

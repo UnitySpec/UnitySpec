@@ -1,7 +1,7 @@
 ﻿using BoDi;
 using System;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public interface ITestThreadContext : ISpecFlowContext
     {

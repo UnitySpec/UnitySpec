@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityFlow.Runner.Attributes
+namespace UnitySpec.Runner.Attributes
 {
     [AttributeUsage(
         AttributeTargets.Property |

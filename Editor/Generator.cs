@@ -1,14 +1,12 @@
 using System.IO;
 using UnityEngine;
-using UnityFlow.General.Build;
-using UnityFlow.Generator;
+using UnitySpec.General.Build;
+using UnitySpec.Generator;
 
 public class Generator
 {
-    private string _projectFilePath;
     private string _projectFolder;
     private string _outputPath;
-    private string _rootNamespace;
     private RunGenerator _runGenerator;
     private ITaskLoggingWrapper _logger;
 
@@ -16,21 +14,40 @@ public class Generator
     {
         _projectFolder = Path.GetFullPath(Application.dataPath);
         _outputPath = Path.Combine(_projectFolder, "output");
-        _rootNamespace = Path.GetFullPath(Application.dataPath);
-        _projectFilePath = Path.Combine(_projectFolder, "..", "Assembly-CSharp.csproj");
         _logger = new UnityLogger();
-        _runGenerator = new RunGenerator(_projectFilePath, _rootNamespace, _logger);
+        string root = Directory.GetParent(Application.dataPath).ToString();
+        string _projectFilePath = Path.Combine(root, "Assembly-CSharp.csproj");
+        _runGenerator = new RunGenerator(_projectFilePath, null, _logger);
 
     }
-    internal void Generate(string specsPath)
+    internal void Generate(string specsPath, SearchOption searchOption = SearchOption.AllDirectories)
     {
-        string[] files = Directory.GetFiles(specsPath, "*.feature", SearchOption.AllDirectories);
+        string[] files;
+        try
+        {
+            files = Directory.GetFiles(specsPath, "*.feature", searchOption);
+        }
+        catch (DirectoryNotFoundException)
+        {
+            throw new TestGeneratorException($"Could not find the directory {specsPath}, please set a valid path in Settings > UnitySpec Settings.");
+        }
 
         var res = _runGenerator.Generate(files, _projectFolder, _outputPath);
 
         foreach (string path in res)
         {
             _logger.LogMessage($"Generated file in {path}");
+        }
+    }
+
+    internal void Generate()
+    {
+        var settings = UnitySpecSettingsContainer.GetSettings();
+        var folders = settings.FeatureFolder;
+        foreach (string folder in folders)
+        {
+            string completeFolder = Path.Combine(Path.GetFullPath(Application.dataPath), folder);
+            Generate(completeFolder, settings.SearchOption);
         }
     }
 }

@@ -1,9 +1,9 @@
 using BoDi;
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.General.Parser;
+using UnitySpec.General.Parser;
 
-namespace UnityFlow.Generator.UnitTestConverter
+namespace UnitySpec.Generator.UnitTestConverter
 {
     public class FeatureGeneratorRegistry : IFeatureGeneratorRegistry
     {

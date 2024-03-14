@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     internal static class RegexFactory
     {

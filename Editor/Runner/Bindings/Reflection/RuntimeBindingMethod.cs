@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace UnityFlow.Bindings.Reflection
+namespace UnitySpec.Bindings.Reflection
 {
     public class RuntimeBindingMethod : IBindingMethod
     {

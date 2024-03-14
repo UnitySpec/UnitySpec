@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityFlow.Tracing
+namespace UnitySpec.Tracing
 {
     public interface ITraceListenerQueue : IDisposable
     {

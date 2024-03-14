@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.GeneratorInterfaces;
-using UnityFlow.Generator.Configuration;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.GeneratorInterfaces;
+using UnitySpec.Generator.Configuration;
 
-namespace UnityFlow.Generator.Project
+namespace UnitySpec.Generator.Project
 {
     public class ProjectReader : ISpecFlowProjectReader
     {

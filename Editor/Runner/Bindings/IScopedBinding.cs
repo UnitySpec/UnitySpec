@@ -1,4 +1,4 @@
-﻿namespace UnityFlow.Bindings
+﻿namespace UnitySpec.Bindings
 {
     public interface IScopedBinding
     {

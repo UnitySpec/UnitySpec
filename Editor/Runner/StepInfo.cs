@@ -1,6 +1,6 @@
-namespace UnityFlow
+namespace UnitySpec
 {
-    using UnityFlow.Bindings;
+    using UnitySpec.Bindings;
 
     public class StepInfo
     {

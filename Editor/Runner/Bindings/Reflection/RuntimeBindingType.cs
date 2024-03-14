@@ -1,6 +1,6 @@
 using System;
 
-namespace UnityFlow.Bindings.Reflection
+namespace UnitySpec.Bindings.Reflection
 {
     public class RuntimeBindingType : IPolymorphicBindingType
     {

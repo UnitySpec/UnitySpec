@@ -8,95 +8,16 @@ using System.Reflection;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 
-namespace UnityFlow.Generator.Roslyn
+namespace UnitySpec.Generator.Roslyn
 {
     public class RoslynHelper
     {
         public ProviderLanguage TargetLanguage { get; private set; }
 
-        //public RoslynHelper(CodeDomProvider codeComProvider)
-        //{
-        //    switch (codeComProvider.FileExtension.ToLower(CultureInfo.InvariantCulture))
-        //    {
-        //        case "cs":
-        //            TargetLanguage = ProviderLanguage.CSharp;
-        //            break;
-        //        case "vb":
-        //            TargetLanguage = ProviderLanguage.VB;
-        //            break;
-        //        default:
-        //            TargetLanguage = ProviderLanguage.Other;
-        //            break;
-        //    }
-        //}
-
         public RoslynHelper(ProviderLanguage targetLanguage)
         {
             TargetLanguage = targetLanguage;
         }
-
-        //public CodeTypeReference CreateNestedTypeReference(CodeTypeDeclaration baseTypeDeclaration, string nestedTypeName)
-        //{
-        //    return new CodeTypeReference(baseTypeDeclaration.Name + "." + nestedTypeName);
-        //}
-
-        //private CodeStatement CreateCommentStatement(string comment)
-        //{
-        //    switch (TargetLanguage)
-        //    {
-        //        case ProviderLanguage.CSharp:
-        //            return new CodeSnippetStatement("//" + comment);
-        //        case ProviderLanguage.VB:
-        //            return new CodeSnippetStatement("'" + comment);
-        //    }
-
-        //    throw TargetLanguageNotSupportedException();
-        //}
-
-        //private NotImplementedException TargetLanguageNotSupportedException()
-        //{
-        //    return new NotImplementedException($"{TargetLanguage} is not supported");
-        //}
-
-
-        //public void BindTypeToSourceFile(ClassDeclarationSyntax classDeclaration, string fileName)
-        //{
-        //    switch (TargetLanguage)
-        //    {
-        //        //case ProviderLanguage.VB:
-        //        //    classDeclaration.Members.Add(new CodeSnippetTypeMember(string.Format("#ExternalSource(\"{0}\",1)", fileName)));
-        //        //    classDeclaration.Members.Add(new CodeSnippetTypeMember("#End ExternalSource"));
-        //        //    break;
-
-        //        case ProviderLanguage.CSharp:
-        //            classDeclaration.Members.First().Modifiers.Add(Token(
-        //                            TriviaList(
-        //                                    new[]{
-        //                                        Trivia(
-        //                                            LineDirectiveTrivia(
-        //                                                Literal(1),
-        //                                                true
-        //                                            )
-        //                                            .WithFile(
-        //                                                Literal("Move.feature")
-        //                                            )
-        //                                        ),
-        //                                        Trivia(
-        //                                            LineDirectiveTrivia(
-        //                                                Token(SyntaxKind.HiddenKeyword),
-        //                                                true
-        //                                            )
-        //                                        )
-        //                                    }
-        //                                ),
-        //                                SyntaxKind.PublicKeyword,
-        //                                TriviaList()
-        //                                ));
-        //            //classDeclaration.Members.Add(new CodeSnippetTypeMember(string.Format("#line 1 \"{0}\"", fileName)));
-        //            //classDeclaration.Members.Add(new CodeSnippetTypeMember("#line hidden"));
-        //            break;
-        //    }
-        //}
 
 
         public SyntaxTrivia GetStartRegionStatement(string regionText)
@@ -114,13 +35,6 @@ namespace UnityFlow.Generator.Roslyn
                         )
                 );
         }
-
-        //public SyntaxTrivia GetEndRegionStatement()
-        //{
-        //    return Trivia(
-        //            EndRegionDirectiveTrivia(true)
-        //            );
-        //}
 
         private SyntaxTrivia getPragmaToken(SyntaxKind keyword)
         {
@@ -241,19 +155,6 @@ namespace UnityFlow.Generator.Roslyn
             return method;
         }
 
-        //public CodeStatement CreateDisableSourceLinePragmaStatement()
-        //{
-        //    switch (TargetLanguage)
-        //    {
-        //        case ProviderLanguage.VB:
-        //            return new CodeSnippetStatement("#End ExternalSource");
-        //        case ProviderLanguage.CSharp:
-        //            return new CodeSnippetStatement("#line hidden");
-        //    }
-
-        //    throw TargetLanguageNotSupportedException();
-        //}
-
 
         public ReturnStatementSyntax AddSourceLinePragmaStatement(ReturnStatementSyntax returnStatement, int lineNo)
         {
@@ -336,7 +237,6 @@ namespace UnityFlow.Generator.Roslyn
             if (len < 2)
             {
                 return IdentifierName(strings[0]);
-                //throw new Exception("Member access for < 2"); 
             }
             var result = MemberAccessExpression(
                                 SyntaxKind.SimpleMemberAccessExpression,
@@ -396,7 +296,7 @@ namespace UnityFlow.Generator.Roslyn
         {
             var resultLen = expr.Length * 2 - 1;
             var resultList = new SyntaxNodeOrToken[resultLen];
-            for (var i = 0; i < resultLen - 1; i++)
+            for (var i = 0; i < resultLen; i++)
             {
                 SyntaxNodeOrToken res;
                 if (i % 2 == 0)

@@ -1,10 +1,10 @@
 ﻿using Microsoft.Build.Utilities;
 using System;
 using System.Collections.Generic;
-using UnityFlow.General.GeneratorInterfaces;
-using UnityFlow.General.Utils;
+using UnitySpec.General.GeneratorInterfaces;
+using UnitySpec.General.Utils;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public class FeatureFileCodeBehindGenerator : IFeatureFileCodeBehindGenerator
     {

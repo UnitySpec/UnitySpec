@@ -1,7 +1,7 @@
 ﻿using BoDi;
-using UnityFlow.Generator.UnitTestProvider;
+using UnitySpec.Generator.UnitTestProvider;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     partial class DefaultDependencyProvider
     {

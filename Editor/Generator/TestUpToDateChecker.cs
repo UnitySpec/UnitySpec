@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using UnityFlow.General.Extensions;
-using UnityFlow.General.GeneratorInterfaces;
-using UnityFlow.Generator.Configuration;
+using UnitySpec.General.Extensions;
+using UnitySpec.General.GeneratorInterfaces;
+using UnitySpec.Generator.Configuration;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public class TestUpToDateChecker : ITestUpToDateChecker
     {

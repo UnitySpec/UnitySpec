@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using UnityFlow.General.Build;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.GeneratorInterfaces;
-using UnityFlow.General.Utils;
-using UnityFlow.Generator.Configuration;
-using UnityFlow.Generator.Project;
+using UnitySpec.General.Build;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.GeneratorInterfaces;
+using UnitySpec.General.Utils;
+using UnitySpec.Generator.Configuration;
+using UnitySpec.Generator.Project;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public class RunGenerator
     {

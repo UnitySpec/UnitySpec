@@ -1,7 +1,7 @@
-﻿using UnityFlow.Events;
-using UnityFlow.General.Tracing;
+﻿using UnitySpec.Events;
+using UnitySpec.General.Tracing;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public class SpecFlowOutputHelper : ISpecFlowOutputHelper
     {

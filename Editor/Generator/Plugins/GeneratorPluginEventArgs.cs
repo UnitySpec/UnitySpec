@@ -1,9 +1,9 @@
 ﻿using BoDi;
 using System;
-using UnityFlow.General.Plugins;
-using UnityFlow.Generator.Configuration;
+using UnitySpec.General.Plugins;
+using UnitySpec.Generator.Configuration;
 
-namespace UnityFlow.Generator.Plugins
+namespace UnitySpec.Generator.Plugins
 {
     public class RegisterDependenciesEventArgs : ObjectContainerEventArgs
     {

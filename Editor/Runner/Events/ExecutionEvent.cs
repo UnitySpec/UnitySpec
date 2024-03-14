@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityFlow.Bindings;
+using UnitySpec.Bindings;
 
-namespace UnityFlow.Events
+namespace UnitySpec.Events
 {
     public class ExecutionEvent : IExecutionEvent
     {

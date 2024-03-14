@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public class TestHeaderWriter : ITestHeaderWriter
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UnityFlow.Runner.ValueRetriever
+namespace UnitySpec.Runner.ValueRetriever
 {
     /// <summary>
     /// A class that will retrieve an object's actual value from a key->value in a table.

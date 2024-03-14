@@ -1,7 +1,7 @@
 ﻿
-using UnityFlow.General.Tracing;
+using UnitySpec.General.Tracing;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public class SpecFlowAttachmentHandler : ISpecFlowAttachmentHandler
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public interface ISpecFlowContext
     {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnityFlow.Bindings.Reflection;
-using UnityFlow.Compatibility;
+using UnitySpec.Bindings.Reflection;
+using UnitySpec.Compatibility;
 
-namespace UnityFlow.Bindings.Discovery
+namespace UnitySpec.Bindings.Discovery
 {
     public class RuntimeBindingRegistryBuilder : IRuntimeBindingRegistryBuilder
     {

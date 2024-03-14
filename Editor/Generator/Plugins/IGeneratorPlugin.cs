@@ -1,6 +1,6 @@
-using UnityFlow.General.UnitTestProvider;
+using UnitySpec.General.UnitTestProvider;
 
-namespace UnityFlow.Generator.Plugins
+namespace UnitySpec.Generator.Plugins
 {
     public interface IGeneratorPlugin
     {

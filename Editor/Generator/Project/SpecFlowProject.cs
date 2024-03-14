@@ -1,7 +1,7 @@
-using UnityFlow.General.GeneratorInterfaces;
-using UnityFlow.Generator.Configuration;
+using UnitySpec.General.GeneratorInterfaces;
+using UnitySpec.Generator.Configuration;
 
-namespace UnityFlow.Generator.Project
+namespace UnitySpec.Generator.Project
 {
     public class SpecFlowProject
     {

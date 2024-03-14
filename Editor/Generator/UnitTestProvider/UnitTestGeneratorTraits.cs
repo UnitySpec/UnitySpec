@@ -1,6 +1,6 @@
 using System;
 
-namespace UnityFlow.Generator.UnitTestProvider
+namespace UnitySpec.Generator.UnitTestProvider
 {
     [Flags]
     public enum UnitTestGeneratorTraits

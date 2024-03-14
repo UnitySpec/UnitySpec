@@ -1,4 +1,4 @@
-namespace UnityFlow.BindingSkeletons
+namespace UnitySpec.BindingSkeletons
 {
     public interface ISkeletonTemplateProvider
     {

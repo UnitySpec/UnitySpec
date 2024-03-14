@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public class TestAssemblyProvider : ITestAssemblyProvider
     {

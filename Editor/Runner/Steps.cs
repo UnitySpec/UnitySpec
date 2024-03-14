@@ -1,10 +1,10 @@
 ﻿using BoDi;
 using System;
 using System.ComponentModel;
-using UnityFlow.ErrorHandling;
-using UnityFlow.Infrastructure;
+using UnitySpec.ErrorHandling;
+using UnitySpec.Infrastructure;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public abstract class Steps : IContainerDependentObject
     {

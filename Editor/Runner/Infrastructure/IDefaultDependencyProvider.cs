@@ -1,6 +1,6 @@
 ﻿using BoDi;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public interface IDefaultDependencyProvider
     {

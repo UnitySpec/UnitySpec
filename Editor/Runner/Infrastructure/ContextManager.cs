@@ -2,10 +2,10 @@ using BoDi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.Bindings;
-using UnityFlow.Tracing;
+using UnitySpec.Bindings;
+using UnitySpec.Tracing;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public class ContextManager : IContextManager, IDisposable
     {

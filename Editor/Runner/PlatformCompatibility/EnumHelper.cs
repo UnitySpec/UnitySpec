@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityFlow.Compatibility
+namespace UnitySpec.Compatibility
 {
     internal static class EnumHelper
     {

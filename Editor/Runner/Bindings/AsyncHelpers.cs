@@ -4,7 +4,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     /// <summary>
     /// https://stackoverflow.com/questions/5095183/how-would-i-run-an-async-taskt-method-synchronously#answer-5097066

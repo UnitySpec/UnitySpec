@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using UnityFlow.ErrorHandling;
+using UnitySpec.ErrorHandling;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public class TestPendingMessageFactory : ITestPendingMessageFactory
     {

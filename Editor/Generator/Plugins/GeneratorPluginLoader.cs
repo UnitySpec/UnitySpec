@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
-using UnityFlow.General.Errorhandling;
-using UnityFlow.General.Infrastructure;
-using UnityFlow.General.Plugins;
+using UnitySpec.General.Errorhandling;
+using UnitySpec.General.Infrastructure;
+using UnitySpec.General.Plugins;
 
-namespace UnityFlow.Generator.Plugins
+namespace UnitySpec.Generator.Plugins
 {
     public class GeneratorPluginLoader : IGeneratorPluginLoader
     {

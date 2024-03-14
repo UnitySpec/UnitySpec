@@ -1,7 +1,7 @@
 ﻿using UnityEngine.Assertions;
-using UnityFlow.Runner.UnitTestProvider;
+using UnitySpec.Runner.UnitTestProvider;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public class UTFRuntimeProvider : IUnitTestRuntimeProvider
     {

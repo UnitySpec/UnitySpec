@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.Bindings;
-using UnityFlow.Bindings.Reflection;
-using UnityFlow.General.Configuration;
-using UnityFlow.Runner.UnitTestProvider;
-using UnityFlow.Tracing;
+using UnitySpec.Bindings;
+using UnitySpec.Bindings.Reflection;
+using UnitySpec.General.Configuration;
+using UnitySpec.Runner.UnitTestProvider;
+using UnitySpec.Tracing;
 
-namespace UnityFlow.ErrorHandling
+namespace UnitySpec.ErrorHandling
 {
     public interface IErrorProvider
     {

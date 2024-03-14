@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using UnityFlow.Bindings.Reflection;
-using UnityFlow.General.Configuration;
-using UnityFlow.Tracing;
+using UnitySpec.Bindings.Reflection;
+using UnitySpec.General.Configuration;
+using UnitySpec.Tracing;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public interface IStepDefinitionRegexCalculator
     {

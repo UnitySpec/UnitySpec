@@ -4,11 +4,12 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
-using UnityFlow.Generator.Generation;
-using UnityFlow.Generator.Roslyn;
+using System.Linq;
+using UnitySpec.Generator.Generation;
+using UnitySpec.Generator.Roslyn;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace UnityFlow.Generator.UnitTestProvider
+namespace UnitySpec.Generator.UnitTestProvider
 {
     public class UTFTestGeneratorProvider : IUnitTestGeneratorProvider
     {
@@ -42,54 +43,52 @@ namespace UnityFlow.Generator.UnitTestProvider
 
         public virtual void SetTestClassIgnore(TestClassGenerationContext generationContext)
         {
-            generationContext.TestClass = generationContext.TestClass.WithAttributeLists(SingletonList(
+            generationContext.TestClass = generationContext.TestClass.AddAttributeLists(
                 roslynHelper.getAttribute(IGNORE_ATTR, "Ignored feature")
-                ));
+                );
         }
 
         public virtual MethodDeclarationSyntax SetTestMethodIgnore(MethodDeclarationSyntax testMethod)
         {
-            return testMethod.WithAttributeLists(SingletonList(
+            return testMethod.AddAttributeLists(
                     roslynHelper.getAttribute(IGNORE_ATTR, "Ignored scenario")
-                ));
+                );
         }
 
         public virtual void SetTestClassInitializeMethod(TestClassGenerationContext generationContext)
         {
-            generationContext.TestClassInitializeMethod = generationContext.TestClassInitializeMethod.WithAttributeLists(SingletonList(
+            generationContext.TestClassInitializeMethod = generationContext.TestClassInitializeMethod.AddAttributeLists(
                         roslynHelper.getAttribute(TESTFIXTURESETUP_ATTR_NUNIT3)
-                    ));
+                    );
         }
 
         public virtual void SetTestClassCleanupMethod(TestClassGenerationContext generationContext)
         {
-            generationContext.TestClassCleanupMethod = generationContext.TestClassCleanupMethod.WithAttributeLists(SingletonList(
+            generationContext.TestClassCleanupMethod = generationContext.TestClassCleanupMethod.AddAttributeLists(
                     roslynHelper.getAttribute(TESTFIXTURETEARDOWN_ATTR_NUNIT3)
-                ));
+                );
         }
 
         public virtual void SetTestClassNonParallelizable(TestClassGenerationContext generationContext)
         {
-            generationContext.TestClass = generationContext.TestClass.WithAttributeLists(SingletonList(
+            generationContext.TestClass = generationContext.TestClass.AddAttributeLists(
                     roslynHelper.getAttribute(NONPARALLELIZABLE_ATTR)
-                    ));
+                    );
         }
 
         public void SetTestClass(TestClassGenerationContext generationContext, string featureTitle, string featureDescription)
         {
-            generationContext.TestClass = generationContext.TestClass.WithAttributeLists(new SyntaxList<AttributeListSyntax>
-                    {
+            generationContext.TestClass = generationContext.TestClass.AddAttributeLists(
                         roslynHelper.getAttribute(TESTFIXTURE_ATTR),
                         roslynHelper.getAttribute(DESCRIPTION_ATTR, featureTitle)
-                    }
                 );
         }
 
         public void SetTestClassCategories(TestClassGenerationContext generationContext, IEnumerable<string> featureCategories)
         {
-            generationContext.TestClass = generationContext.TestClass.WithAttributeLists(new SyntaxList<AttributeListSyntax>(
-                    roslynHelper.getAttributeForEachValue(CATEGORY_ATTR, featureCategories)
-                    ));
+            generationContext.TestClass = generationContext.TestClass.AddAttributeLists(
+                roslynHelper.getAttributeForEachValue(CATEGORY_ATTR, featureCategories).ToArray()
+                );
         }
 
         public virtual void FinalizeTestClass(TestClassGenerationContext generationContext)
@@ -121,30 +120,30 @@ namespace UnityFlow.Generator.UnitTestProvider
 
         public void SetTestInitializeMethod(TestClassGenerationContext generationContext)
         {
-            generationContext.TestInitializeMethod = generationContext.TestInitializeMethod.WithAttributeLists(SingletonList(roslynHelper.getAttribute(TESTSETUP_ATTR)));
+            generationContext.TestInitializeMethod = generationContext.TestInitializeMethod.AddAttributeLists(roslynHelper.getAttribute(TESTSETUP_ATTR));
         }
 
         public void SetTestCleanupMethod(TestClassGenerationContext generationContext)
         {
-            generationContext.TestCleanupMethod = generationContext.TestCleanupMethod.WithAttributeLists(SingletonList(roslynHelper.getAttribute(TESTTEARDOWN_ATTR)));
+            generationContext.TestCleanupMethod = generationContext.TestCleanupMethod.AddAttributeLists(roslynHelper.getAttribute(TESTTEARDOWN_ATTR));
         }
 
         public MethodDeclarationSyntax MakeTestMethod(MethodDeclarationSyntax testMethod, string friendlyTestName)
         {
-            return testMethod.WithAttributeLists(testMethod.AttributeLists.AddRange(
+            return testMethod.AddAttributeLists(
                 new AttributeListSyntax[]
                     {
                         roslynHelper.getAttribute(TEST_ATTR),
                         roslynHelper.getAttribute(DESCRIPTION_ATTR, friendlyTestName)
                     }
-                ));
+                );
         }
 
         public MethodDeclarationSyntax SetTestMethodCategories(MethodDeclarationSyntax testMethod, IEnumerable<string> scenarioCategories)
         {
-            return testMethod.WithAttributeLists(new SyntaxList<AttributeListSyntax>(
-                    roslynHelper.getAttributeForEachValue(CATEGORY_ATTR, scenarioCategories)
-                    ));
+            return testMethod.AddAttributeLists(
+                    roslynHelper.getAttributeForEachValue(CATEGORY_ATTR, scenarioCategories).ToArray()
+                    );
         }
 
         public void SetRowTest(TestClassGenerationContext generationContext, MethodDeclarationSyntax testMethod, string scenarioTitle)

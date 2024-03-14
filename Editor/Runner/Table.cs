@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using UnityFlow.ErrorHandling;
+using UnitySpec.ErrorHandling;
 
-namespace UnityFlow
+namespace UnitySpec
 {
 #if !BODI_LIMITEDRUNTIME
     [Serializable]

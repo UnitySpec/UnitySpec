@@ -1,4 +1,4 @@
-namespace UnityFlow
+namespace UnitySpec
 {
     public enum ScenarioBlock
     {

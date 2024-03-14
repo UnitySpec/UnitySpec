@@ -1,6 +1,6 @@
-﻿using UnityFlow.General.GeneratorInterfaces;
+﻿using UnitySpec.General.GeneratorInterfaces;
 
-namespace UnityFlow.Generator.Configuration
+namespace UnitySpec.Generator.Configuration
 {
     public interface ISpecFlowConfigurationReader
     {

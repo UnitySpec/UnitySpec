@@ -1,10 +1,10 @@
 using System;
 using System.Globalization;
 using System.Threading;
-using UnityFlow.Tracing;
+using UnitySpec.Tracing;
 
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public readonly struct CultureInfoScope : IDisposable
     {

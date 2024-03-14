@@ -5,15 +5,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Extensions;
-using UnityFlow.General.Parser;
-using UnityFlow.Generator.Roslyn;
-using UnityFlow.Generator.UnitTestConverter;
-using UnityFlow.Generator.UnitTestProvider;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.Extensions;
+using UnitySpec.General.Parser;
+using UnitySpec.Generator.Roslyn;
+using UnitySpec.Generator.UnitTestConverter;
+using UnitySpec.Generator.UnitTestProvider;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace UnityFlow.Generator.Generation
+namespace UnitySpec.Generator.Generation
 {
     public class UnitTestMethodGenerator
     {
@@ -179,11 +179,11 @@ namespace UnityFlow.Generator.Generation
                                 _roslynHelper.GetName(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME),
                                 _roslynHelper.GetName(GeneratorConstants.FEATURE_TAGS_VARIABLE_NAME)
                                 );
-            var scenarioInfoDecl = VariableDeclaration(_roslynHelper.GetName("UnityFlow.ScenarioInfo"))
+            var scenarioInfoDecl = VariableDeclaration(_roslynHelper.GetName("UnitySpec.ScenarioInfo"))
                                     .WithVariables(SingletonSeparatedList(
                                         VariableDeclarator(Identifier("scenarioInfo"))
                                         .WithInitializer(EqualsValueClause(
-                                            ObjectCreationExpression(_roslynHelper.GetName("UnityFlow.ScenarioInfo"))
+                                            ObjectCreationExpression(_roslynHelper.GetName("UnitySpec.ScenarioInfo"))
                                             .WithArgumentList(arguments)
                                         ))
                                     ));

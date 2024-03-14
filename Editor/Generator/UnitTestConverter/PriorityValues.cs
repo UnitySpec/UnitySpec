@@ -1,4 +1,4 @@
-namespace UnityFlow.Generator.UnitTestConverter
+namespace UnitySpec.Generator.UnitTestConverter
 {
     public static class PriorityValues
     {

@@ -1,7 +1,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 
-namespace UnityFlow.Generator.UnitTestProvider
+namespace UnitySpec.Generator.UnitTestProvider
 {
     public interface IUnitTestGeneratorProvider
     {

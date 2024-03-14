@@ -1,4 +1,4 @@
-namespace UnityFlow.Generator.Plugins
+namespace UnitySpec.Generator.Plugins
 {
     public class GeneratorPluginParameters
     {

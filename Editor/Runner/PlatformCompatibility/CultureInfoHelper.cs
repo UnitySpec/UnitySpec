@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace UnityFlow.Compatibility
+namespace UnitySpec.Compatibility
 {
     internal static class CultureInfoHelper
     {

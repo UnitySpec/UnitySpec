@@ -1,9 +1,9 @@
-﻿using UnityFlow.Bindings;
-using UnityFlow.ErrorHandling;
-using UnityFlow.General.Configuration;
-using UnityFlow.Tracing;
+﻿using UnitySpec.Bindings;
+using UnitySpec.ErrorHandling;
+using UnitySpec.General.Configuration;
+using UnitySpec.Tracing;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public class ObsoleteStepHandler : IObsoleteStepHandler
     {

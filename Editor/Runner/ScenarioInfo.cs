@@ -2,7 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public class ScenarioInfo
     {

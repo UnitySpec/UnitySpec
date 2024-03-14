@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using System.Text;
-using UnityFlow.Bindings;
-using UnityFlow.Bindings.Reflection;
+using UnitySpec.Bindings;
+using UnitySpec.Bindings.Reflection;
 
-namespace UnityFlow.Tracing
+namespace UnitySpec.Tracing
 {
     public interface IStepFormatter
     {

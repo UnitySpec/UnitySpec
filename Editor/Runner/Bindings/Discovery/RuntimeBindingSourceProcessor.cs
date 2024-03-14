@@ -1,7 +1,7 @@
-﻿using UnityFlow.ErrorHandling;
-using UnityFlow.Tracing;
+﻿using UnitySpec.ErrorHandling;
+using UnitySpec.Tracing;
 
-namespace UnityFlow.Bindings.Discovery
+namespace UnitySpec.Bindings.Discovery
 {
     public interface IRuntimeBindingSourceProcessor : IBindingSourceProcessor
     {

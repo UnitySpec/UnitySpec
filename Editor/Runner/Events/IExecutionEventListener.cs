@@ -1,4 +1,4 @@
-﻿namespace UnityFlow.Events
+﻿namespace UnitySpec.Events
 {
     public interface IExecutionEventListener
     {

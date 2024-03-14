@@ -3,67 +3,52 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using UnityFlow.ErrorHandling;
+using UnitySpec.ErrorHandling;
 
-namespace UnityFlow.BindingSkeletons
+namespace UnitySpec.BindingSkeletons
 {
-    public abstract class FileBasedSkeletonTemplateProvider : ISkeletonTemplateProvider
+    public class FileBasedSkeletonTemplateProvider : ISkeletonTemplateProvider
     {
-        private const string templateSeparator = ">>>";
-        private Dictionary<string, string> templates;
-
-        private Dictionary<string, string> GetTemplates()
-        {
-            var templates = new Dictionary<string, string>();
-
-            string templateFileContent = GetTemplateFileContent();
-            var templateItems = templateFileContent.Split(new[] { templateSeparator }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var templateItem in templateItems.Select(ti => new StringReader(ti)).Select(reader => new { Key = reader.ReadLine(), Body = reader.ReadToEnd() }))
-            {
-                if (string.IsNullOrEmpty(templateItem.Key))
-                    throw new SpecFlowException($"Invalid sftemplate file! Missing title after '{templateSeparator}'.");
-
-                if (templates.ContainsKey(templateItem.Key))
-                    throw new SpecFlowException($"Invalid sftemplate file! Duplicate key: '{templateItem.Key}'.");
-                templates.Add(templateItem.Key, templateItem.Body);
-            }
-
-            return templates;
-        }
-
-        protected abstract string GetTemplateFileContent();
-        protected virtual string MissingTemplate(string key)
-        {
-            return "undefined template";
-        }
-
-        protected internal virtual string GetTemplate(string key)
-        {
-            LazyInitializer.EnsureInitialized(ref templates, GetTemplates);
-
-            if (!templates.TryGetValue(key, out string template))
-                return null;
-            return template;
-        }
-
         public string GetStepDefinitionTemplate(ProgrammingLanguage language, bool withRegex)
         {
-            string key = $"{language}/StepDefinition{(withRegex ? "Regex" : "")}";
-            string template = GetTemplate(key);
-            if (template == null)
-                return MissingTemplate(key);
-
+            string template;
+            if (withRegex)
+            {
+                template = @"[{attribute}(@""{regex}"")]
+public void {methodName}({parameters})
+{
+    _scenarioContext.Pending();
+}";
+            } else
+            {
+                template = @"[{attribute}]
+public void {methodName}({parameters})
+{
+    _scenarioContext.Pending();
+}";
+            }
             return template;
         }
 
         public string GetStepDefinitionClassTemplate(ProgrammingLanguage language)
         {
-            string key = $"{language}/StepDefinitionClass";
-            string template = GetTemplate(key);
-            if (template == null)
-                return MissingTemplate(key);
+            return @"using System;
+using UnityFlow;
 
-            return template;
+namespace {namespace}
+{
+    [Binding]
+    public class {className}
+    {
+        private readonly ScenarioContext _scenarioContext;
+
+        public {className}(ScenarioContext scenarioContext)
+        {
+            _scenarioContext = scenarioContext;
+        }
+{bindings}
+    }
+}";
         }
     }
 }

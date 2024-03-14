@@ -1,6 +1,6 @@
-﻿using UnityFlow.General.Configuration;
+﻿using UnitySpec.General.Configuration;
 
-namespace UnityFlow.Generator.Configuration
+namespace UnitySpec.Generator.Configuration
 {
     public class SpecFlowProjectConfiguration
     {

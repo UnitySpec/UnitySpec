@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using UnityFlow.Bindings;
-using UnityFlow.Compatibility;
-using UnityFlow.General.Parser;
+using UnitySpec.Bindings;
+using UnitySpec.Compatibility;
+using UnitySpec.General.Parser;
 
-namespace UnityFlow.Tracing
+namespace UnitySpec.Tracing
 {
     internal static class LanguageHelper
     {

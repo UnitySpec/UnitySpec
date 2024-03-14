@@ -1,8 +1,8 @@
 ﻿using BoDi;
 using System;
-using UnityFlow.Generator.Configuration;
+using UnitySpec.Generator.Configuration;
 
-namespace UnityFlow.Generator.Plugins
+namespace UnitySpec.Generator.Plugins
 {
     public class GeneratorPluginEvents
     {

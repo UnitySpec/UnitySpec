@@ -1,6 +1,6 @@
 using System;
 
-namespace UnityFlow.Events
+namespace UnitySpec.Events
 {
     public interface ITestThreadExecutionEventPublisher
     {

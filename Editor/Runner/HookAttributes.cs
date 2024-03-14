@@ -1,7 +1,7 @@
 using System;
-using UnityFlow.Bindings;
+using UnitySpec.Bindings;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public abstract class HookAttribute : Attribute

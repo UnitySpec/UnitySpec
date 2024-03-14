@@ -1,6 +1,6 @@
-﻿using UnityFlow.General.Plugins;
+﻿using UnitySpec.General.Plugins;
 
-namespace UnityFlow.Generator.Plugins
+namespace UnitySpec.Generator.Plugins
 {
     public interface IGeneratorPluginLoader
     {

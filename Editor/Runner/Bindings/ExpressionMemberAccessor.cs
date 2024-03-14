@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     internal static class ExpressionMemberAccessor
     {

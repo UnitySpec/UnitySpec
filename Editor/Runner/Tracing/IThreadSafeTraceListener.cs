@@ -1,6 +1,6 @@
-﻿using UnityFlow.General.Tracing;
+﻿using UnitySpec.General.Tracing;
 
-namespace UnityFlow.Tracing
+namespace UnitySpec.Tracing
 {
     /// <summary>
     /// Marker interface for trace listener that do not need queued execution

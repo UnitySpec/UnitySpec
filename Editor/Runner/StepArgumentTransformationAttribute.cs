@@ -1,6 +1,6 @@
 using System;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class StepArgumentTransformationAttribute : Attribute

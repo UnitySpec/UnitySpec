@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public interface ITestHeaderWriter
     {
