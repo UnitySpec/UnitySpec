@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using UnityFlow.General.Tracing;
+using UnitySpec.General.Tracing;
 
-namespace UnityFlow.Generator.Tracing
+namespace UnitySpec.Generator.Tracing
 {
     public class TextWriterTraceListener : ITraceListener
     {

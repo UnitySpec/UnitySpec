@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using UnityFlow.Bindings.Reflection;
+using UnitySpec.Bindings.Reflection;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public class BindingObsoletion
     {

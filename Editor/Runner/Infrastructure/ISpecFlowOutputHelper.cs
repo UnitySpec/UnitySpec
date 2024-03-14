@@ -1,4 +1,4 @@
-﻿namespace UnityFlow.Infrastructure
+﻿namespace UnitySpec.Infrastructure
 {
     public interface ISpecFlowOutputHelper
     {

@@ -1,4 +1,4 @@
-﻿namespace UnityFlow.Generator.Roslyn
+﻿namespace UnitySpec.Generator.Roslyn
 {
     public enum ProviderLanguage
     {

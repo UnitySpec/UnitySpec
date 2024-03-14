@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
-using UnityFlow.BindingSkeletons;
-using UnityFlow.ErrorHandling;
-using UnityFlow.General.Configuration;
+using UnitySpec.BindingSkeletons;
+using UnitySpec.ErrorHandling;
+using UnitySpec.General.Configuration;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public class TestUndefinedMessageFactory : ITestUndefinedMessageFactory
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public interface ISynchronousBindingDelegateInvoker
     {

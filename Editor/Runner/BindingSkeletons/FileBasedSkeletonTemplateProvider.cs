@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using UnityFlow.ErrorHandling;
+using UnitySpec.ErrorHandling;
 
-namespace UnityFlow.BindingSkeletons
+namespace UnitySpec.BindingSkeletons
 {
     public abstract class FileBasedSkeletonTemplateProvider : ISkeletonTemplateProvider
     {

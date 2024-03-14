@@ -4,14 +4,14 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using UnityFlow.Bindings;
-using UnityFlow.Bindings.Reflection;
-using UnityFlow.BindingSkeletons;
-using UnityFlow.ErrorHandling;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Tracing;
+using UnitySpec.Bindings;
+using UnitySpec.Bindings.Reflection;
+using UnitySpec.BindingSkeletons;
+using UnitySpec.ErrorHandling;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.Tracing;
 
-namespace UnityFlow.Tracing
+namespace UnitySpec.Tracing
 {
     public interface ITestTracer
     {

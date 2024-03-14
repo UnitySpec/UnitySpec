@@ -1,5 +1,5 @@
 ﻿
-namespace UnityFlow.Bindings.Reflection
+namespace UnitySpec.Bindings.Reflection
 {
     public interface IBindingType
     {

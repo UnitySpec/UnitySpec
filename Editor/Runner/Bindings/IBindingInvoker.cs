@@ -1,8 +1,8 @@
 using System;
-using UnityFlow.Infrastructure;
-using UnityFlow.Tracing;
+using UnitySpec.Infrastructure;
+using UnitySpec.Tracing;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public interface IBindingInvoker
     {

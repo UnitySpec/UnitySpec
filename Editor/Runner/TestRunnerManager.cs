@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using UnityFlow.Bindings.Discovery;
-using UnityFlow.General.Configuration;
-using UnityFlow.Infrastructure;
-using UnityFlow.Tracing;
+using UnitySpec.Bindings.Discovery;
+using UnitySpec.General.Configuration;
+using UnitySpec.Infrastructure;
+using UnitySpec.Tracing;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public interface ITestRunnerManager : IDisposable
     {

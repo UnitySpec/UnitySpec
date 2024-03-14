@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UnityFlow.Runner.ValueRetriever
+namespace UnitySpec.Runner.ValueRetriever
 {
     public abstract class StructRetriever<T> : IValueRetriever
         where T : struct

@@ -1,8 +1,8 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using UnityFlow.General.Configuration;
-using UnityFlow.Generator.Roslyn;
+using UnitySpec.General.Configuration;
+using UnitySpec.Generator.Roslyn;
 
-namespace UnityFlow.Generator.Generation
+namespace UnitySpec.Generator.Generation
 {
     public class LinePragmaHandler
     {

@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using UnityFlow.Bindings;
-using UnityFlow.ErrorHandling;
-using UnityFlow.Infrastructure;
+using UnitySpec.Bindings;
+using UnitySpec.ErrorHandling;
+using UnitySpec.Infrastructure;
 
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public interface IScenarioContext : ISpecFlowContext
     {

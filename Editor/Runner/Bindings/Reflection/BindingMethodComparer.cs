@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace UnityFlow.Bindings.Reflection
+namespace UnitySpec.Bindings.Reflection
 {
     public class BindingMethodComparer : IEqualityComparer<IBindingMethod>
     {

@@ -1,16 +1,16 @@
 ﻿using BoDi;
-using UnityFlow.Bindings;
-using UnityFlow.Bindings.Discovery;
-using UnityFlow.BindingSkeletons;
-using UnityFlow.ErrorHandling;
-using UnityFlow.Events;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Configuration.Interfaces;
-using UnityFlow.General.Tracing;
-using UnityFlow.Runner.Configuration;
-using UnityFlow.Tracing;
+using UnitySpec.Bindings;
+using UnitySpec.Bindings.Discovery;
+using UnitySpec.BindingSkeletons;
+using UnitySpec.ErrorHandling;
+using UnitySpec.Events;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.Configuration.Interfaces;
+using UnitySpec.General.Tracing;
+using UnitySpec.Runner.Configuration;
+using UnitySpec.Tracing;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     //NOTE: Please update https://github.com/techtalk/SpecFlow/wiki/Available-Containers-&-Registrations if you change registration defaults
 

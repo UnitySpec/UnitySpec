@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public interface IBindingRegistry
     {

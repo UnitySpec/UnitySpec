@@ -6,11 +6,11 @@ public class UFWindow : EditorWindow
 {
     private Generator _generator = new();
 
-    [MenuItem("Window/UnityFlow")]
+    [MenuItem("Window/UnitySpec")]
     public static void ShowExample()
     {
         UFWindow wnd = GetWindow<UFWindow>();
-        wnd.titleContent = new GUIContent("UnityFlow");
+        wnd.titleContent = new GUIContent("UnitySpec");
     }
 
     public void CreateGUI()
@@ -29,7 +29,7 @@ public class UFWindow : EditorWindow
             {
                 whiteSpace = WhiteSpace.Normal
             },
-            text = "Welcome to UnityFlow, clik the button below to generate test files."
+            text = "Welcome to UnitySpec, clik the button below to generate test files."
         };
     }
 

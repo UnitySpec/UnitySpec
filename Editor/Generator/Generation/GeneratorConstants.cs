@@ -1,4 +1,4 @@
-﻿namespace UnityFlow.Generator.Generation
+﻿namespace UnitySpec.Generator.Generation
 {
     public class GeneratorConstants
     {
@@ -13,7 +13,7 @@
         public const string TESTCLASS_CLEANUP_NAME = "FeatureTearDown";
         public const string BACKGROUND_NAME = "FeatureBackground";
         public const string TESTRUNNER_FIELD = "testRunner";
-        public const string UNITYFLOW_NAMESPACE = "UnityFlow";
+        public const string UNITYSPEC_NAMESPACE = "UnitySpec";
         public const string SCENARIO_OUTLINE_EXAMPLE_TAGS_PARAMETER = "exampleTags";
         public const string SCENARIO_TAGS_VARIABLE_NAME = "tagsOfScenario";
         public const string SCENARIO_ARGUMENTS_VARIABLE_NAME = "argumentsOfScenario";

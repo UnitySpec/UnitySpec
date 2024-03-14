@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEngine;
-using UnityFlow.General.Build;
-using UnityFlow.Generator;
+using UnitySpec.General.Build;
+using UnitySpec.Generator;
 
 public class Generator
 {
@@ -34,7 +34,7 @@ public class Generator
 
     internal void Generate()
     {
-        var settings = UnityFlowSettingsContainer.GetSettings();
+        var settings = UnitySpecSettingsContainer.GetSettings();
         var folders = settings.FeatureFolder;
         foreach (string folder in folders)
         {

@@ -1,6 +1,6 @@
 using System;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     /// <summary>
     /// Restricts the binding attributes (step definition, hook, etc.) to be applied only in a specific scope.

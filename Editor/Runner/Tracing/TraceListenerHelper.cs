@@ -1,5 +1,5 @@
-﻿using UnityFlow.General.Tracing;
-namespace UnityFlow.Tracing
+﻿using UnitySpec.General.Tracing;
+namespace UnitySpec.Tracing
 {
     public static class TraceListenerHelper
     {

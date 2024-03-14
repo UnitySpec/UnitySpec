@@ -1,7 +1,7 @@
 using System;
-using UnityFlow.Bindings.Reflection;
+using UnitySpec.Bindings.Reflection;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public interface IBinding
     {

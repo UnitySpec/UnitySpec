@@ -1,7 +1,9 @@
 {
-    "name": "UnityFlow.Generator",
+    "name": "UnitySpec.editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:0d0c4f03e1293a44aae145986097a2a2"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

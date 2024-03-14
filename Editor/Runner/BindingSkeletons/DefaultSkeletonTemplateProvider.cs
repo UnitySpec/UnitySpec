@@ -1,21 +1,21 @@
 using System;
 using System.IO;
 
-namespace UnityFlow.BindingSkeletons
+namespace UnitySpec.BindingSkeletons
 {
     public class ResourceSkeletonTemplateProvider : FileBasedSkeletonTemplateProvider
     {
         protected override string GetTemplateFileContent()
         {
 
-            string path = "Packages\\UnityFlow\\Editor\\Runner\\BindingSkeletons\\DefaultSkeletonTemplates.sftemplate";
+            string path = "Packages\\UnitySpec\\Editor\\Runner\\BindingSkeletons\\DefaultSkeletonTemplates.sftemplate";
             // TODO: not hardcode this path
             using (StreamReader streamReader = new StreamReader(path))
             {
                 return streamReader.ReadToEnd();
             }
 
-            //var resourceStream = GetType().Assembly.GetManifestResourceStream("UnityFlow.Bindingskeletons.DefaultSkeletonTemplates.sftemplate");
+            //var resourceStream = GetType().Assembly.GetManifestResourceStream("UnitySpec.Bindingskeletons.DefaultSkeletonTemplates.sftemplate");
             //if (resourceStream == null)
             //    throw new SpecFlowException("Missing resource: DefaultSkeletonTemplates.sftemplate");
 

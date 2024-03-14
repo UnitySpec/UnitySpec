@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace UnityFlow.Compatibility
+namespace UnitySpec.Compatibility
 {
     internal class MonoHelper
     {

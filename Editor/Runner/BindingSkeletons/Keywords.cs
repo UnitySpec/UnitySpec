@@ -1,4 +1,4 @@
-namespace UnityFlow.BindingSkeletons
+namespace UnitySpec.BindingSkeletons
 {
     using System.Collections.Generic;
 

@@ -1,7 +1,7 @@
-﻿using UnityFlow.Bindings;
-using UnityFlow.Infrastructure;
+﻿using UnitySpec.Bindings;
+using UnitySpec.Infrastructure;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public class TestRunner : ITestRunner
     {

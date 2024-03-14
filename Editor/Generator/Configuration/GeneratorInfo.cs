@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityFlow.Generator.Configuration
+namespace UnitySpec.Generator.Configuration
 {
     public class GeneratorInfo
     {

@@ -1,6 +1,6 @@
-using UnityFlow.General.Tracing;
+using UnitySpec.General.Tracing;
 
-namespace UnityFlow.Tracing
+namespace UnitySpec.Tracing
 {
     public class NullListener : ITraceListener, IThreadSafeTraceListener
     {

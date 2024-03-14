@@ -3,10 +3,10 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
-using UnityFlow.ErrorHandling;
-using UnityFlow.General.Configuration;
+using UnitySpec.ErrorHandling;
+using UnitySpec.General.Configuration;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public interface IFeatureContext : ISpecFlowContext
     {

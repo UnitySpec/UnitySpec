@@ -1,6 +1,6 @@
 ﻿>>>CSharp/StepDefinitionClass
 using System;
-using UnityFlow;
+using UnitySpec;
 
 namespace {namespace}
 {
@@ -30,7 +30,7 @@ public void {methodName}({parameters})
 }
 >>>VB/StepDefinitionClass
 Imports System
-Imports UnityFlow
+Imports UnitySpec
 
 Namespace {namespace}
 
@@ -43,20 +43,20 @@ Namespace {namespace}
 
 End Namespace
 >>>VB/StepDefinitionRegex
-<UnityFlow.{attribute}("{regex}")> _
+<UnitySpec.{attribute}("{regex}")> _
 Public Sub {methodName}({parameters})
     ScenarioContext.Current.Pending()
 End Sub
 >>>VB/StepDefinition
-<UnityFlow.{attribute}()> _
+<UnitySpec.{attribute}()> _
 Public Sub {methodName}({parameters})
     ScenarioContext.Current.Pending()
 End Sub
 >>>FSharp/StepDefinitionClass
-[<UnityFlow.Binding>]
+[<UnitySpec.Binding>]
 module {className}
 
-open UnityFlow
+open UnitySpec
 
 {bindings}
 >>>FSharp/StepDefinitionRegex

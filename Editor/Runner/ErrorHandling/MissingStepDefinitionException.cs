@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 
 // the exceptions are part of the public API, keep them in TechTalk.SpecFlow namespace
-namespace UnityFlow.ErrorHandling
+namespace UnitySpec.ErrorHandling
 {
     [Serializable]
     public class MissingStepDefinitionException : SpecFlowException

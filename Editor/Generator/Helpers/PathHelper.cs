@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace UnityFlow.Generator.Helpers
+namespace UnitySpec.Generator.Helpers
 {
     public static class PathHelper
     {

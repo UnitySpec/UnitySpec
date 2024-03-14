@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UnityFlow.BindingSkeletons
+namespace UnitySpec.BindingSkeletons
 {
     using System.Text.RegularExpressions;
 

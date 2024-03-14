@@ -1,7 +1,7 @@
 using BoDi;
 using System;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     /// <summary>
     /// Resolves user created test objects from different scopes (scenario, feature, test thread).

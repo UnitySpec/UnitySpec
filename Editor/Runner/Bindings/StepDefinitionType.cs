@@ -1,6 +1,6 @@
 using System;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public enum StepDefinitionType
     {

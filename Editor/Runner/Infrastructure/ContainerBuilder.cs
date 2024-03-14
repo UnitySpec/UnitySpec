@@ -1,13 +1,13 @@
 using BoDi;
 using System;
 using System.Reflection;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Tracing;
-using UnityFlow.General.UnitTestProvider;
-using UnityFlow.Runner.Configuration;
-using UnityFlow.Runner.UnitTestProvider;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.Tracing;
+using UnitySpec.General.UnitTestProvider;
+using UnitySpec.Runner.Configuration;
+using UnitySpec.Runner.UnitTestProvider;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public interface IContainerBuilder
     {

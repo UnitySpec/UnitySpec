@@ -1,15 +1,15 @@
 using BoDi;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Configuration.Interfaces;
-using UnityFlow.General.GeneratorInterfaces;
-using UnityFlow.General.Parser;
-using UnityFlow.General.Utils;
-using UnityFlow.Generator.Configuration;
-using UnityFlow.Generator.Generation;
-using UnityFlow.Generator.Plugins;
-using UnityFlow.Generator.UnitTestConverter;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.Configuration.Interfaces;
+using UnitySpec.General.GeneratorInterfaces;
+using UnitySpec.General.Parser;
+using UnitySpec.General.Utils;
+using UnitySpec.Generator.Configuration;
+using UnitySpec.Generator.Generation;
+using UnitySpec.Generator.Plugins;
+using UnitySpec.Generator.UnitTestConverter;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     internal partial class DefaultDependencyProvider
     {

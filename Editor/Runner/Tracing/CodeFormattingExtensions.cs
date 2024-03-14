@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace UnityFlow.Tracing
+namespace UnitySpec.Tracing
 {
     public static class CodeFormattingExtensions
     {

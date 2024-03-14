@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.Runner.Attributes;
+using UnitySpec.Runner.Attributes;
 
-namespace UnityFlow.Bindings.Discovery
+namespace UnitySpec.Bindings.Discovery
 {
     public class SpecFlowAttributesFilter : ISpecFlowAttributesFilter
     {

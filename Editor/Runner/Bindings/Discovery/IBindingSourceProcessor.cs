@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UnityFlow.Bindings.Discovery
+namespace UnitySpec.Bindings.Discovery
 {
     public interface IBindingSourceProcessor
     {

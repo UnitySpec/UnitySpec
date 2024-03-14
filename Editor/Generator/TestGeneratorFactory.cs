@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityFlow.General.GeneratorInterfaces;
+using UnitySpec.General.GeneratorInterfaces;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public class TestGeneratorFactory : RemotableGeneratorClass, ITestGeneratorFactory
     {

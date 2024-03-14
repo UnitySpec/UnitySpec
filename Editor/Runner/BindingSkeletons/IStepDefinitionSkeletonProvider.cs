@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
-using UnityFlow.Bindings;
-using UnityFlow.General.BindingSkeletons;
+using UnitySpec.Bindings;
+using UnitySpec.General.BindingSkeletons;
 
-namespace UnityFlow.BindingSkeletons
+namespace UnitySpec.BindingSkeletons
 {
     public interface IStepDefinitionSkeletonProvider
     {

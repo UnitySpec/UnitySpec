@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityFlow.Generator.Roslyn;
+using UnitySpec.Generator.Roslyn;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public static class GenerationTargetLanguage
     {

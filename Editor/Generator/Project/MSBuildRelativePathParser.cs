@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace UnityFlow.Generator.Project
+namespace UnitySpec.Generator.Project
 {
     public interface IMSBuildRelativePathParser
     {

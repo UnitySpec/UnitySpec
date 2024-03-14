@@ -1,6 +1,6 @@
-using UnityFlow.Bindings.Reflection;
+using UnitySpec.Bindings.Reflection;
 
-namespace UnityFlow.Bindings.Discovery
+namespace UnitySpec.Bindings.Discovery
 {
     public class BindingSourceMethod
     {

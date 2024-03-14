@@ -1,4 +1,4 @@
-namespace UnityFlow.Bindings.Discovery
+namespace UnitySpec.Bindings.Discovery
 {
     public interface IBindingSourceAttributeValueProvider
     {

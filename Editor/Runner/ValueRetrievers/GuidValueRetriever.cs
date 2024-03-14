@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityFlow.Runner.ValueRetriever
+namespace UnitySpec.Runner.ValueRetriever
 {
     public class GuidValueRetriever : StructRetriever<Guid>
     {

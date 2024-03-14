@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using UnityFlow.General.Parser;
+using UnitySpec.General.Parser;
 
-namespace UnityFlow.Generator.UnitTestConverter
+namespace UnitySpec.Generator.UnitTestConverter
 {
     public interface IFeatureGenerator
     {

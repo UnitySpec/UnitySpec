@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using UnityFlow.ErrorHandling;
-using UnityFlow.General.Tracing;
+using UnitySpec.ErrorHandling;
+using UnitySpec.General.Tracing;
 
-namespace UnityFlow.Tracing
+namespace UnitySpec.Tracing
 {
     public class TraceListenerQueue : ITraceListenerQueue
     {

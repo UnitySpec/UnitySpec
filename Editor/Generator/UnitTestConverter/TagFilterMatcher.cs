@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UnityFlow.Generator.UnitTestConverter
+namespace UnitySpec.Generator.UnitTestConverter
 {
     internal class TagFilterMatcher : ITagFilterMatcher
     {

@@ -4,14 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using UnityFlow.Bindings.Reflection;
-using UnityFlow.Compatibility;
-using UnityFlow.ErrorHandling;
-using UnityFlow.General.Configuration;
-using UnityFlow.Infrastructure;
-using UnityFlow.Tracing;
+using UnitySpec.Bindings.Reflection;
+using UnitySpec.Compatibility;
+using UnitySpec.ErrorHandling;
+using UnitySpec.General.Configuration;
+using UnitySpec.Infrastructure;
+using UnitySpec.Tracing;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public class BindingInvoker : IBindingInvoker
     {

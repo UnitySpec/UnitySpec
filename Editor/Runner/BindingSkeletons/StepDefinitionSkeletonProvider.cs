@@ -4,11 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using UnityFlow.Bindings;
-using UnityFlow.General.BindingSkeletons;
-using UnityFlow.Tracing;
+using UnitySpec.Bindings;
+using UnitySpec.General.BindingSkeletons;
+using UnitySpec.Tracing;
 
-namespace UnityFlow.BindingSkeletons
+namespace UnitySpec.BindingSkeletons
 {
     public class StepDefinitionSkeletonProvider : IStepDefinitionSkeletonProvider
     {

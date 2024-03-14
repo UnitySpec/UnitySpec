@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace UnityFlow.Generator.UnitTestConverter
+namespace UnitySpec.Generator.UnitTestConverter
 {
     public class IgnoreDecorator : ITestClassTagDecorator, ITestMethodTagDecorator
     {

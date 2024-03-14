@@ -1,6 +1,6 @@
 # ScenarioContext
 
-You may have at least seen the ScenarioContext from the code that UnityFlow generates when a missing step definition is found: `ScenarioContext.Pending();`
+You may have at least seen the ScenarioContext from the code that UnitySpec generates when a missing step definition is found: `ScenarioContext.Pending();`
 
 `ScenarioContext` provides access to several functions, which are demonstrated using the following scenarios.
 

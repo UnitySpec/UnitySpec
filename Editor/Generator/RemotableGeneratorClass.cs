@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     [Serializable]
     public abstract class RemotableGeneratorClass : MarshalByRefObject

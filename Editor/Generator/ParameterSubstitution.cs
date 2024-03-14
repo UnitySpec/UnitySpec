@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public class ParameterSubstitution : List<KeyValuePair<string, string>>
     {

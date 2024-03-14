@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using UnityFlow.Compatibility;
-using UnityFlow.General.Configuration;
+using UnitySpec.Compatibility;
+using UnitySpec.General.Configuration;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public class StepContext
     {

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Extensions;
-using UnityFlow.Generator.UnitTestProvider;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.Extensions;
+using UnitySpec.Generator.UnitTestProvider;
 
-namespace UnityFlow.Generator.UnitTestConverter
+namespace UnitySpec.Generator.UnitTestConverter
 {
     public class NonParallelizableDecorator : ITestClassDecorator
     {

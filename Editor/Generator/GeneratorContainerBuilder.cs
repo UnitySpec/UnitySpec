@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.GeneratorInterfaces;
-using UnityFlow.General.Plugins;
-using UnityFlow.General.UnitTestProvider;
-using UnityFlow.Generator.Configuration;
-using UnityFlow.Generator.Plugins;
-using UnityFlow.Generator.Roslyn;
-using UnityFlow.Generator.UnitTestProvider;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.GeneratorInterfaces;
+using UnitySpec.General.Plugins;
+using UnitySpec.General.UnitTestProvider;
+using UnitySpec.Generator.Configuration;
+using UnitySpec.Generator.Plugins;
+using UnitySpec.Generator.Roslyn;
+using UnitySpec.Generator.UnitTestProvider;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public class GeneratorContainerBuilder
     {

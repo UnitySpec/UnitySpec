@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace UnityFlow.Bindings.Discovery
+namespace UnitySpec.Bindings.Discovery
 {
     public interface IRuntimeBindingRegistryBuilder
     {

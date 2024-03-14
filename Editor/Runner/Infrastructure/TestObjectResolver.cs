@@ -1,7 +1,7 @@
 ﻿using BoDi;
 using System;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public class TestObjectResolver : ITestObjectResolver
     {

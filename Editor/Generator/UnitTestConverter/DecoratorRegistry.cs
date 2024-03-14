@@ -4,9 +4,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.General.Extensions;
+using UnitySpec.General.Extensions;
 
-namespace UnityFlow.Generator.UnitTestConverter
+namespace UnitySpec.Generator.UnitTestConverter
 {
     public interface IDecoratorRegistry
     {

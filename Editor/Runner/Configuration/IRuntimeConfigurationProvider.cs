@@ -1,6 +1,6 @@
-using UnityFlow.General.Configuration;
+using UnitySpec.General.Configuration;
 
-namespace UnityFlow.Runner.Configuration
+namespace UnitySpec.Runner.Configuration
 {
     public interface IRuntimeConfigurationProvider
     {

@@ -1,6 +1,6 @@
-﻿using UnityFlow.Bindings;
+﻿using UnitySpec.Bindings;
 
-namespace UnityFlow.Infrastructure
+namespace UnitySpec.Infrastructure
 {
     public interface IObsoleteStepHandler
     {

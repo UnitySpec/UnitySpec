@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace UnityFlow.Bindings
+namespace UnitySpec.Bindings
 {
     public class BindingScope
     {

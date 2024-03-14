@@ -1,8 +1,8 @@
 using System;
 using System.Globalization;
-using UnityFlow.Tracing;
+using UnitySpec.Tracing;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     public class FeatureInfo
     {

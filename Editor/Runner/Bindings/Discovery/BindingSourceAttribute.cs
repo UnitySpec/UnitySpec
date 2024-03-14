@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.Bindings.Reflection;
+using UnitySpec.Bindings.Reflection;
 
-namespace UnityFlow.Bindings.Discovery
+namespace UnitySpec.Bindings.Discovery
 {
     public class BindingSourceAttribute
     {

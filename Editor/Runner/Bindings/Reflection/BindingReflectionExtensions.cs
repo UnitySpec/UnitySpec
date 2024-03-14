@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnityFlow.ErrorHandling;
+using UnitySpec.ErrorHandling;
 
-namespace UnityFlow.Bindings.Reflection
+namespace UnitySpec.Bindings.Reflection
 {
     public static class BindingReflectionExtensions
     {

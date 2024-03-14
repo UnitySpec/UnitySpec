@@ -8,7 +8,7 @@ using System.Reflection;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 
-namespace UnityFlow.Generator.Roslyn
+namespace UnitySpec.Generator.Roslyn
 {
     public class RoslynHelper
     {

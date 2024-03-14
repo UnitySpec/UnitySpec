@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.Bindings.Reflection;
-using UnityFlow.Compatibility;
-using UnityFlow.ErrorHandling;
+using UnitySpec.Bindings.Reflection;
+using UnitySpec.Compatibility;
+using UnitySpec.ErrorHandling;
 
-namespace UnityFlow.Bindings.Discovery
+namespace UnitySpec.Bindings.Discovery
 {
     public abstract class BindingSourceProcessor : IBindingSourceProcessor
     {

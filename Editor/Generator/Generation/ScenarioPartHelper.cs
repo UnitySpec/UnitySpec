@@ -5,13 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Extensions;
-using UnityFlow.General.Parser;
-using UnityFlow.Generator.Roslyn;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.Extensions;
+using UnitySpec.General.Parser;
+using UnitySpec.Generator.Roslyn;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace UnityFlow.Generator.Generation
+namespace UnitySpec.Generator.Generation
 {
 
     public class ScenarioPartHelper
@@ -118,7 +118,7 @@ namespace UnityFlow.Generator.Generation
 
         private ExpressionSyntax GetTableArgExpression(DataTable tableArg, List<StatementSyntax> statements, ParameterSubstitution paramToIdentifier)
         {
-            var tableType = _roslynHelper.GetName("UnityFlow.Table");
+            var tableType = _roslynHelper.GetName("UnitySpec.Table");
             if (tableArg == null)
             {
                 return CastExpression(tableType, LiteralExpression(SyntaxKind.NullLiteralExpression));

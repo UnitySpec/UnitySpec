@@ -1,7 +1,7 @@
 using System;
-using UnityFlow.Bindings;
+using UnitySpec.Bindings;
 
-namespace UnityFlow
+namespace UnitySpec
 {
     /// <summary>
     /// Marker attribute that specifies that this class may contain bindings (step definitions, hooks, etc.)

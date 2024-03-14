@@ -1,7 +1,7 @@
-﻿using UnityFlow.General.Configuration;
-using UnityFlow.General.GeneratorInterfaces;
+﻿using UnitySpec.General.Configuration;
+using UnitySpec.General.GeneratorInterfaces;
 
-namespace UnityFlow.Generator.Configuration
+namespace UnitySpec.Generator.Configuration
 {
     public class GeneratorConfigurationProvider : IGeneratorConfigurationProvider
     {

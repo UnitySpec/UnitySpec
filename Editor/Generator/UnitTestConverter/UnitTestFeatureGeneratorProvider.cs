@@ -1,7 +1,7 @@
-using UnityFlow.General.Parser;
-using UnityFlow.Generator.Generation;
+using UnitySpec.General.Parser;
+using UnitySpec.Generator.Generation;
 
-namespace UnityFlow.Generator.UnitTestConverter
+namespace UnitySpec.Generator.UnitTestConverter
 {
     public class UnitTestFeatureGeneratorProvider : IFeatureGeneratorProvider
     {

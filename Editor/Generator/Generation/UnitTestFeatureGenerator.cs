@@ -3,15 +3,15 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Linq;
-using UnityFlow.General.Configuration;
-using UnityFlow.General.Extensions;
-using UnityFlow.General.Parser;
-using UnityFlow.Generator.Roslyn;
-using UnityFlow.Generator.UnitTestConverter;
-using UnityFlow.Generator.UnitTestProvider;
+using UnitySpec.General.Configuration;
+using UnitySpec.General.Extensions;
+using UnitySpec.General.Parser;
+using UnitySpec.Generator.Roslyn;
+using UnitySpec.Generator.UnitTestConverter;
+using UnitySpec.Generator.UnitTestProvider;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace UnityFlow.Generator.Generation
+namespace UnitySpec.Generator.Generation
 {
     public class UnitTestFeatureGenerator : IFeatureGenerator
     {
@@ -103,7 +103,7 @@ namespace UnityFlow.Generator.Generation
             }
             var usings = List<UsingDirectiveSyntax>(new UsingDirectiveSyntax[]
             {
-                _roslynHelper.GetUsing(GeneratorConstants.UNITYFLOW_NAMESPACE),
+                _roslynHelper.GetUsing(GeneratorConstants.UNITYSPEC_NAMESPACE),
                 _roslynHelper.GetUsing("System"),
                 _roslynHelper.GetUsing("System.Linq")
             });
@@ -164,7 +164,7 @@ namespace UnityFlow.Generator.Generation
         private FieldDeclarationSyntax DeclareTestRunnerMember()
         {
             var testRunnerField = FieldDeclaration(
-                VariableDeclaration(_roslynHelper.GetName("UnityFlow.ITestRunner"))
+                VariableDeclaration(_roslynHelper.GetName("UnitySpec.ITestRunner"))
                     .WithVariables(SingletonSeparatedList(VariableDeclarator(Identifier(GeneratorConstants.TESTRUNNER_FIELD))))
                 ).WithModifiers(TokenList(Token(SyntaxKind.PrivateKeyword)));
 
@@ -183,7 +183,7 @@ namespace UnityFlow.Generator.Generation
             //testRunner = TestRunnerManager.GetTestRunner(null, 0); if not UnitTestGeneratorTraits.ParallelExecution
             var testRunnerField = _scenarioPartHelper.GetTestRunnerExpression();
 
-            var testRunnerInvocation = InvocationExpression(_roslynHelper.GetMemberAccess("UnityFlow.TestRunnerManager.GetTestRunner"));
+            var testRunnerInvocation = InvocationExpression(_roslynHelper.GetMemberAccess("UnitySpec.TestRunnerManager.GetTestRunner"));
             testRunnerInvocation = _testGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.ParallelExecution)
                 ? testRunnerInvocation
                 : testRunnerInvocation
@@ -216,11 +216,11 @@ namespace UnityFlow.Generator.Generation
                 _roslynHelper.GetMemberAccess(_roslynHelper.TargetLanguage.GetLanguage()),
                 _roslynHelper.GetName(GeneratorConstants.FEATURE_TAGS_VARIABLE_NAME)
                 );
-            var featureInfoDecl = VariableDeclaration(_roslynHelper.GetName("UnityFlow.FeatureInfo"))
+            var featureInfoDecl = VariableDeclaration(_roslynHelper.GetName("UnitySpec.FeatureInfo"))
                 .WithVariables(SingletonSeparatedList(
                     VariableDeclarator(Identifier("featureInfo"))
                     .WithInitializer(EqualsValueClause(
-                        ObjectCreationExpression(_roslynHelper.GetName("UnityFlow.FeatureInfo"))
+                        ObjectCreationExpression(_roslynHelper.GetName("UnitySpec.FeatureInfo"))
                         .WithArgumentList(arguments)
                     ))
                 ));
@@ -299,7 +299,7 @@ namespace UnityFlow.Generator.Generation
             var mods = scenarioInitializeMethod.Modifiers.Add(Token(SyntaxKind.PublicKeyword));
             var parList = scenarioInitializeMethod.ParameterList.Parameters.Add(
                     Parameter(Identifier("scenarioInfo"))
-                    .WithType(_roslynHelper.GetName("UnityFlow.ScenarioInfo"))
+                    .WithType(_roslynHelper.GetName("UnitySpec.ScenarioInfo"))
                 );
 
             //testRunner.OnScenarioInitialize(scenarioInfo);

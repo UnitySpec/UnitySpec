@@ -2,10 +2,10 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using UnityFlow.General.Extensions;
-using UnityFlow.General.GeneratorInterfaces;
+using UnitySpec.General.Extensions;
+using UnitySpec.General.GeneratorInterfaces;
 
-namespace UnityFlow.Generator
+namespace UnitySpec.Generator
 {
     public abstract class ErrorHandlingTestGenerator : RemotableGeneratorClass
     {

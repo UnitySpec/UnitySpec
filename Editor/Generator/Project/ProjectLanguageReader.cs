@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace UnityFlow.Generator.Project
+namespace UnitySpec.Generator.Project
 {
     public class ProjectLanguageReader
     {

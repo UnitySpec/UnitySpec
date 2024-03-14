@@ -5,11 +5,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityFlow.Generator.Generation;
-using UnityFlow.Generator.Roslyn;
+using UnitySpec.Generator.Generation;
+using UnitySpec.Generator.Roslyn;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace UnityFlow.Generator.UnitTestProvider
+namespace UnitySpec.Generator.UnitTestProvider
 {
     public class UTFTestGeneratorProvider : IUnitTestGeneratorProvider
     {

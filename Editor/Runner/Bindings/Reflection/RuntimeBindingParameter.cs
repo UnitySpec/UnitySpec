@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace UnityFlow.Bindings.Reflection
+namespace UnitySpec.Bindings.Reflection
 {
     public class RuntimeBindingParameter : IBindingParameter
     {

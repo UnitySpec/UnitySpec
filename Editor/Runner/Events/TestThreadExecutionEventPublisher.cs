@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UnityFlow.Events
+namespace UnitySpec.Events
 {
     public class TestThreadExecutionEventPublisher : ITestThreadExecutionEventPublisher
     {
