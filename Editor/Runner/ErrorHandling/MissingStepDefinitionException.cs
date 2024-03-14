@@ -8,7 +8,7 @@ namespace UnitySpec.ErrorHandling
     public class MissingStepDefinitionException : SpecFlowException
     {
         public MissingStepDefinitionException()
-            : base("No matching step definition found for one or more steps.")
+            : base("No matching step definition found for one or more steps. Use the following code to create it:")
         {
         }
 

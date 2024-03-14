@@ -40,7 +40,7 @@ namespace UnitySpec.Infrastructure
             container.RegisterTypeAs<TestObjectResolver, ITestObjectResolver>();
 
             container.RegisterTypeAs<StepDefinitionSkeletonProvider, IStepDefinitionSkeletonProvider>();
-            container.RegisterTypeAs<DefaultSkeletonTemplateProvider, ISkeletonTemplateProvider>();
+            container.RegisterTypeAs<FileBasedSkeletonTemplateProvider, ISkeletonTemplateProvider>();
             container.RegisterTypeAs<StepTextAnalyzer, IStepTextAnalyzer>();
 
             //container.RegisterTypeAs<RuntimePluginLoader, IRuntimePluginLoader>();
