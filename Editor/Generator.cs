@@ -22,7 +22,15 @@ public class Generator
     }
     internal void Generate(string specsPath, SearchOption searchOption = SearchOption.AllDirectories)
     {
-        string[] files = Directory.GetFiles(specsPath, "*.feature", searchOption);
+        string[] files;
+        try
+        {
+            files = Directory.GetFiles(specsPath, "*.feature", searchOption);
+        }
+        catch (DirectoryNotFoundException)
+        {
+            throw new TestGeneratorException($"Could not find the directory {specsPath}, please set a valid path in Settings > UnitySpec Settings.");
+        }
 
         var res = _runGenerator.Generate(files, _projectFolder, _outputPath);
 
