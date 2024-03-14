@@ -1,6 +1,6 @@
 {
   "name": "com.mmulder135.unityflow",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "displayName": "UnityFlow",
   "description": "BDD in Unity; A package based on SpecFlow",
   "unity": "2022.3",
