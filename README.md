@@ -10,12 +10,16 @@ This project is based on the code from [SpecFlow](https://github.com/SpecFlowOSS
  > UnitySpec requires the Unity Test Framework to run tests
 
 ## Setup
-1. Create a test folder in Unity
+1. Create a test folder in Unity.
 > This can either be a EditMode or PlayMode testfolder,
 > see the [documentation from the Unity Test Framework](https://docs.unity3d.com/Packages/com.unity.test-framework@1.1/manual/workflow-create-test-assembly.html) for more information on test folders.
 
-2. Optional: Create folders for feature files and step definition files inside the test folder.
-3. Open Settings and navigate to UnitySpec, set the folder containing the feature files under Specification folders.
+2. Open the assembly definition of the test folder:
+    1. Add `UnitySpec.Runner.editor` to the `Assembly Definition References`.
+	2. Add `BoDi.dll` to the `Assembe References`.
+	3. Press `Apply`.
+3. Optional: Create folders for feature files and step definition files inside the test folder.
+4. Open Settings and navigate to UnitySpec, set the folder containing the feature files under Specification folders.
 > You can add multiple paths for multiple folders. You can also edit the search behaviour, default is searching the listed directories and all their subdirectories.
 
 
