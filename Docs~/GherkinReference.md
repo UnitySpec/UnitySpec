@@ -31,7 +31,7 @@ Feature: Guess the word
 ```
 
 The trailing portion (after the keyword) of each step is matched to
-a code block, called a [step definition](../Bindings/Step-Definitions.md).
+a code block, called a [step definition](StepDefinitions.md).
 
 ## Keywords
 
@@ -168,7 +168,7 @@ Examples follow this same pattern:
 
 Each step starts with `Given`, `When`, `Then`, `And`, or `But`.
 
-UnitySpec executes each step in a scenario one at a time, in the sequence you’ve written them in.
+UnitySpec executes each step in a scenario one at a time, in the sequence youâ€™ve written them in.
 When UnitySpec tries to execute a step, it looks for a matching step definition to execute.
 
 Keywords are not taken into account when looking for a step definition. This means you cannot have a
@@ -185,8 +185,8 @@ This might seem like a limitation, but it forces you to come up with a less ambi
 domain language:
 
 ```gherkin
-Given my account has a balance of £430
-Then my account should have a balance of £430
+Given my account has a balance of Â£430
+Then my account should have a balance of Â£430
 ```
 
 #### Given
@@ -206,7 +206,7 @@ Examples:
 
 - Mickey and Minnie have started a game
 - I am logged in
-- Joe has a balance of £42
+- Joe has a balance of Â£42
 
 #### When
 
@@ -226,13 +226,13 @@ Most software does something people could do manually (just not as efficiently).
 Try hard to come up with examples that don't make any assumptions about
 technology or user interface. Imagine it's 1922, when there were no computers.
 
-Implementation details should be hidden in the [step definitions](../Bindings/Step-Definitions.md).
+Implementation details should be hidden in the [step definitions](StepDefinitions.md).
 
 #### Then
 
 `Then` steps are used to describe an *expected* outcome, or result.
 
-The [step definition](../Bindings/Step-Definitions.md) of a `Then` step should use an *assertion* to
+The [step definition](StepDefinitions.md) of a `Then` step should use an *assertion* to
 compare the *actual* outcome (what the system actually does) to the *expected* outcome
 (what the step says the system is supposed to do).
 
@@ -309,7 +309,7 @@ Occasionally you'll find yourself repeating the same `Given` steps in all of the
 Since it is repeated in every scenario, this is an indication that those steps
 are not *essential* to describe the scenarios; they are *incidental details*. You can literally move such `Given` steps to the background, by grouping them under a `Background` section.
 
-A `Background` allows you to add some context to the scenarios that follow it. It can contain one or more `Given` steps, which are run before *each* scenario, but after any [Before hooks](../Bindings/Hooks.md).
+A `Background` allows you to add some context to the scenarios that follow it. It can contain one or more `Given` steps, which are run before *each* scenario.
 
 A `Background` is placed before the first `Scenario`/`Example`, at the same level of indentation.
 
@@ -367,7 +367,7 @@ Feature: Overdue tasks
 
 You can only have one set of `Background` steps per `Feature` or `Rule`. If you need different `Background` steps for different scenarios, consider breaking up your set of scenarios into more `Rule`s or more `Feature`s.--->
 
-For a less explicit alternative to `Background`, check out [scoped step definitions](../Bindings/Scoped-Step-Definitions.md).
+For a less explicit alternative to `Background`, check out [scoped step definitions](ScopedBindings.md).
 
 ### Tips for using Background
 
@@ -455,7 +455,7 @@ Given a blog post named "Random" with Markdown body
   """
 ```
 
-In your step definition, there’s no need to find this text and match it in your pattern.
+In your step definition, thereâ€™s no need to find this text and match it in your pattern.
 It will automatically be passed as the last argument in the step definition.
 
 Indentation of the opening `"""` is unimportant, although common practice is two spaces in from the enclosing step.
@@ -490,13 +490,13 @@ Here is a Gherkin scenario written in Norwegian:
 Funksjonalitet: Gjett et ord
 
   Eksempel: Ordmaker starter et spill
-    Når Ordmaker starter et spill
-    Så må Ordmaker vente på at Gjetter blir med
+    NÃ¥r Ordmaker starter et spill
+    SÃ¥ mÃ¥ Ordmaker vente pÃ¥ at Gjetter blir med
 
   Eksempel: Gjetter blir med
-    Gitt at Ordmaker har startet et spill med ordet "bløtt"
-    Når Gjetter blir med på Ordmakers spill
-    Så må Gjetter gjette et ord på 5 bokstaver
+    Gitt at Ordmaker har startet et spill med ordet "blÃ¸tt"
+    NÃ¥r Gjetter blir med pÃ¥ Ordmakers spill
+    SÃ¥ mÃ¥ Gjetter gjette et ord pÃ¥ 5 bokstaver
 ```
 
 Using a language other than English has not been tested in UnitySpec.
