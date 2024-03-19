@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace Samples._0_0_2.SimpleAddition.SampleAdditionTests
+namespace Samples.SimpleAddition.SampleAdditionTests
 {
     using UnitySpec;
     using System;

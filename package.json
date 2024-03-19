@@ -1,5 +1,5 @@
 {
-    "name": "com.mmulder135.unityflow",
+    "name": "com.mmulder135.unityspec",
     "version": "0.0.2",
     "displayName": "UnitySpec",
     "description": "BDD in Unity",
@@ -18,6 +18,11 @@
             "displayName": "Simple addition",
             "description": "Contains sample feature and step definition for addition",
             "path": "Samples~/Addition"
+        },
+        {
+            "displayName": "Simple movement",
+            "description": "Contains sample feature, scene, and step definition for movement",
+            "path": "Samples~/Movement"
         }
     ]
 }
