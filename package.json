@@ -1,16 +1,28 @@
 {
-  "name": "com.mmulder135.unityflow",
-  "version": "0.0.2",
-  "displayName": "UnitySpec",
-  "description": "BDD in Unity",
-  "unity": "2022.3",
-  "keywords": [
-    "BDD",
-    "Testing",
-    "SpecFlow"
-  ],
-  "author": {
-    "name": "Michael Mulder",
-    "email": "mmulder135@gmail.com"
-  }
+    "name": "com.mmulder135.unityspec",
+    "version": "0.0.2",
+    "displayName": "UnitySpec",
+    "description": "BDD in Unity",
+    "unity": "2022.3",
+    "keywords": [
+        "BDD",
+        "Testing",
+        "SpecFlow"
+    ],
+    "author": {
+        "name": "Michael Mulder",
+        "email": "mmulder135@gmail.com"
+    },
+    "samples": [
+        {
+            "displayName": "Simple addition",
+            "description": "Contains sample feature and step definition for addition",
+            "path": "Samples~/Addition"
+        },
+        {
+            "displayName": "Simple movement",
+            "description": "Contains sample feature, scene, and step definition for movement",
+            "path": "Samples~/Movement"
+        }
+    ]
 }
