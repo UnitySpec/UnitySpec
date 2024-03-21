@@ -1,10 +1,10 @@
 {
-  "name": "com.mmulder135.unityflow",
+  "name": "com.mmulder135.unityspec",
   "version": "0.0.2",
   "displayName": "UnitySpec",
   "description": "BDD in Unity",
   "unity": "2022.3",
-  "documentationUrl": "https://github.com/mmulder135/UnitySpec",
+  "documentationUrl": "https://github.com/UnitySpec/UnitySpec",
   "license": "MIT",
   "keywords": [
     "BDD",
@@ -14,7 +14,7 @@
   "author": {
     "name": "Michael Mulder",
     "email": "mmulder135@gmail.com"
-  }
+  },
     "samples": [
         {
             "displayName": "Simple addition",
