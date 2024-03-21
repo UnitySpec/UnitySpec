@@ -1,18 +1,20 @@
 {
-    "name": "com.mmulder135.unityspec",
-    "version": "0.0.2",
-    "displayName": "UnitySpec",
-    "description": "BDD in Unity",
-    "unity": "2022.3",
-    "keywords": [
-        "BDD",
-        "Testing",
-        "SpecFlow"
-    ],
-    "author": {
-        "name": "Michael Mulder",
-        "email": "mmulder135@gmail.com"
-    },
+  "name": "com.mmulder135.unityflow",
+  "version": "0.0.2",
+  "displayName": "UnitySpec",
+  "description": "BDD in Unity",
+  "unity": "2022.3",
+  "documentationUrl": "https://github.com/mmulder135/UnitySpec",
+  "license": "MIT",
+  "keywords": [
+    "BDD",
+    "Testing",
+    "SpecFlow"
+  ],
+  "author": {
+    "name": "Michael Mulder",
+    "email": "mmulder135@gmail.com"
+  }
     "samples": [
         {
             "displayName": "Simple addition",
