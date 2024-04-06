@@ -1,6 +1,6 @@
 {
   "name": "com.mmulder135.unityspec",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "displayName": "UnitySpec",
   "description": "BDD in Unity",
   "unity": "2022.3",
