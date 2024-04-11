@@ -499,15 +499,13 @@ Funksjonalitet: Gjett et ord
     Så må Gjetter gjette et ord på 5 bokstaver
 ```
 
-Using a language other than English has not been tested in UnitySpec.
-
 ### Gherkin Dialects
 
 In order to allow Gherkin to be written in a number of languages, the keywords have been translated into multiple languages. To improve readability and flow, some languages may have more than one translation for any given keyword.
 
 #### Overview
 
-You can find all translation of Gherkin [on GitHub](https://github.com/cucumber/cucumber/blob/master/gherkin/gherkin-languages.json).
+You can find all translations of Gherkin [on GitHub](https://github.com/cucumber/cucumber/blob/master/gherkin/gherkin-languages.json).
 This is also the place to add or update translations.
 
->**Note** Big parts of this page where taken over from <https://github.com/SpecFlowOSS/SpecFlow/blob/master/docs/Gherkin/Gherkin-Reference.md>.
+>**Note** Big parts of this page were taken over from <https://github.com/SpecFlowOSS/SpecFlow/blob/master/docs/Gherkin/Gherkin-Reference.md>.
