@@ -1,5 +1,7 @@
 ﻿using BoDi;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnitySpec.Bindings;
@@ -112,7 +114,7 @@ namespace UnitySpec.Infrastructure
 
             _testThreadExecutionEventPublisher.PublishEvent(new TestRunStartedEvent());
 
-            FireEvents(HookType.BeforeTestRun);
+            FireVoidEvents(HookType.BeforeTestRun);
         }
 
         public virtual void OnTestRunEnd()
@@ -127,12 +129,12 @@ namespace UnitySpec.Infrastructure
                 _testRunnerEndExecuted = true;
             }
 
-            FireEvents(HookType.AfterTestRun);
+            FireVoidEvents(HookType.AfterTestRun);
 
             _testThreadExecutionEventPublisher.PublishEvent(new TestRunFinishedEvent());
         }
 
-        public virtual void OnFeatureStart(FeatureInfo featureInfo)
+        public virtual IEnumerator OnFeatureStart(FeatureInfo featureInfo)
         {
             // if the unit test provider would execute the fixture teardown code
             // only delayed (at the end of the execution), we automatically close
@@ -147,19 +149,19 @@ namespace UnitySpec.Infrastructure
 
             _testThreadExecutionEventPublisher.PublishEvent(new FeatureStartedEvent(FeatureContext));
 
-            FireEvents(HookType.BeforeFeature);
+            yield return FireEvents(HookType.BeforeFeature);
         }
 
-        public virtual void OnFeatureEnd()
+        public virtual IEnumerator OnFeatureEnd()
         {
             // if the unit test provider would execute the fixture teardown code
             // only delayed (at the end of the execution), we ignore the
             // feature-end call, if the feature has been closed already
             if (_unitTestRuntimeProvider.DelayedFixtureTearDown &&
                 FeatureContext == null)
-                return;
+                yield break;
 
-            FireEvents(HookType.AfterFeature);
+            yield return FireEvents(HookType.AfterFeature);
 
             if (_specFlowConfiguration.TraceTimings)
             {
@@ -306,31 +308,60 @@ namespace UnitySpec.Infrastructure
 
         protected virtual void FireScenarioEvents(HookType bindingEvent)
         {
-            FireEvents(bindingEvent);
+            FireVoidEvents(bindingEvent);
         }
 
-        private void FireEvents(HookType hookType)
+        private IEnumerator FireEvents(HookType hookType)
         {
-            _testThreadExecutionEventPublisher.PublishEvent(new HookStartedEvent(hookType, FeatureContext, ScenarioContext, _contextManager.StepContext));
-            var stepContext = _contextManager.GetStepContext();
+            var uniqueMatchingHooks = GetMatchingHooks(hookType);
 
-            var matchingHooks = _bindingRegistry.GetHooks(hookType)
-                .Where(hookBinding => !hookBinding.IsScoped ||
-                                      hookBinding.BindingScope.Match(stepContext, out int _));
+            Exception hookException = null;
+            var yieldList = new List<object>();
+            try
+            {
+                //Note: if a (user-)hook throws an exception the subsequent hooks of the same type are not executed
+                foreach (var hookBinding in uniqueMatchingHooks.OrderBy(x => x.HookOrder))
+                {
+                    UnityEngine.Debug.Log($"Invoking {hookBinding}");
+                    var res = InvokeHook(_bindingInvoker, hookBinding, hookType);
+                    if (res is not null)
+                    {
+                        // Hook is not of type void -> assume is of type IEnumerator
+                        yieldList.Add(res);
+                    }
+                }
+            }
+            catch (Exception hookExceptionCaught)
+            {
+                hookException = hookExceptionCaught;
+                SetHookError(hookType, hookException);
+            }
 
-            //HACK: The InvokeHook requires an IHookBinding that contains the scope as well
-            // if multiple scopes match the same method, we take the first one.
-            // The InvokeHook uses only the Method anyway...
-            // The only problem could be if the same method is decorated with hook attributes using different order,
-            // but in this case it is anyway impossible to tell the right ordering.
-            var uniqueMatchingHooks = matchingHooks.GroupBy(hookBinding => hookBinding.Method).Select(g => g.First());
+            foreach (object yieldStatement in  yieldList)
+            {
+                UnityEngine.Debug.Log($"Executing {yieldStatement}");
+                yield return yieldStatement;
+            }
+            //Note: plugin-hooks are still executed even if a user-hook failed with an exception
+            //A plugin-hook should not throw an exception under normal circumstances, exceptions are not handled/caught here
+            //FireRuntimePluginTestExecutionLifecycleEvents(hookType);
+
+            _testThreadExecutionEventPublisher.PublishEvent(new HookFinishedEvent(hookType, FeatureContext, ScenarioContext, _contextManager.StepContext, hookException));
+
+            //Note: the (user-)hook exception (if any) will be thrown after the plugin hooks executed to fail the test with the right error
+            if (hookException != null) throw hookException;
+        }
+
+        private void FireVoidEvents(HookType hookType)
+        {
+            var uniqueMatchingHooks = GetMatchingHooks(hookType);
             Exception hookException = null;
             try
             {
                 //Note: if a (user-)hook throws an exception the subsequent hooks of the same type are not executed
                 foreach (var hookBinding in uniqueMatchingHooks.OrderBy(x => x.HookOrder))
                 {
-                    InvokeHook(_bindingInvoker, hookBinding, hookType);
+                    var res = InvokeHook(_bindingInvoker, hookBinding, hookType);
                 }
             }
             catch (Exception hookExceptionCaught)
@@ -349,6 +380,25 @@ namespace UnitySpec.Infrastructure
             if (hookException != null) throw hookException;
         }
 
+        private IEnumerable<IHookBinding> GetMatchingHooks(HookType hookType)
+        {
+            _testThreadExecutionEventPublisher.PublishEvent(new HookStartedEvent(hookType, FeatureContext, ScenarioContext, _contextManager.StepContext));
+            var stepContext = _contextManager.GetStepContext();
+
+            var matchingHooks = _bindingRegistry.GetHooks(hookType)
+                .Where(hookBinding => !hookBinding.IsScoped ||
+                                      hookBinding.BindingScope.Match(stepContext, out int _));
+
+            //HACK: The InvokeHook requires an IHookBinding that contains the scope as well
+            // if multiple scopes match the same method, we take the first one.
+            // The InvokeHook uses only the Method anyway...
+            // The only problem could be if the same method is decorated with hook attributes using different order,
+            // but in this case it is anyway impossible to tell the right ordering.
+            IEnumerable<IHookBinding> uniqueMatchingHooks = matchingHooks.GroupBy(hookBinding => hookBinding.Method).Select(g => g.First());
+
+            return uniqueMatchingHooks;
+        }
+
         //private void FireRuntimePluginTestExecutionLifecycleEvents(HookType hookType)
         //{
         //    //We pass a container corresponding the type of event
@@ -358,7 +408,7 @@ namespace UnitySpec.Infrastructure
 
         protected IObjectContainer TestThreadContainer { get; }
 
-        public virtual void InvokeHook(IBindingInvoker invoker, IHookBinding hookBinding, HookType hookType)
+        public virtual object InvokeHook(IBindingInvoker invoker, IHookBinding hookBinding, HookType hookType)
         {
             var currentContainer = GetHookContainer(hookType);
             var arguments = ResolveArguments(hookBinding, currentContainer);
@@ -369,7 +419,7 @@ namespace UnitySpec.Infrastructure
             try
             {
 
-                invoker.InvokeBinding(hookBinding, _contextManager, arguments, _testTracer, out duration);
+                return invoker.InvokeBinding(hookBinding, _contextManager, arguments, _testTracer, out duration);
             }
             finally
             {

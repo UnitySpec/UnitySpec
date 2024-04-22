@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace UnitySpec
 {
     public interface ITestRunner
@@ -8,11 +10,11 @@ namespace UnitySpec
 
         void InitializeTestRunner(int threadId);
 
-        void OnTestRunStart();
-        void OnTestRunEnd();
+        IEnumerator OnTestRunStart();
+        IEnumerator OnTestRunEnd();
 
-        void OnFeatureStart(FeatureInfo featureInfo);
-        void OnFeatureEnd();
+        IEnumerator OnFeatureStart(FeatureInfo featureInfo);
+        IEnumerator OnFeatureEnd();
 
         void OnScenarioInitialize(ScenarioInfo scenarioInfo);
         void OnScenarioStart();

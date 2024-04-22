@@ -1,4 +1,5 @@
-﻿using UnitySpec.Bindings;
+﻿using System.Collections;
+using UnitySpec.Bindings;
 
 namespace UnitySpec.Infrastructure
 {
@@ -10,8 +11,8 @@ namespace UnitySpec.Infrastructure
         void OnTestRunStart();
         void OnTestRunEnd();
 
-        void OnFeatureStart(FeatureInfo featureInfo);
-        void OnFeatureEnd();
+        IEnumerator OnFeatureStart(FeatureInfo featureInfo);
+        IEnumerator OnFeatureEnd();
 
         void OnScenarioInitialize(ScenarioInfo scenarioInfo);
         void OnScenarioStart();

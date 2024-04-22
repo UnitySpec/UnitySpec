@@ -1,4 +1,5 @@
-﻿using UnitySpec.Bindings;
+﻿using System.Collections;
+using UnitySpec.Bindings;
 using UnitySpec.Infrastructure;
 
 namespace UnitySpec
@@ -24,9 +25,9 @@ namespace UnitySpec
             get { return _executionEngine.ScenarioContext; }
         }
 
-        public void OnTestRunStart()
+        public IEnumerator OnTestRunStart()
         {
-            _executionEngine.OnTestRunStart();
+            yield return _executionEngine.OnTestRunStart();
         }
 
         public void InitializeTestRunner(int threadId)
@@ -34,14 +35,14 @@ namespace UnitySpec
             ThreadId = threadId;
         }
 
-        public void OnFeatureStart(FeatureInfo featureInfo)
+        public IEnumerator OnFeatureStart(FeatureInfo featureInfo)
         {
-            _executionEngine.OnFeatureStart(featureInfo);
+            yield return _executionEngine.OnFeatureStart(featureInfo);
         }
 
-        public void OnFeatureEnd()
+        public IEnumerator OnFeatureEnd()
         {
-            _executionEngine.OnFeatureEnd();
+            yield return _executionEngine.OnFeatureEnd();
         }
 
         public void OnScenarioInitialize(ScenarioInfo scenarioInfo)
@@ -69,9 +70,9 @@ namespace UnitySpec
             _executionEngine.OnScenarioSkipped();
         }
 
-        public void OnTestRunEnd()
+        public IEnumerator OnTestRunEnd()
         {
-            _executionEngine.OnTestRunEnd();
+            yield return _executionEngine.OnTestRunEnd();
         }
 
         public object Given(string text, string multilineTextArg, Table tableArg, string keyword = null)
