@@ -1,4 +1,5 @@
-﻿using UnitySpec.Bindings;
+﻿using System.Collections;
+using UnitySpec.Bindings;
 using UnitySpec.Infrastructure;
 
 namespace UnitySpec
@@ -34,14 +35,14 @@ namespace UnitySpec
             ThreadId = threadId;
         }
 
-        public void OnFeatureStart(FeatureInfo featureInfo)
+        public IEnumerator OnFeatureStart(FeatureInfo featureInfo)
         {
-            _executionEngine.OnFeatureStart(featureInfo);
+            yield return _executionEngine.OnFeatureStart(featureInfo);
         }
 
-        public void OnFeatureEnd()
+        public IEnumerator OnFeatureEnd()
         {
-            _executionEngine.OnFeatureEnd();
+            yield return _executionEngine.OnFeatureEnd();
         }
 
         public void OnScenarioInitialize(ScenarioInfo scenarioInfo)

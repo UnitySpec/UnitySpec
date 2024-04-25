@@ -1,10 +1,10 @@
 {
   "name": "com.mmulder135.unityspec",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "displayName": "UnitySpec",
   "description": "BDD in Unity",
   "unity": "2022.3",
-  "documentationUrl": "https://github.com/UnitySpec/UnitySpec",
+  "documentationUrl": "https://github.com/UnitySpec",
   "license": "MIT",
   "keywords": [
     "BDD",
