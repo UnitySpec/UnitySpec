@@ -10,8 +10,8 @@ namespace UnitySpec
 
         void InitializeTestRunner(int threadId);
 
-        IEnumerator OnTestRunStart();
-        IEnumerator OnTestRunEnd();
+        void OnTestRunStart();
+        void OnTestRunEnd();
 
         IEnumerator OnFeatureStart(FeatureInfo featureInfo);
         IEnumerator OnFeatureEnd();

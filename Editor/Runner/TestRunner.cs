@@ -25,9 +25,9 @@ namespace UnitySpec
             get { return _executionEngine.ScenarioContext; }
         }
 
-        public IEnumerator OnTestRunStart()
+        public void OnTestRunStart()
         {
-            yield return _executionEngine.OnTestRunStart();
+            _executionEngine.OnTestRunStart();
         }
 
         public void InitializeTestRunner(int threadId)
@@ -70,9 +70,9 @@ namespace UnitySpec
             _executionEngine.OnScenarioSkipped();
         }
 
-        public IEnumerator OnTestRunEnd()
+        public void OnTestRunEnd()
         {
-            yield return _executionEngine.OnTestRunEnd();
+            _executionEngine.OnTestRunEnd();
         }
 
         public object Given(string text, string multilineTextArg, Table tableArg, string keyword = null)
