@@ -3,7 +3,7 @@ UnitySpec is a BDD solution for Unity3D. It is based on the Gherkin specificatio
 This project is based on the code from [SpecFlow](https://github.com/SpecFlowOSS/SpecFlow).
 > UnitySpec has been tested in Unity 2022.3 for both .Net Standard 2.1 and .Net Framework
 
-> This project uses [UnitySpec.General](https://github.com/UnitySpec/General) and [UnitySpec.Generator](https://github.com/UnitySpec/Generator).
+> This project uses [UnitySpec.General v0.1.0](https://github.com/UnitySpec/General/releases/tag/v0.1.0) and [UnitySpec.Generator v0.2.0](https://github.com/UnitySpec/Generator/releases/tag/v0.2.0).
 
 ## Installation
  - Recommended installation through the Unity Package Manager
