@@ -28,7 +28,7 @@ This project is based on the code from [SpecFlow](https://github.com/SpecFlowOSS
 ## Usage
 1. **Write scenarios**
    After installation feature files can be added in Unity by right-clicking in the project window > Create > New Feature.
-Scenarios should be written in Gherkin, [a Gherkin reference can be found here](Docs/GherkinReference.md).
+Scenarios should be written in Gherkin, [a Gherkin reference can be found here](Docs~/GherkinReference.md).
 
 2. **Create test files**
 Once the scenario is written UnitySpec can be used to autogenerate test files to test this scenario.
@@ -36,7 +36,7 @@ Go to Window > UnitySpec to open the UnitySpec Window. Click on the button to ge
 The files are generated at the same location as the feature files.
 
 3. **Write step definitions**
-For each step used in the scenarios, a step definition has to be written. See [the documentation on step definitions](Docs/StepDefinitions.md) for more information.
+For each step used in the scenarios, a step definition has to be written. See [the documentation on step definitions](Docs~/StepDefinitions.md) for more information.
    
 5. **Run test files**
 Open the test runner. For each feature file a test file should be visible, and for each scenario a test in that file.
