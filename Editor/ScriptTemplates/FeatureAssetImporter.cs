@@ -14,13 +14,15 @@ public sealed class FeatureAssetImporter : ScriptedImporter
     private const string FeatureExtension = "feature";
 
     private const string DefaultContent = @"
-    Feature: Addition
+Feature: Feature1
 
-    Scenario: Add two numbers
-        Given the first number is 50
-        And the second number is 70
-        When the two numbers are added
-        Then the result should be 120
+A short summary of the feature
+
+@tag1
+Scenario: [scenario name]
+	Given [context]
+	When [action]
+	Then [outcome]
     ";
 
     [MenuItem("Assets/Create/New Feature", false, 1)]
