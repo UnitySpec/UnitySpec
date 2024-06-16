@@ -43,11 +43,14 @@ public class Generator
     internal void Generate()
     {
         var settings = UnitySpecSettingsContainer.GetSettings();
-        var folders = settings.FeatureFolder;
-        foreach (string folder in folders)
+        var folderNames = settings.FeatureFolder;
+        foreach (string name in folderNames)
         {
-            string completeFolder = Path.Combine(Path.GetFullPath(Application.dataPath), folder);
-            Generate(completeFolder, settings.SearchOption);
+            foreach (var folderPath in Directory.GetDirectories(Application.dataPath, name, SearchOption.AllDirectories))
+            {
+                string completeFolder = Path.Combine(Path.GetFullPath(Application.dataPath), folderPath);
+                Generate(completeFolder, settings.SearchOption);
+            }
         }
     }
 }
